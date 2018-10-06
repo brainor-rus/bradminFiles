@@ -1,7 +1,7 @@
 <form
         action={{ $action == 'edit' ? "/bradmin/" . $sectionName . "/" . $id . "/edit-action" : "/bradmin/" . $sectionName . "/create-action"}}
         method="post">
-
+    @csrf
 
     <div class="row">
         @foreach($columns as $column)
