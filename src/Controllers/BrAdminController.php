@@ -149,8 +149,8 @@ class BrAdminController extends Controller
         $sectionModelSettings = $section->getSectionSettings($sectionName);
         $modelPath = $sectionModelSettings['model'] ?? config('bradmin.base_models_path') . studly_case(strtolower(str_singular($sectionName)));
         $model = new $modelPath;
-//        $model->where('id', $id)->delete();
-        return redirect()->route("bradmin.index");
+        $model->where('id', $id)->delete();
+        return redirect('/');
     }
 
     public function render($html, $pagination=null, $meta=null)

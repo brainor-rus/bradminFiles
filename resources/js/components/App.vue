@@ -3,13 +3,13 @@
 </style>
 <template>
     <div class="main-wrapper">
-            <div class="fixed-sidebar-wrapper"
-                 v-bind:class="fixedSidebarclasses"
-                 @mouseover="mouseOver"
-                 @mouseleave="mouseLeave"
-            >
-                <left-sidebar-header></left-sidebar-header>
-                <left-menu></left-menu>
+        <div class="fixed-sidebar-wrapper"
+             v-bind:class="fixedSidebarclasses"
+             @mouseover="mouseOver"
+             @mouseleave="mouseLeave"
+        >
+            <left-sidebar-header></left-sidebar-header>
+            <left-menu></left-menu>
         </div>
         <div class="content-wrapper">
             <div class="container-fluid">
