@@ -1,19 +1,27 @@
+<style>
+    @import '../../css/modal.css';
+</style>
 <template>
     <div class="modal-mask">
         <div class="modal-wrapper">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
+                        <h4 class="modal-title">Подтвердите удаление</h4>
                         <button type="button" class="close" @click="$emit('close')">
                             <span aria-hidden="true">&times;</span>
                         </button>
-                        <h4 class="modal-title">Modal title</h4>
                     </div>
-                    <div class="modal-body">
-                        <form :action="getLink" method="post">
-                            <button type="submit"></button>
-                        </form>
-                    </div>
+                    <form :action="getLink" method="post" class="mt-3">
+                        <div class="modal-body">
+                            Вы действительно хотите удалить данную запись?
+                        </div>
+                        <div class="modal-footer">
+                            <input type="hidden" name="_token" :value="getCSRF">
+                            <button type="button" class="float-right btn btn-secondary mr-3" @click="$emit('close')">Отмена</button>
+                            <button class="float-right btn btn-danger" type="submit">Удалить</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
@@ -21,11 +29,16 @@
 </template>
 
 <script>
+    import $ from 'jquery';
+
     export default {
         computed: {
             getLink() {
                 return this.$parent.$data.link;
             },
+            getCSRF() {
+                return $('meta[name="csrf-token"]').attr('content');
+            }
         },
     }
 </script>

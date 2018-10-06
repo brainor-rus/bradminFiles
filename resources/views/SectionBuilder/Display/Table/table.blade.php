@@ -38,7 +38,7 @@
                 @endforeach
                 <td class="text-right">
                     <a href="{{ Request::url() . '/' . $field['brRowId'] . '/edit/' }}" class="text-success">Ред.</a>
-                    <button class="delete-btn" data-delete-link="{{ Request::url() . '/' . $field['brRowId'] . '/delete/' }}" class="text-danger">Удал.</button>
+                    <a href="#" class="delete-btn text-danger" data-delete-link="{{ Request::url() . '/' . $field['brRowId'] . '/delete/' }}">Удал.</a>
                 </td>
             </tr>
         @endforeach

@@ -146,9 +146,11 @@ class BrAdminController extends Controller
 
     public function deleteDelete(Section $section, $sectionName, $id)
     {
-        $class = $section->fireDelete(studly_case($sectionName));
-
-        return $this->render($class);
+        $sectionModelSettings = $section->getSectionSettings($sectionName);
+        $modelPath = $sectionModelSettings['model'] ?? config('bradmin.base_models_path') . studly_case(strtolower(str_singular($sectionName)));
+        $model = new $modelPath;
+//        $model->where('id', $id)->delete();
+        return redirect()->route("bradmin.index");
     }
 
     public function render($html, $pagination=null, $meta=null)
