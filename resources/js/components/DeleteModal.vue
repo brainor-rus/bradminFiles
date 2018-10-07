@@ -12,7 +12,7 @@
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <form :action="getLink" method="post" class="mt-3">
+                    <form @submit.prevent="$emit('fireAction',$event)" id="delete-row-form" :action="getLink" method="post" class="mt-3">
                         <div class="modal-body">
                             Вы действительно хотите удалить данную запись?
                         </div>

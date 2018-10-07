@@ -96,7 +96,20 @@ class BrAdminController extends Controller
         FormAction::saveBelongsToManyRelations($model, $request);
         FormAction::saveHasOneRelations($model, $request);
 
-        return redirect()->back();
+//        return redirect()->back();
+
+        $redirectUrl = '/'.config('bradmin.admin_url').'/'.$sectionName;
+        return response()->json([
+                'data' => [
+                    'code'=>0,
+                    'message'=>'Успешно',
+                    'class'=>'success'
+                ],
+                'redirect' => [
+                    'url' => $redirectUrl
+                ]
+            ]
+        );
     }
 
     public function getEdit(Section $section, $sectionName, $id)
@@ -156,13 +169,26 @@ class BrAdminController extends Controller
     }
 
 
-    public function deleteDelete(Section $section, $sectionName, $id)
+    public function deleteAction(Section $section, $sectionName, $id)
     {
         $sectionModelSettings = $section->getSectionSettings($sectionName);
         $modelPath = $sectionModelSettings['model'] ?? config('bradmin.base_models_path') . studly_case(strtolower(str_singular($sectionName)));
         $model = new $modelPath;
         $model->where('id', $id)->delete();
-        return redirect('/');
+//        return redirect('/');
+
+        $redirectUrl = '/'.config('bradmin.admin_url').'/'.$sectionName;
+        return response()->json([
+                'data' => [
+                    'code'=>0,
+                    'message'=>'Успешно',
+                    'class'=>'success'
+                ],
+                'redirect' => [
+                    'url' => $redirectUrl
+                ]
+            ]
+        );
     }
 
     public function render($html, $pagination=null, $meta=null)

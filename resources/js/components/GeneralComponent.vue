@@ -43,7 +43,10 @@
 
         <div v-if="showModal">
             <transition name="modal">
-                <modal @close="showModal = false"></modal>
+                <modal
+                        @close="showModal = false"
+                        @fireAction="fireAction"
+                ></modal>
             </transition>
         </div>
 
@@ -81,7 +84,7 @@
                     each_side: 3,
                     pagesNumber:[]
                 },
-                link:"",
+                link:'',
             };
         },
         computed: {
@@ -96,7 +99,6 @@
         created: function () {
             this.fetchData(this.currentPage);
             this.$store.commit('activeUrlParams', this.$route.path);
-            console.log(this.responseHtml);
         },
         updated: function () {
 
@@ -120,7 +122,6 @@
                 this.link = event.target.dataset.deleteLink;
             },
             fetchData(page) {
-                console.log('555');
                 this.error = this.responseData = null;
                 this.loading = true;
                 this.classes = '';
@@ -210,6 +211,7 @@
                 .then(function (response) {
                     if (typeof response.data.data !== 'undefined') {
                         vm.actionResponseData = response.data.data;
+
                     }
                     if (typeof response.data.redirect !== 'undefined') {
                         vm.redirectUrl = response.data.redirect.url;
@@ -221,6 +223,7 @@
                     vm.loading = false;
                     vm.error = error.response.data.message || error.message;
                 });
+                this.showModal = false;
             },
             changePage: function (page) {
                 this.pagination.current_page = page;

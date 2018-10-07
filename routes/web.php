@@ -50,7 +50,7 @@ Route::group(['middleware' => config('bradmin.middleware')], function () {
 
     Route::post('/'.config('bradmin.admin_url').'/{section}/{id}/delete', [
         'as'   => 'bradmin.section.delete.action',
-        'uses' => 'Bradmin\Controllers\BrAdminController@deleteDelete',
+        'uses' => 'Bradmin\Controllers\BrAdminController@deleteAction',
     ]);
 
 });
