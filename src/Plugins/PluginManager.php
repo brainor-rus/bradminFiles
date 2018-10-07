@@ -25,7 +25,7 @@ class PluginManager
                         }
                         );
                         $fileDocComment = array_shift( $docComments )[1];
-                        $commentRows = explode("\r\n", $fileDocComment);
+                        $commentRows = explode("\n", $fileDocComment);
                         foreach ($commentRows as $commentRow){
                             if(stripos ( $commentRow,':' )){
                                 $commentRowParams = explode(":", $commentRow);

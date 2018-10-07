@@ -40,7 +40,7 @@ class BrAdminController extends Controller
     public function getDisplay(Section $section, $sectionName)
     {
         $display = $section->fireDisplay($sectionName);
-        $sectionModelSettings = $section->getSectionSettings($sectionName);
+        $sectionModelSettings = $section->getSectionSettings(studly_case($sectionName));
 
         $results = $display->render($sectionModelSettings['model'] ?? config('bradmin.base_models_path') . studly_case(strtolower(str_singular($sectionName))));
 
@@ -63,8 +63,8 @@ class BrAdminController extends Controller
 
     public function getCreate(Section $section, $sectionName)
     {
-        $display = $section->fireCreate($sectionName);
-        $sectionModelSettings = $section->getSectionSettings($sectionName);
+        $display = $section->fireCreate(studly_case($sectionName));
+        $sectionModelSettings = $section->getSectionSettings(studly_case($sectionName));
 
         $html = $display->render($sectionModelSettings['model'] ?? config('bradmin.base_models_path') . studly_case(strtolower(str_singular($sectionName))), $sectionName);
         $meta = [
@@ -76,7 +76,8 @@ class BrAdminController extends Controller
 
     public function createAction(Section $section, $sectionName, Request $request)
     {
-        $sectionModelSettings = $section->getSectionSettings($sectionName);
+        $request->offsetUnset('_token');
+        $sectionModelSettings = $section->getSectionSettings(studly_case($sectionName));
         $modelPath = $sectionModelSettings['model'] ?? config('bradmin.base_models_path') . studly_case(strtolower(str_singular($sectionName)));
 
         $model = new $modelPath;
@@ -95,13 +96,26 @@ class BrAdminController extends Controller
         FormAction::saveBelongsToManyRelations($model, $request);
         FormAction::saveHasOneRelations($model, $request);
 
-        return redirect()->back();
+//        return redirect()->back();
+
+        $redirectUrl = '/'.config('bradmin.admin_url').'/'.$sectionName;
+        return response()->json([
+                'data' => [
+                    'code'=>0,
+                    'message'=>'Успешно',
+                    'class'=>'success'
+                ],
+                'redirect' => [
+                    'url' => $redirectUrl
+                ]
+            ]
+        );
     }
 
     public function getEdit(Section $section, $sectionName, $id)
     {
-        $display = $section->fireEdit($sectionName);
-        $sectionModelSettings = $section->getSectionSettings($sectionName);
+        $display = $section->fireEdit(studly_case($sectionName));
+        $sectionModelSettings = $section->getSectionSettings(studly_case($sectionName));
 
         $html = $display->render($sectionModelSettings['model'] ?? config('bradmin.base_models_path') . studly_case(strtolower(str_singular($sectionName))), $sectionName, $id);
         $meta = [
@@ -113,7 +127,8 @@ class BrAdminController extends Controller
 
     public function editAction(Section $section, $sectionName, Request $request, $id)
     {
-        $sectionModelSettings = $section->getSectionSettings($sectionName);
+        $request->offsetUnset('_token');
+        $sectionModelSettings = $section->getSectionSettings(studly_case($sectionName));
         $modelPath = $sectionModelSettings['model'] ?? config('bradmin.base_models_path') . studly_case(strtolower(str_singular($sectionName)));
 
         $model = new $modelPath;
@@ -133,7 +148,19 @@ class BrAdminController extends Controller
 
 //        $modelPath::where('id', $id)->update($request->all());
 
-        return redirect()->back();
+//        return redirect()->back();
+        $redirectUrl = '/'.config('bradmin.admin_url').'/'.$sectionName;
+        return response()->json([
+                'data' => [
+                    'code'=>0,
+                    'message'=>'Успешно',
+                    'class'=>'success'
+                ],
+                'redirect' => [
+                    'url' => $redirectUrl
+                ]
+            ]
+        );
     }
 
     public function postEdit()
@@ -142,11 +169,26 @@ class BrAdminController extends Controller
     }
 
 
-    public function deleteDelete(Section $section, $sectionName, $id)
+    public function deleteAction(Section $section, $sectionName, $id)
     {
-        $class = $section->fireDelete($sectionName);
+        $sectionModelSettings = $section->getSectionSettings($sectionName);
+        $modelPath = $sectionModelSettings['model'] ?? config('bradmin.base_models_path') . studly_case(strtolower(str_singular($sectionName)));
+        $model = new $modelPath;
+        $model->where('id', $id)->delete();
+//        return redirect('/');
 
-        return $this->render($class);
+        $redirectUrl = '/'.config('bradmin.admin_url').'/'.$sectionName;
+        return response()->json([
+                'data' => [
+                    'code'=>0,
+                    'message'=>'Успешно',
+                    'class'=>'success'
+                ],
+                'redirect' => [
+                    'url' => $redirectUrl
+                ]
+            ]
+        );
     }
 
     public function render($html, $pagination=null, $meta=null)

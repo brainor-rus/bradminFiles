@@ -2,8 +2,13 @@
     <div class="content" :class="classes">
         <div class="loading" v-if="loading">Загрузка....</div>
         <div class="error" v-if="error">{{ error}}</div>
-        <div v-html="responseHtml"></div>
-
+        <component :is="{template: `<div>${responseHtml}</div>`, props:[responseHtml]}"
+                   track-by="${responseHtml}"
+                   @showDeleteModal="show_modal"
+                   @redirectTo="redirectTo"
+                   @fireAction="fireAction"
+                   :key="$route.fullPath"
+        ></component>
 
         <nav v-if="pagination.pagesNumber.length > 1">
             <ul class="pagination" role="navigation">
@@ -38,7 +43,10 @@
 
         <div v-if="showModal">
             <transition name="modal">
-                <modal @close="showModal = false"></modal>
+                <modal
+                        @close="showModal = false"
+                        @fireAction="fireAction"
+                ></modal>
             </transition>
         </div>
 
@@ -56,11 +64,15 @@
         components: { modal },
         data(){
             return {
+                uid : Math.floor(Math.random() * 101),
                 loading: false,
                 responseData: null,
-                responseHtml: null,
+                responseHtml: '',
                 error: null,
                 classes: '',
+                actionResponseData: null,
+                actionError: null,
+                redirectUrl: this.$route.path,
                 showModal: false,
                 pagination: {
                     total: 0,
@@ -72,7 +84,7 @@
                     each_side: 3,
                     pagesNumber:[]
                 },
-                link:"",
+                link:'',
             };
         },
         computed: {
@@ -82,14 +94,14 @@
                 }else{
                     return this.$route.query.page;
                 }
-            },
+            }
         },
         created: function () {
             this.fetchData(this.currentPage);
             this.$store.commit('activeUrlParams', this.$route.path);
-
         },
         updated: function () {
+
             this.$nextTick(function () {
                 $('.multiselect').selectize({
                     plugins: ['remove_button'],
@@ -103,25 +115,19 @@
                     }
                 });
             });
-            var vm = this;
-            $('.delete-btn').on('click', function () {
-                vm.show_modal();
-                vm.setLink($(this).data('deleteLink'));
-                console.log(this.showModal);
-            });
         },
         methods: {
-            show_modal(){
+            show_modal: function(event){
                 this.showModal = true;
-            },
-            setLink(link){
-                this.link = link;
+                this.link = event.target.dataset.deleteLink;
             },
             fetchData(page) {
                 this.error = this.responseData = null;
                 this.loading = true;
                 this.classes = '';
+
                 let ajaxUrl = '';
+
                 if(this.$route.path === '/'+this.$store.state.options.adminUrl){
                     ajaxUrl = '/' + this.$store.state.options.adminUrl +'/dashboard';
                 }
@@ -180,15 +186,64 @@
                             }
                         }
                         this.loading = false;
+
                     })
                     .catch(error => {
                         this.loading = false;
                         this.error = error.response.data.message || error.message;
                     });
+
+            },
+            fireAction(event) {
+                this.error = this.actionResponseData = this.actionError = null;
+                this.loading = true;
+
+                let ajaxUrl = event.target.attributes.action.value,
+                    method = event.target.attributes.method.value,
+                    formId = event.target.attributes.id.value,
+                    formData = $('#'+formId).serialize(),
+                    vm = this;
+                axios({
+                    method:method,
+                    url:ajaxUrl,
+                    data:formData
+                })
+                .then(function (response) {
+                    if (typeof response.data.data !== 'undefined') {
+                        vm.actionResponseData = response.data.data;
+
+                    }
+                    if (typeof response.data.redirect !== 'undefined') {
+                        vm.redirectUrl = response.data.redirect.url;
+                    }
+                    vm.loading = false;
+                    vm.redirectTo(null,vm.redirectUrl);
+                })
+                .catch(function (error) {
+                    vm.loading = false;
+                    vm.error = error.response.data.message || error.message;
+                });
+                this.showModal = false;
             },
             changePage: function (page) {
                 this.pagination.current_page = page;
                 this.fetchData(page);
+            },
+            redirectTo: function (event, url = null) {
+                let redirectUrl = document.createElement('a');
+
+                if(null === url){
+                    redirectUrl.href = event.target.attributes.href.value;
+                }else{
+                    redirectUrl.href = url;
+                }
+
+                if(redirectUrl.pathname === this.$route.path){
+                    this.fetchData(this.currentPage);
+                }
+                else{
+                    this.$router.push({ path: redirectUrl.pathname});
+                }
             }
         }
     }

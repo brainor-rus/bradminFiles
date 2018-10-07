@@ -1,7 +1,8 @@
-<form
+<form @submit.prevent="$emit('fireAction',$event)"
+      id="{{ $sectionName }}-edit-form"
         action={{ $action == 'edit' ? "/bradmin/" . $sectionName . "/" . $id . "/edit-action" : "/bradmin/" . $sectionName . "/create-action"}}
         method="post">
-
+    @csrf
 
     <div class="row">
         @foreach($columns as $column)
@@ -24,7 +25,7 @@
             <div class="card">
                 <div class="card-body">
                     <button type="submit" class="btn btn-success">Сохранить</button>
-                    <a href="/bradmin/{{ $sectionName }}" class="btn btn-secondary">Отмена</a>
+                    <a @click.prevent="$emit('redirectTo',$event)" href="/bradmin/{{ $sectionName }}" class="btn btn-secondary">Отмена</a>
                 </div>
             </div>
         </div>

@@ -19,6 +19,8 @@ class CreateBrainorPayStatisticsTable extends Migration
                 $table->bigInteger('user_id')->nullable();
                 $table->bigInteger('connection_id')->nullable();
                 $table->string('connection_type')->nullable();
+                $table->string('transaction_id')->nullable();
+                $table->string('uid');
                 $table->decimal('amount');
                 $table->decimal('commission');
                 $table->integer('bank_id');

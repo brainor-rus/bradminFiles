@@ -6,6 +6,8 @@ import VueCookie from 'vue-cookie';
 Vue.use(VueRouter);
 Vue.use(VueCookie);
 
+global.Vue = Vue;
+
 import App from './components/App';
 import Home from './components/Home';
 import GeneralComponent from './components/GeneralComponent';
