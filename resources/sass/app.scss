@@ -54,6 +54,7 @@ body{
   }
 .fixed-sidebar-wrapper.open{
   overflow-y: auto;
+  width: 260px;
 }
 .fixed-sidebar-wrapper::-webkit-scrollbar-track
 {
@@ -128,6 +129,11 @@ body{
   width: calc(100% - 80px);
   margin-left: auto;
   background: rgba(225, 226, 231, 1);
+  -webkit-transition: width .3s;
+  transition: width .3s ;
+}
+.content-wrapper.open{
+  width: calc(100% - 260px);
 }
 .panel-header{
   height: 135px;
