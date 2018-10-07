@@ -2,11 +2,10 @@
     <div class="content" :class="classes">
         <div class="loading" v-if="loading">Загрузка....</div>
         <div class="error" v-if="error">{{ error}}</div>
-<!--<div v-html="responseHtml"></div>-->
-        <component :is="uid && {template: `<div>${responseHtml}</div>`}"
+        <component :is="{template: `<div>${responseHtml}</div>`, props:[responseHtml]}"
                    @showDeleteModal="show_modal"
                    @redirectTo="redirectTo"
-                   :key="uid"
+                   :key="$route.fullPath"
         ></component>
 
         <nav v-if="pagination.pagesNumber.length > 1">
@@ -55,12 +54,12 @@
     import $ from 'jquery'
     import 'selectize';
     import modal from './DeleteModal';
-    import GeneralComponent from './GeneralComponent';
 
     export default {
-        components: { modal },
+        components: {AjaxContent, modal },
         data(){
             return {
+                uid : Math.floor(Math.random() * 101),
                 loading: false,
                 responseData: null,
                 responseHtml: '',
@@ -87,11 +86,12 @@
                 }else{
                     return this.$route.query.page;
                 }
-            },
+            }
         },
         created: function () {
             this.fetchData(this.currentPage);
             this.$store.commit('activeUrlParams', this.$route.path);
+            console.log(this.responseHtml);
         },
         updated: function () {
 
