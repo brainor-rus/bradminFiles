@@ -2,7 +2,21 @@
     <ul class="main-menu">
         <li class="error" v-if="error">{{ error}}</li>
         <li v-for="menuItem in responseData">
-            <router-link :to="menuItem.url" :class="{ 'router-link-exact-active' : menuItem.url === activeUrlParams}">
+            <router-link v-if="menuItem.nodes"
+                         :to="menuItem.url"
+                         :class="['collapsable',{ 'router-link-exact-active' : menuItem.url === activeUrlParams}]"
+                         :data-target="'#' + menuItem.url.replace(/\//g, '')"
+            >
+                <i v-if="menuItem.iconText" class="icon">{{ menuItem.iconText }}</i>
+                <template v-else>
+                    <i v-if="menuItem.icon" class="icon" :class="menuItem.icon"></i>
+                </template>
+                <transition name="fade">
+                    <span v-show="sidebarOpen">{{ menuItem.text }}</span>
+                </transition>
+                <i class="toggler fas"></i>
+            </router-link>
+            <router-link v-else :to="menuItem.url" :class="{ 'router-link-exact-active' : menuItem.url === activeUrlParams}">
                 <i v-if="menuItem.iconText" class="icon">{{ menuItem.iconText }}</i>
                 <template v-else>
                     <i v-if="menuItem.icon" class="icon" :class="menuItem.icon"></i>
@@ -11,12 +25,14 @@
                     <span v-show="sidebarOpen">{{ menuItem.text }}</span>
                 </transition>
             </router-link>
-            <left-menu-recursive v-if="menuItem.nodes" :menuItemNodes="menuItem.nodes" :sidebarOpen="sidebarOpen"></left-menu-recursive>
+            <left-menu-recursive v-if="menuItem.nodes" :menuParentItemUrl="menuItem.url" :menuItemNodes="menuItem.nodes" :sidebarOpen="sidebarOpen"></left-menu-recursive>
         </li>
     </ul>
 </template>
 <script>
     import axios from 'axios';
+    import $ from 'jquery';
+    import 'bootstrap';
     import LeftMenuRecursive from './LeftMenuRecursive';
 
     export default {
@@ -30,6 +46,15 @@
         },
         created() {
             this.fetchData();
+        },
+        updated: function () {
+            this.$nextTick(function () {
+                $('.collapsable').on('click', function(){
+                    let toggleId = $(this).data('target');
+                    $(this).toggleClass('toggled')
+                    $(toggleId).collapse('toggle')
+                });
+            });
         },
         computed: {
             sidebarOpen() {

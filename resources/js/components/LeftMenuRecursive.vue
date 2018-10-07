@@ -1,7 +1,17 @@
 <template>
-    <ul class="sub-menu">
+    <ul class="sub-menu collapse" :id="menuParentItemUrl.replace(/\//g, '')"
+        :class="{ 'show' : menuParentItemUrl === activeUrlParams}"
+    >
         <li v-for="menuItem in menuItemNodes">
-            <router-link :to="menuItem.url" :class="{ 'router-link-exact-active' : menuItem.url === activeUrlParams}">
+            <router-link v-if="menuItem.nodes"
+                         :to="'#' + menuItem.url.replace(/\//g, '')"
+                         :class="{ 'router-link-exact-active'
+                        : menuItem.url === activeUrlParams}"
+                         :data-toggle="'collapse'"
+                         :data-target="'#' + menuItem.url.replace(/\//g, '')"
+                         :aria-expanded="true"
+                         :aria-controls="menuItem.url.replace(/\//g, '')"
+            >
                 <i v-if="menuItem.iconText" class="icon">{{ menuItem.iconText }}</i>
                 <template v-else>
                     <i v-if="menuItem.icon" class="icon" :class="menuItem.icon"></i>
@@ -10,13 +20,22 @@
                     <span v-show="sidebarOpen">{{ menuItem.text }}</span>
                 </transition>
             </router-link>
-            <left-menu-recursive v-if="menuItem.nodes" :menuItemNodes="menuItem.nodes" :sidebarOpen="sidebarOpen"></left-menu-recursive>
+            <router-link v-else :to="menuItem.url" :class="{ 'router-link-exact-active' : menuItem.url === activeUrlParams}">
+                <i v-if="menuItem.iconText" class="icon">{{ menuItem.iconText }}</i>
+                <template v-else>
+                    <i v-if="menuItem.icon" class="icon" :class="menuItem.icon"></i>
+                </template>
+                <transition name="fade">
+                    <span v-show="sidebarOpen">{{ menuItem.text }}</span>
+                </transition>
+            </router-link>
+            <left-menu-recursive v-if="menuItem.nodes" :menuParentItemUrl="menuItem.url.replace(/\//g, '')" :menuItemNodes="menuItem.nodes" :sidebarOpen="sidebarOpen"></left-menu-recursive>
         </li>
     </ul>
 </template>
 <script>
     export default {
-        props: [ 'menuItemNodes' ],
+        props: [ 'menuItemNodes','menuParentItemUrl' ],
         name: 'left-menu-recursive',
         computed: {
             sidebarOpen() {
