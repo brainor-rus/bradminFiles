@@ -56,7 +56,7 @@
     import modal from './DeleteModal';
 
     export default {
-        components: {AjaxContent, modal },
+        components: { modal },
         data(){
             return {
                 uid : Math.floor(Math.random() * 101),

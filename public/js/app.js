@@ -28770,7 +28770,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    components: { AjaxContent: AjaxContent, modal: __WEBPACK_IMPORTED_MODULE_3__DeleteModal___default.a },
+    components: { modal: __WEBPACK_IMPORTED_MODULE_3__DeleteModal___default.a },
     data: function data() {
         return {
             uid: Math.floor(Math.random() * 101),
