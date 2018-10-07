@@ -28763,6 +28763,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
 
 
 
@@ -28779,6 +28781,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             responseHtml: '',
             error: null,
             classes: '',
+            actionResponseData: null,
+            actionError: null,
+            redirectUrl: this.$route.path,
             showModal: false,
             pagination: {
                 total: 0,
@@ -28830,6 +28835,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.link = event.target.dataset.deleteLink;
         },
         fetchData: function fetchData(page) {
+            var _this = this;
+
+            console.log('555');
             this.error = this.responseData = null;
             this.loading = true;
             this.classes = '';
@@ -28841,60 +28849,83 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             } else {
                 ajaxUrl = this.$route.path;
             }
-            this.$nextTick(function () {
-                var _this = this;
+            __WEBPACK_IMPORTED_MODULE_0_axios___default.a.post(ajaxUrl, { 'page': this.currentPage }).then(function (response) {
+                if (typeof response.data.data !== 'undefined') {
+                    _this.responseData = response.data.data;
+                    if (typeof response.data.data.pagination !== 'undefined') {
 
-                __WEBPACK_IMPORTED_MODULE_0_axios___default.a.post(ajaxUrl, { 'page': this.currentPage }).then(function (response) {
-                    if (typeof response.data.data !== 'undefined') {
-                        _this.responseData = response.data.data;
-                        if (typeof response.data.data.pagination !== 'undefined') {
+                        _this.pagination.total = response.data.data.pagination.total;
+                        _this.pagination.per_page = response.data.data.pagination.per_page;
+                        _this.pagination.from = response.data.data.pagination.from;
+                        _this.pagination.to = response.data.data.pagination.to;
+                        _this.pagination.last_page = response.data.data.pagination.last_page;
+                        _this.pagination.current_page = response.data.data.pagination.current_page;
 
-                            _this.pagination.total = response.data.data.pagination.total;
-                            _this.pagination.per_page = response.data.data.pagination.per_page;
-                            _this.pagination.from = response.data.data.pagination.from;
-                            _this.pagination.to = response.data.data.pagination.to;
-                            _this.pagination.last_page = response.data.data.pagination.last_page;
-                            _this.pagination.current_page = response.data.data.pagination.current_page;
+                        var from = _this.pagination.current_page - _this.pagination.each_side;
+                        if (from < 1) {
+                            from = 1;
+                        }
+                        var to = from + _this.pagination.each_side * 2;
+                        if (to >= _this.pagination.last_page) {
+                            to = _this.pagination.last_page;
+                        }
+                        var pagesArray = [];
+                        while (from <= to) {
+                            pagesArray.push(from);
+                            from++;
+                        }
+                        _this.pagination.pagesNumber = pagesArray;
 
-                            var from = _this.pagination.current_page - _this.pagination.each_side;
-                            if (from < 1) {
-                                from = 1;
-                            }
-                            var to = from + _this.pagination.each_side * 2;
-                            if (to >= _this.pagination.last_page) {
-                                to = _this.pagination.last_page;
-                            }
-                            var pagesArray = [];
-                            while (from <= to) {
-                                pagesArray.push(from);
-                                from++;
-                            }
-                            _this.pagination.pagesNumber = pagesArray;
-
-                            if (_this.pagination.pagesNumber.length > 1) {
-                                _this.$router.replace({ query: { page: page } });
-                            }
+                        if (_this.pagination.pagesNumber.length > 1) {
+                            _this.$router.replace({ query: { page: page } });
                         }
                     }
+                }
 
-                    if (typeof response.data.html !== 'undefined') {
-                        _this.responseHtml = response.data.html;
+                if (typeof response.data.html !== 'undefined') {
+                    _this.responseHtml = response.data.html;
+                }
+
+                if (typeof response.data.meta !== 'undefined') {
+                    if (typeof response.data.meta.title !== 'undefined') {
+                        _this.$store.commit('titleUpdate', response.data.meta.title);
                     }
 
-                    if (typeof response.data.meta !== 'undefined') {
-                        if (typeof response.data.meta.title !== 'undefined') {
-                            _this.$store.commit('titleUpdate', response.data.meta.title);
-                        }
-
-                        if (typeof response.data.meta.class !== 'undefined') {
-                            _this.classes = response.data.meta.class;
-                        }
+                    if (typeof response.data.meta.class !== 'undefined') {
+                        _this.classes = response.data.meta.class;
                     }
-                    _this.loading = false;
-                }).catch(function (error) {
-                    _this.loading = false;
-                    _this.error = error.response.data.message || error.message;
-                });
+                }
+                _this.loading = false;
+            }).catch(function (error) {
+                _this.loading = false;
+                _this.error = error.response.data.message || error.message;
+            });
+        },
+        fireAction: function fireAction(event) {
+            this.error = this.actionResponseData = this.actionError = null;
+            this.loading = true;
+
+            var ajaxUrl = event.target.attributes.action.value,
+                method = event.target.attributes.method.value,
+                formId = event.target.attributes.id.value,
+                formData = __WEBPACK_IMPORTED_MODULE_1_jquery___default()('#' + formId).serialize(),
+                vm = this;
+            __WEBPACK_IMPORTED_MODULE_0_axios___default()({
+                method: method,
+                url: ajaxUrl,
+                data: formData
+            }).then(function (response) {
+                if (typeof response.data.data !== 'undefined') {
+                    vm.actionResponseData = response.data.data;
+                }
+                if (typeof response.data.redirect !== 'undefined') {
+                    vm.redirectUrl = response.data.redirect.url;
+                }
+                vm.loading = false;
+                vm.redirectTo(null, vm.redirectUrl);
+            }).catch(function (error) {
+                vm.loading = false;
+                vm.error = error.response.data.message || error.message;
             });
         },
 
@@ -28903,9 +28934,21 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.fetchData(page);
         },
         redirectTo: function redirectTo(event) {
-            var url = document.createElement('a');
-            url.href = event.target.attributes.href.value;
-            this.$router.push({ path: url.pathname });
+            var url = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+
+            var redirectUrl = document.createElement('a');
+
+            if (null === url) {
+                redirectUrl.href = event.target.attributes.href.value;
+            } else {
+                redirectUrl.href = url;
+            }
+
+            if (redirectUrl.pathname === this.$route.path) {
+                this.fetchData(this.currentPage);
+            } else {
+                this.$router.push({ path: redirectUrl.pathname });
+            }
         }
     }
 });
@@ -33101,7 +33144,12 @@ var render = function() {
         {
           key: _vm.$route.fullPath,
           tag: "component",
-          on: { showDeleteModal: _vm.show_modal, redirectTo: _vm.redirectTo }
+          attrs: { "track-by": "${responseHtml}" },
+          on: {
+            showDeleteModal: _vm.show_modal,
+            redirectTo: _vm.redirectTo,
+            fireAction: _vm.fireAction
+          }
         }
       ),
       _vm._v(" "),

@@ -135,7 +135,19 @@ class BrAdminController extends Controller
 
 //        $modelPath::where('id', $id)->update($request->all());
 
-        return redirect()->back();
+//        return redirect()->back();
+        $redirectUrl = '/'.config('bradmin.admin_url').'/'.$sectionName;
+        return response()->json([
+                'data' => [
+                    'code'=>0,
+                    'message'=>'Успешно',
+                    'class'=>'success'
+                ],
+                'redirect' => [
+                    'url' => $redirectUrl
+                ]
+            ]
+        );
     }
 
     public function postEdit()

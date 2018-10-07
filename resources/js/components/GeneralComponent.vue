@@ -3,8 +3,10 @@
         <div class="loading" v-if="loading">Загрузка....</div>
         <div class="error" v-if="error">{{ error}}</div>
         <component :is="{template: `<div>${responseHtml}</div>`, props:[responseHtml]}"
+                   track-by="${responseHtml}"
                    @showDeleteModal="show_modal"
                    @redirectTo="redirectTo"
+                   @fireAction="fireAction"
                    :key="$route.fullPath"
         ></component>
 
@@ -65,6 +67,9 @@
                 responseHtml: '',
                 error: null,
                 classes: '',
+                actionResponseData: null,
+                actionError: null,
+                redirectUrl: this.$route.path,
                 showModal: false,
                 pagination: {
                     total: 0,
@@ -115,6 +120,7 @@
                 this.link = event.target.dataset.deleteLink;
             },
             fetchData(page) {
+                console.log('555');
                 this.error = this.responseData = null;
                 this.loading = true;
                 this.classes = '';
@@ -127,76 +133,114 @@
                 else{
                     ajaxUrl = this.$route.path;
                 }
-                this.$nextTick(function () {
-                    axios
-                        .post(ajaxUrl,
-                            {'page':this.currentPage,}
-                        )
-                        .then(response => {
-                            if (typeof response.data.data !== 'undefined') {
-                                this.responseData = response.data.data;
-                                if (typeof response.data.data.pagination !== 'undefined') {
+                axios
+                    .post(ajaxUrl,
+                        {'page':this.currentPage,}
+                    )
+                    .then(response => {
+                        if (typeof response.data.data !== 'undefined') {
+                            this.responseData = response.data.data;
+                            if (typeof response.data.data.pagination !== 'undefined') {
 
 
-                                    this.pagination.total = response.data.data.pagination.total;
-                                    this.pagination.per_page = response.data.data.pagination.per_page;
-                                    this.pagination.from = response.data.data.pagination.from;
-                                    this.pagination.to = response.data.data.pagination.to;
-                                    this.pagination.last_page = response.data.data.pagination.last_page;
-                                    this.pagination.current_page = response.data.data.pagination.current_page;
+                                this.pagination.total = response.data.data.pagination.total;
+                                this.pagination.per_page = response.data.data.pagination.per_page;
+                                this.pagination.from = response.data.data.pagination.from;
+                                this.pagination.to = response.data.data.pagination.to;
+                                this.pagination.last_page = response.data.data.pagination.last_page;
+                                this.pagination.current_page = response.data.data.pagination.current_page;
 
-                                    var from = this.pagination.current_page - this.pagination.each_side;
-                                    if (from < 1) {
-                                        from = 1;
-                                    }
-                                    var to = from + (this.pagination.each_side * 2);
-                                    if (to >= this.pagination.last_page) {
-                                        to = this.pagination.last_page;
-                                    }
-                                    var pagesArray = [];
-                                    while (from <= to) {
-                                        pagesArray.push(from);
-                                        from++;
-                                    }
-                                    this.pagination.pagesNumber = pagesArray;
+                                var from = this.pagination.current_page - this.pagination.each_side;
+                                if (from < 1) {
+                                    from = 1;
+                                }
+                                var to = from + (this.pagination.each_side * 2);
+                                if (to >= this.pagination.last_page) {
+                                    to = this.pagination.last_page;
+                                }
+                                var pagesArray = [];
+                                while (from <= to) {
+                                    pagesArray.push(from);
+                                    from++;
+                                }
+                                this.pagination.pagesNumber = pagesArray;
 
-                                    if( this.pagination.pagesNumber.length > 1){
-                                        this.$router.replace({ query: {page: page} })
-                                    }
+                                if( this.pagination.pagesNumber.length > 1){
+                                    this.$router.replace({ query: {page: page} })
                                 }
                             }
+                        }
 
-                            if (typeof response.data.html !== 'undefined') {
-                                this.responseHtml = response.data.html;
+                        if (typeof response.data.html !== 'undefined') {
+                            this.responseHtml = response.data.html;
+                        }
+
+                        if (typeof response.data.meta !== 'undefined') {
+                            if (typeof response.data.meta.title !== 'undefined') {
+                                this.$store.commit('titleUpdate', response.data.meta.title);
                             }
 
-                            if (typeof response.data.meta !== 'undefined') {
-                                if (typeof response.data.meta.title !== 'undefined') {
-                                    this.$store.commit('titleUpdate', response.data.meta.title);
-                                }
-
-                                if (typeof response.data.meta.class !== 'undefined') {
-                                    this.classes = response.data.meta.class;
-                                }
+                            if (typeof response.data.meta.class !== 'undefined') {
+                                this.classes = response.data.meta.class;
                             }
-                            this.loading = false;
+                        }
+                        this.loading = false;
 
-                        })
-                        .catch(error => {
-                            this.loading = false;
-                            this.error = error.response.data.message || error.message;
-                        });
+                    })
+                    .catch(error => {
+                        this.loading = false;
+                        this.error = error.response.data.message || error.message;
+                    });
+
+            },
+            fireAction(event) {
+                this.error = this.actionResponseData = this.actionError = null;
+                this.loading = true;
+
+                let ajaxUrl = event.target.attributes.action.value,
+                    method = event.target.attributes.method.value,
+                    formId = event.target.attributes.id.value,
+                    formData = $('#'+formId).serialize(),
+                    vm = this;
+                axios({
+                    method:method,
+                    url:ajaxUrl,
+                    data:formData
                 })
-
+                .then(function (response) {
+                    if (typeof response.data.data !== 'undefined') {
+                        vm.actionResponseData = response.data.data;
+                    }
+                    if (typeof response.data.redirect !== 'undefined') {
+                        vm.redirectUrl = response.data.redirect.url;
+                    }
+                    vm.loading = false;
+                    vm.redirectTo(null,vm.redirectUrl);
+                })
+                .catch(function (error) {
+                    vm.loading = false;
+                    vm.error = error.response.data.message || error.message;
+                });
             },
             changePage: function (page) {
                 this.pagination.current_page = page;
                 this.fetchData(page);
             },
-            redirectTo: function (event) {
-                var url = document.createElement('a');
-                url.href = event.target.attributes.href.value;
-                this.$router.push({ path: url.pathname});
+            redirectTo: function (event, url = null) {
+                let redirectUrl = document.createElement('a');
+
+                if(null === url){
+                    redirectUrl.href = event.target.attributes.href.value;
+                }else{
+                    redirectUrl.href = url;
+                }
+
+                if(redirectUrl.pathname === this.$route.path){
+                    this.fetchData(this.currentPage);
+                }
+                else{
+                    this.$router.push({ path: redirectUrl.pathname});
+                }
             }
         }
     }
