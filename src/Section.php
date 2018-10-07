@@ -72,13 +72,10 @@ class Section
     public function fireDelete($sectionName,array $payload = [])
     {
         $this->setClass(config('bradmin.user_path').'\\Sections\\'.$sectionName);
-
         if(!class_exists($this->getClass()))
         {
             throw new \Exception('Section not found.');
         }
-
-
         return $this->getClass();
     }
 
