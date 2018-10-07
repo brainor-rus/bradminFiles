@@ -123,6 +123,20 @@ body{
   background-color: #ffffff;
   color: #0d2746;
 }
+.collapsable .toggler:after{
+  content: "\f0d7";
+}
+.collapsable.toggled .toggler:after{
+  content: "\f0d8";
+}
+.router-link-active.collapsable .toggler:after{
+  content: "\f0d8";
+}
+.toggler{
+  right: 15px;
+  position: absolute;
+  top: 40%;
+}
 
 .content-wrapper{
   min-height: 100vh;
