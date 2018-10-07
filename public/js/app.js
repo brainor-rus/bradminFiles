@@ -26657,13 +26657,17 @@ var index_esm = {
 "use strict";
 // initial state
 var state = {
-    sidebarOpen: false
+    sidebarOpen: false,
+    sidebarClass: ''
 };
 
 // mutations
 var mutations = {
     sidebarOpenState: function sidebarOpenState(state, newState) {
         state.sidebarOpen = newState;
+    },
+    sidebarClassChange: function sidebarClassChange(state, newState) {
+        state.sidebarClass = newState;
     }
 };
 
@@ -27121,13 +27125,17 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     components: { LeftMenu: __WEBPACK_IMPORTED_MODULE_0__LeftMenu___default.a, LeftSidebarHeader: __WEBPACK_IMPORTED_MODULE_1__LeftSidebarHeader___default.a },
     data: function data() {
         return {
-            fixedSidebarclasses: ''
+            fixedSidebarclasses: '',
+            sidebarOpenCookieStatus: this.$cookie.get('sidebarOpen')
         };
     },
 
     computed: {
         title: function title() {
             return this.$store.state.title.title;
+        },
+        sidebarClass: function sidebarClass() {
+            return this.$store.state.sidebar.sidebarClass;
         },
 
         activeUrlParams: {
@@ -27139,14 +27147,27 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             }
         }
     },
+    created: function created() {
+        this.checkSidebarState();
+    },
     methods: {
         mouseOver: function mouseOver() {
-            this.fixedSidebarclasses = 'open';
-            this.$store.commit('sidebarOpenState', true);
+            if (this.sidebarClass === '') {
+                this.fixedSidebarclasses = 'open';
+                this.$store.commit('sidebarOpenState', true);
+            }
         },
         mouseLeave: function mouseLeave() {
-            this.fixedSidebarclasses = '';
-            this.$store.commit('sidebarOpenState', false);
+            if (this.sidebarClass === '') {
+                this.fixedSidebarclasses = '';
+                this.$store.commit('sidebarOpenState', false);
+            }
+        },
+        checkSidebarState: function checkSidebarState() {
+            if (this.sidebarOpenCookieStatus === 'true') {
+                this.$store.commit('sidebarClassChange', 'open');
+                this.$store.commit('sidebarOpenState', true);
+            }
         }
     }
 });
@@ -28460,8 +28481,6 @@ module.exports = Component.exports
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
 //
 //
 //
@@ -28469,30 +28488,26 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     data: function data() {
-        return {};
+        return {
+            sidebarOpenButtonAction: this.$cookie.get('sidebarOpen')
+        };
     },
 
-    computed: {
-        sidebarOpenButtonAction: {
-            get: function get() {
-                if (typeof this.$cookie.get('sidebarOpen') !== 'undefined') {
-                    return this.$cookie.get('sidebarOpen') === 'true' ? false : true;
-                } else {
-                    return true;
-                }
-            },
-            set: function set(newValue) {
-                this.lpairs = _extends({}, this.lpairs, { xx: newValue });
-            }
-        }
-    },
     methods: {
         changeSidebarOpenCookie: function changeSidebarOpenCookie(actionValue) {
-            console.log(actionValue);
-            this.sidebarOpenButtonAction = actionValue;
+            var value = void 0;
 
-            this.$store.commit('sidebarOpenState', actionValue);
-            this.$cookie.set('sidebarOpen', actionValue, { expires: '1Y' });
+            if (actionValue === 'false' || actionValue === false || actionValue === null || typeof actionValue === 'undefined') {
+                value = true;
+                this.$store.commit('sidebarClassChange', 'open');
+                this.$store.commit('sidebarOpenState', value);
+            } else {
+                value = false;
+                this.$store.commit('sidebarClassChange', '');
+            }
+            this.sidebarOpenButtonAction = value;
+
+            this.$cookie.set('sidebarOpen', this.sidebarOpenButtonAction, { expires: '1Y' });
         }
     }
 });
@@ -28540,14 +28555,14 @@ var render = function() {
       "div",
       {
         staticClass: "fixed-sidebar-wrapper",
-        class: _vm.fixedSidebarclasses,
+        class: [_vm.sidebarClass, _vm.fixedSidebarclasses],
         on: { mouseover: _vm.mouseOver, mouseleave: _vm.mouseLeave }
       },
       [_c("left-sidebar-header"), _vm._v(" "), _c("left-menu")],
       1
     ),
     _vm._v(" "),
-    _c("div", { staticClass: "content-wrapper" }, [
+    _c("div", { staticClass: "content-wrapper", class: _vm.sidebarClass }, [
       _c("div", { staticClass: "container-fluid" }, [
         _c("div", { staticClass: "row" }, [
           _c("div", { staticClass: "col-12 panel-header" }, [
