@@ -2,8 +2,12 @@
     <div class="content" :class="classes">
         <div class="loading" v-if="loading">Загрузка....</div>
         <div class="error" v-if="error">{{ error}}</div>
-        <div v-html="responseHtml"></div>
-
+<!--<div v-html="responseHtml"></div>-->
+        <component :is="uid && {template: `<div>${responseHtml}</div>`}"
+                   @showDeleteModal="show_modal"
+                   @redirectTo="redirectTo"
+                   :key="uid"
+        ></component>
 
         <nav v-if="pagination.pagesNumber.length > 1">
             <ul class="pagination" role="navigation">
@@ -51,6 +55,7 @@
     import $ from 'jquery'
     import 'selectize';
     import modal from './DeleteModal';
+    import GeneralComponent from './GeneralComponent';
 
     export default {
         components: { modal },
@@ -58,7 +63,7 @@
             return {
                 loading: false,
                 responseData: null,
-                responseHtml: null,
+                responseHtml: '',
                 error: null,
                 classes: '',
                 showModal: false,
@@ -87,9 +92,9 @@
         created: function () {
             this.fetchData(this.currentPage);
             this.$store.commit('activeUrlParams', this.$route.path);
-
         },
         updated: function () {
+
             this.$nextTick(function () {
                 $('.multiselect').selectize({
                     plugins: ['remove_button'],
@@ -103,92 +108,95 @@
                     }
                 });
             });
-            var vm = this;
-            $('.delete-btn').on('click', function () {
-                vm.show_modal();
-                vm.setLink($(this).data('deleteLink'));
-                console.log(this.showModal);
-            });
         },
         methods: {
-            show_modal(){
+            show_modal: function(event){
                 this.showModal = true;
-            },
-            setLink(link){
-                this.link = link;
+                this.link = event.target.dataset.deleteLink;
             },
             fetchData(page) {
                 this.error = this.responseData = null;
                 this.loading = true;
                 this.classes = '';
+
                 let ajaxUrl = '';
+
                 if(this.$route.path === '/'+this.$store.state.options.adminUrl){
                     ajaxUrl = '/' + this.$store.state.options.adminUrl +'/dashboard';
                 }
                 else{
                     ajaxUrl = this.$route.path;
                 }
-                axios
-                    .post(ajaxUrl,
-                        {'page':this.currentPage,}
-                    )
-                    .then(response => {
-                        if (typeof response.data.data !== 'undefined') {
-                            this.responseData = response.data.data;
-                            if (typeof response.data.data.pagination !== 'undefined') {
+                this.$nextTick(function () {
+                    axios
+                        .post(ajaxUrl,
+                            {'page':this.currentPage,}
+                        )
+                        .then(response => {
+                            if (typeof response.data.data !== 'undefined') {
+                                this.responseData = response.data.data;
+                                if (typeof response.data.data.pagination !== 'undefined') {
 
 
-                                this.pagination.total = response.data.data.pagination.total;
-                                this.pagination.per_page = response.data.data.pagination.per_page;
-                                this.pagination.from = response.data.data.pagination.from;
-                                this.pagination.to = response.data.data.pagination.to;
-                                this.pagination.last_page = response.data.data.pagination.last_page;
-                                this.pagination.current_page = response.data.data.pagination.current_page;
+                                    this.pagination.total = response.data.data.pagination.total;
+                                    this.pagination.per_page = response.data.data.pagination.per_page;
+                                    this.pagination.from = response.data.data.pagination.from;
+                                    this.pagination.to = response.data.data.pagination.to;
+                                    this.pagination.last_page = response.data.data.pagination.last_page;
+                                    this.pagination.current_page = response.data.data.pagination.current_page;
 
-                                var from = this.pagination.current_page - this.pagination.each_side;
-                                if (from < 1) {
-                                    from = 1;
-                                }
-                                var to = from + (this.pagination.each_side * 2);
-                                if (to >= this.pagination.last_page) {
-                                    to = this.pagination.last_page;
-                                }
-                                var pagesArray = [];
-                                while (from <= to) {
-                                    pagesArray.push(from);
-                                    from++;
-                                }
-                                this.pagination.pagesNumber = pagesArray;
+                                    var from = this.pagination.current_page - this.pagination.each_side;
+                                    if (from < 1) {
+                                        from = 1;
+                                    }
+                                    var to = from + (this.pagination.each_side * 2);
+                                    if (to >= this.pagination.last_page) {
+                                        to = this.pagination.last_page;
+                                    }
+                                    var pagesArray = [];
+                                    while (from <= to) {
+                                        pagesArray.push(from);
+                                        from++;
+                                    }
+                                    this.pagination.pagesNumber = pagesArray;
 
-                                if( this.pagination.pagesNumber.length > 1){
-                                    this.$router.replace({ query: {page: page} })
+                                    if( this.pagination.pagesNumber.length > 1){
+                                        this.$router.replace({ query: {page: page} })
+                                    }
                                 }
                             }
-                        }
 
-                        if (typeof response.data.html !== 'undefined') {
-                            this.responseHtml = response.data.html;
-                        }
-
-                        if (typeof response.data.meta !== 'undefined') {
-                            if (typeof response.data.meta.title !== 'undefined') {
-                                this.$store.commit('titleUpdate', response.data.meta.title);
+                            if (typeof response.data.html !== 'undefined') {
+                                this.responseHtml = response.data.html;
                             }
 
-                            if (typeof response.data.meta.class !== 'undefined') {
-                                this.classes = response.data.meta.class;
+                            if (typeof response.data.meta !== 'undefined') {
+                                if (typeof response.data.meta.title !== 'undefined') {
+                                    this.$store.commit('titleUpdate', response.data.meta.title);
+                                }
+
+                                if (typeof response.data.meta.class !== 'undefined') {
+                                    this.classes = response.data.meta.class;
+                                }
                             }
-                        }
-                        this.loading = false;
-                    })
-                    .catch(error => {
-                        this.loading = false;
-                        this.error = error.response.data.message || error.message;
-                    });
+                            this.loading = false;
+
+                        })
+                        .catch(error => {
+                            this.loading = false;
+                            this.error = error.response.data.message || error.message;
+                        });
+                })
+
             },
             changePage: function (page) {
                 this.pagination.current_page = page;
                 this.fetchData(page);
+            },
+            redirectTo: function (event) {
+                var url = document.createElement('a');
+                url.href = event.target.attributes.href.value;
+                this.$router.push({ path: url.pathname});
             }
         }
     }

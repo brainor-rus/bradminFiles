@@ -37,9 +37,8 @@
                     </td>
                 @endforeach
                 <td class="text-right">
-                    <a href="{{ Request::url() . '/' . $field['brRowId'] . '/edit/' }}" class="text-success">Ред.</a>
-                    <button type="button" class="delete-btn text-danger bg-transparent border-0" data-delete-link="{{ Request::url() . '/' . $field['brRowId'] . '/delete/' }}">Удал.</button>
-                    {{--<a class="delete-btn text-danger" data-delete-link="{{ Request::url() . '/' . $field['brRowId'] . '/delete/' }}">Удал.</a>--}}
+                    <a @click.prevent="$emit('redirectTo',$event)" href="{{ parse_url(Request::url(), PHP_URL_PATH) . '/' . $field['brRowId'] . '/edit/' }}" class="text-success">Ред.</a>
+                    <button @click="$emit('showDeleteModal',$event)" type="button" class="delete-btn text-danger bg-transparent border-0" data-delete-link="{{ Request::url() . '/' . $field['brRowId'] . '/delete/' }}">Удал.</button>
                 </td>
             </tr>
         @endforeach

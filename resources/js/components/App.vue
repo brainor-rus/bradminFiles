@@ -44,6 +44,14 @@
         computed: {
             title() {
                 return this.$store.state.title.title;
+            },
+            activeUrlParams: {
+                get: function() {
+                    return this.$store.state.options.activeUrlParams;
+                },
+                set: function(newValue) {
+                    return newValue;
+                }
             }
         },
         methods: {
