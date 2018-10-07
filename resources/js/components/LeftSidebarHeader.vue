@@ -5,29 +5,26 @@
 
     export default {
         data(){
-            return {};
-        },
-        computed: {
-            sidebarOpenButtonAction: {
-                get: function() {
-                    if (typeof this.$cookie.get('sidebarOpen') !== 'undefined') {
-                            return this.$cookie.get('sidebarOpen') === 'true'? false : true;
-                    }else {
-                        return true;
-                    }
-                },
-                set: function(newValue) {
-                    this.lpairs = { ...this.lpairs, xx: newValue };
-                }
-            }
+            return {
+                sidebarOpenButtonAction:this.$cookie.get('sidebarOpen'),
+            };
         },
         methods: {
             changeSidebarOpenCookie(actionValue) {
-                console.log(actionValue);
-                this.sidebarOpenButtonAction = actionValue;
+                let value;
 
-                this.$store.commit('sidebarOpenState', actionValue);
-                this.$cookie.set('sidebarOpen', actionValue, { expires: '1Y' });
+                if(actionValue === 'false' || actionValue === false || actionValue === null || typeof actionValue === 'undefined'){
+                    value = true;
+                    this.$store.commit('sidebarClassChange', 'open')
+                    this.$store.commit('sidebarOpenState', value);
+                }else{
+                    value = false;
+                    this.$store.commit('sidebarClassChange', '');
+                }
+                this.sidebarOpenButtonAction = value;
+
+
+                this.$cookie.set('sidebarOpen', this.sidebarOpenButtonAction, { expires: '1Y' });
             }
         }
     }

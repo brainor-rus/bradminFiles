@@ -4,14 +4,14 @@
 <template>
     <div class="main-wrapper">
         <div class="fixed-sidebar-wrapper"
-             v-bind:class="fixedSidebarclasses"
+             v-bind:class="[sidebarClass,fixedSidebarclasses]"
              @mouseover="mouseOver"
              @mouseleave="mouseLeave"
         >
             <left-sidebar-header></left-sidebar-header>
             <left-menu></left-menu>
         </div>
-        <div class="content-wrapper">
+        <div class="content-wrapper" v-bind:class="sidebarClass">
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-12 panel-header">
@@ -38,12 +38,16 @@
         components: { LeftMenu, LeftSidebarHeader },
         data(){
             return {
-                fixedSidebarclasses: ''
+                fixedSidebarclasses: '',
+                sidebarOpenCookieStatus:this.$cookie.get('sidebarOpen'),
             };
         },
         computed: {
             title() {
                 return this.$store.state.title.title;
+            },
+            sidebarClass() {
+                return this.$store.state.sidebar.sidebarClass;
             },
             activeUrlParams: {
                 get: function() {
@@ -54,14 +58,27 @@
                 }
             }
         },
+        created: function (){
+            this.checkSidebarState();
+        },
         methods: {
             mouseOver: function(){
-                this.fixedSidebarclasses = 'open';
-                this.$store.commit('sidebarOpenState', true);
+                if(this.sidebarClass === ''){
+                    this.fixedSidebarclasses = 'open';
+                    this.$store.commit('sidebarOpenState', true);
+                }
             },
             mouseLeave: function(){
-                this.fixedSidebarclasses = '';
-                this.$store.commit('sidebarOpenState', false)
+                if(this.sidebarClass === ''){
+                    this.fixedSidebarclasses = '';
+                    this.$store.commit('sidebarOpenState', false)
+                }
+            },
+            checkSidebarState: function(){
+                if(this.sidebarOpenCookieStatus === 'true'){
+                    this.$store.commit('sidebarClassChange', 'open');
+                    this.$store.commit('sidebarOpenState', true);
+                }
             }
         }
     }
