@@ -1,7 +1,9 @@
 // initial state
 const state = {
     sidebarOpen: false,
-    sidebarClass: ''
+    sidebarClass: '',
+    logoUrl: window.logoUrl,
+    logoMiniUrl: window.logoMiniUrl,
 };
 
 // mutations
