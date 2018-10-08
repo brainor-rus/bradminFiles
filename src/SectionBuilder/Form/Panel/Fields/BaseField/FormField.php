@@ -14,12 +14,18 @@ use Bradmin\SectionBuilder\Form\Panel\Fields\Hidden;
 use Bradmin\SectionBuilder\Form\Panel\Fields\Input;
 use Bradmin\SectionBuilder\Form\Panel\Fields\MultiSelect;
 use Bradmin\SectionBuilder\Form\Panel\Fields\Select;
+use Bradmin\SectionBuilder\Form\Panel\Fields\Textarea;
 
 class FormField
 {
     public static function input($name, $label)
     {
         return new Input($name, $label);
+    }
+
+    public static function textarea($name, $label)
+    {
+        return new Textarea($name, $label);
     }
 
     public static function select($name, $label)
