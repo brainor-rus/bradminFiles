@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\View;
+use Illuminate\Support\Facades\Storage;
 
 use Bradmin\Section;
 use Bradmin\Navigation\NavigationManager;
@@ -201,5 +202,9 @@ class BrAdminController extends Controller
                 'meta' => $meta ?? ''
             ]
         );
+    }
+
+    public function getImage($path){
+        return response()->file($path);
     }
 }
