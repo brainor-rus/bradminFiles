@@ -1,10 +1,12 @@
 <div class="row pb-3">
     <div class="col-12">
-        <div class="card">
-            <div class="card-body">
-                <a @click.prevent="$emit('redirectTo',$event)" href="{{ Request::url() }}/create" class="btn btn-primary">Создать</a>
+        @if($firedSection->isCreatable())
+            <div class="card">
+                <div class="card-body">
+                    <a @click.prevent="$emit('redirectTo',$event)" href="{{ Request::url() }}/create" class="btn btn-primary">Создать</a>
+                </div>
             </div>
-        </div>
+        @endif
     </div>
 </div>
 
@@ -37,8 +39,12 @@
                     </td>
                 @endforeach
                 <td class="text-right">
-                    <a @click.prevent="$emit('redirectTo',$event)" href="{{ parse_url(Request::url(), PHP_URL_PATH) . '/' . $field['brRowId'] . '/edit' }}" class="text-success">Ред.</a>
-                    <button @click="$emit('showDeleteModal',$event)" type="button" class="delete-btn text-danger bg-transparent border-0" data-delete-link="{{ Request::url() . '/' . $field['brRowId'] . '/delete' }}">Удал.</button>
+                    @if($firedSection->isEditable())
+                        <a @click.prevent="$emit('redirectTo',$event)" href="{{ parse_url(Request::url(), PHP_URL_PATH) . '/' . $field['brRowId'] . '/edit' }}" class="text-success">Ред.</a>
+                    @endif
+                    @if($firedSection->isDeletable())
+                        <button @click="$emit('showDeleteModal',$event)" type="button" class="delete-btn text-danger bg-transparent border-0" data-delete-link="{{ Request::url() . '/' . $field['brRowId'] . '/delete' }}">Удал.</button>
+                    @endif
                 </td>
             </tr>
         @endforeach
