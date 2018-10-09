@@ -43,7 +43,8 @@ class BrAdminController extends Controller
         $display = $section->fireDisplay($sectionName);
         $sectionModelSettings = $section->getSectionSettings(studly_case($sectionName));
 
-        $results = $display->render($sectionModelSettings['model'] ?? config('bradmin.base_models_path') . studly_case(strtolower(str_singular($sectionName))));
+        $firedSection = $section->getSectionByName($sectionName);
+        $results = $display->render($sectionModelSettings['model'] ?? config('bradmin.base_models_path') . studly_case(strtolower(str_singular($sectionName))), $firedSection);
 
         $html = $results['view'];
         $pagination = [
@@ -58,110 +59,160 @@ class BrAdminController extends Controller
             'title' => $sectionModelSettings['title']
         ];
 
-
         return $this->render($html,$pagination,$meta);
     }
 
     public function getCreate(Section $section, $sectionName)
     {
-        $display = $section->fireCreate(studly_case($sectionName));
-        $sectionModelSettings = $section->getSectionSettings(studly_case($sectionName));
+        $class = $section->getSectionByName($sectionName);
+        if(isset($class)) {
+            if ($class->isCreatable()) {
+                $display = $section->fireCreate(studly_case($sectionName));
+                $sectionModelSettings = $section->getSectionSettings(studly_case($sectionName));
 
-        $html = $display->render($sectionModelSettings['model'] ?? config('bradmin.base_models_path') . studly_case(strtolower(str_singular($sectionName))), $sectionName);
-        $meta = [
-            'title' => $sectionModelSettings['title'] . '| Новая запись'
-        ];
+                $html = $display->render($sectionModelSettings['model'] ?? config('bradmin.base_models_path') . studly_case(strtolower(str_singular($sectionName))), $sectionName);
+                $meta = [
+                    'title' => $sectionModelSettings['title'] . '| Новая запись'
+                ];
 
-        return $this->render($html, '', $meta);
+                return $this->render($html, '', $meta);
+            }
+            else{
+                return $this->render("Создание в этой секции невозможно");
+            }
+        }
     }
 
     public function createAction(Section $section, $sectionName, Request $request)
     {
-        $request->offsetUnset('_token');
-        $sectionModelSettings = $section->getSectionSettings(studly_case($sectionName));
-        $modelPath = $sectionModelSettings['model'] ?? config('bradmin.base_models_path') . studly_case(strtolower(str_singular($sectionName)));
+        $class = $section->getSectionByName($sectionName);
+        $redirectUrl = '/' . config('bradmin.admin_url') . '/' . $sectionName;
+        if(isset($class)) {
+            if ($class->isEditable()) {
+                $request->offsetUnset('_token');
+                $sectionModelSettings = $section->getSectionSettings(studly_case($sectionName));
+                $modelPath = $sectionModelSettings['model'] ?? config('bradmin.base_models_path') . studly_case(strtolower(str_singular($sectionName)));
 
-        $model = new $modelPath;
-        $attrFields = Schema::getColumnListing($model->getTable());
-        $relationFields = array_diff_key($request->all(), array_flip($attrFields));
+                $model = new $modelPath;
+                $attrFields = Schema::getColumnListing($model->getTable());
+                $relationFields = array_diff_key($request->all(), array_flip($attrFields));
 
-        $model = $model::create($request->all());
-        $model = $model->where('id', $model->id)
-            ->when(isset($relationFields), function ($query) use ($relationFields) {
-                $query->with(array_keys($relationFields));
-            })
-            ->first();
+                $model = $model::create($request->all());
+                $model = $model->where('id', $model->id)
+                    ->when(isset($relationFields), function ($query) use ($relationFields) {
+                        $query->with(array_keys($relationFields));
+                    })
+                    ->first();
 
-//        FormAction::save($model, $request);
-        FormAction::saveBelongsToRelations($model, $request);
-        FormAction::saveBelongsToManyRelations($model, $request);
-        FormAction::saveHasOneRelations($model, $request);
+                //        FormAction::save($model, $request);
+                FormAction::saveBelongsToRelations($model, $request);
+                FormAction::saveBelongsToManyRelations($model, $request);
+                FormAction::saveHasOneRelations($model, $request);
 
-//        return redirect()->back();
+                //        return redirect()->back();
 
-        $redirectUrl = '/'.config('bradmin.admin_url').'/'.$sectionName;
-        return response()->json([
-                'data' => [
-                    'code'=>0,
-                    'message'=>'Успешно',
-                    'class'=>'success'
-                ],
-                'redirect' => [
-                    'url' => $redirectUrl
-                ]
-            ]
-        );
+                return response()->json([
+                        'data' => [
+                            'code' => 0,
+                            'message' => 'Успешно',
+                            'class' => 'success'
+                        ],
+                        'redirect' => [
+                            'url' => $redirectUrl
+                        ]
+                    ]
+                );
+            }
+            else{
+                return response()->json([
+                        'data' => [
+                            'code' => 500,
+                            'message' => 'Ошибка',
+                            'class' => 'error'
+                        ],
+                        'redirect' => [
+                            'url' => $redirectUrl
+                        ]
+                    ]
+                );
+            }
+        }
     }
 
     public function getEdit(Section $section, $sectionName, $id)
     {
-        $display = $section->fireEdit(studly_case($sectionName));
-        $sectionModelSettings = $section->getSectionSettings(studly_case($sectionName));
+        $class = $section->getSectionByName($sectionName);
+        if(isset($class)) {
+            if ($class->isEditable()) {
+                $display = $section->fireEdit(studly_case($sectionName));
+                $sectionModelSettings = $section->getSectionSettings(studly_case($sectionName));
 
-        $html = $display->render($sectionModelSettings['model'] ?? config('bradmin.base_models_path') . studly_case(strtolower(str_singular($sectionName))), $sectionName, $id);
-        $meta = [
-            'title' => $sectionModelSettings['title'] . '| Редактирование'
-        ];
+                $html = $display->render($sectionModelSettings['model'] ?? config('bradmin.base_models_path') . studly_case(strtolower(str_singular($sectionName))), $sectionName, $id);
+                $meta = [
+                    'title' => $sectionModelSettings['title'] . '| Редактирование'
+                ];
 
-        return $this->render($html, '', $meta);
+                return $this->render($html, '', $meta);
+            }
+            else{
+                return $this->render("Редактирование этой секции невозможно.");
+            }
+        }
     }
 
     public function editAction(Section $section, $sectionName, Request $request, $id)
     {
-        $request->offsetUnset('_token');
-        $sectionModelSettings = $section->getSectionSettings(studly_case($sectionName));
-        $modelPath = $sectionModelSettings['model'] ?? config('bradmin.base_models_path') . studly_case(strtolower(str_singular($sectionName)));
+        $class = $section->getSectionByName($sectionName);
+        $redirectUrl = '/' . config('bradmin.admin_url') . '/' . $sectionName;
+        if(isset($class)) {
+            if ($class->isEditable()) {
+                $request->offsetUnset('_token');
+                $sectionModelSettings = $section->getSectionSettings(studly_case($sectionName));
+                $modelPath = $sectionModelSettings['model'] ?? config('bradmin.base_models_path') . studly_case(strtolower(str_singular($sectionName)));
 
-        $model = new $modelPath;
-        $attrFields = Schema::getColumnListing($model->getTable());
-        $relationFields = array_diff_key($request->all(), array_flip($attrFields));
+                $model = new $modelPath;
+                $attrFields = Schema::getColumnListing($model->getTable());
+                $relationFields = array_diff_key($request->all(), array_flip($attrFields));
 
-        $model = $model->where('id', $id)
-            ->when(isset($relationFields), function ($query) use ($relationFields) {
-                $query->with(array_keys($relationFields));
-            })
-            ->first();
+                $model = $model->where('id', $id)
+                    ->when(isset($relationFields), function ($query) use ($relationFields) {
+                        $query->with(array_keys($relationFields));
+                    })
+                    ->first();
 
-        FormAction::save($model, $request);
-        FormAction::saveBelongsToRelations($model, $request);
-        FormAction::saveBelongsToManyRelations($model, $request);
-        FormAction::saveHasOneRelations($model, $request);
+                FormAction::save($model, $request);
+                FormAction::saveBelongsToRelations($model, $request);
+                FormAction::saveBelongsToManyRelations($model, $request);
+                FormAction::saveHasOneRelations($model, $request);
 
-//        $modelPath::where('id', $id)->update($request->all());
+                //        $modelPath::where('id', $id)->update($request->all());
 
-//        return redirect()->back();
-        $redirectUrl = '/'.config('bradmin.admin_url').'/'.$sectionName;
-        return response()->json([
-                'data' => [
-                    'code'=>0,
-                    'message'=>'Успешно',
-                    'class'=>'success'
-                ],
-                'redirect' => [
-                    'url' => $redirectUrl
-                ]
-            ]
-        );
+                return response()->json([
+                        'data' => [
+                            'code' => 0,
+                            'message' => 'Успешно',
+                            'class' => 'success'
+                        ],
+                        'redirect' => [
+                            'url' => $redirectUrl
+                        ]
+                    ]
+                );
+            }
+            else{
+                return response()->json([
+                        'data' => [
+                            'code' => 500,
+                            'message' => 'Ошибка',
+                            'class' => 'error'
+                        ],
+                        'redirect' => [
+                            'url' => $redirectUrl
+                        ]
+                    ]
+                );
+            }
+        }
     }
 
     public function postEdit()
@@ -175,21 +226,50 @@ class BrAdminController extends Controller
         $sectionModelSettings = $section->getSectionSettings($sectionName);
         $modelPath = $sectionModelSettings['model'] ?? config('bradmin.base_models_path') . studly_case(strtolower(str_singular($sectionName)));
         $model = new $modelPath;
-        $model->where('id', $id)->delete();
-//        return redirect('/');
-
+        $class = $section->getSectionByName($sectionName);
         $redirectUrl = '/'.config('bradmin.admin_url').'/'.$sectionName;
-        return response()->json([
-                'data' => [
-                    'code'=>0,
-                    'message'=>'Успешно',
-                    'class'=>'success'
-                ],
-                'redirect' => [
-                    'url' => $redirectUrl
+        if(isset($class)){
+            if($class->isDeletable()){
+                $model->where('id', $id)->delete();
+                return response()->json([
+                        'data' => [
+                            'code'=>0,
+                            'message'=>'Успешно',
+                            'class'=>'success'
+                        ],
+                        'redirect' => [
+                            'url' => $redirectUrl
+                        ]
+                    ]
+                );
+            }
+            else{
+                return response()->json([
+                        'data' => [
+                            'code'=>500,
+                            'message'=>'Ошибка',
+                            'class'=>'error'
+                        ],
+                        'redirect' => [
+                            'url' => $redirectUrl
+                        ]
+                    ]
+                );
+            }
+        }
+        else{
+            return response()->json([
+                    'data' => [
+                        'code'=>500,
+                        'message'=>'Ошибка',
+                        'class'=>'error'
+                    ],
+                    'redirect' => [
+                        'url' => $redirectUrl
+                    ]
                 ]
-            ]
-        );
+            );
+        }
     }
 
     public function render($html, $pagination=null, $meta=null)

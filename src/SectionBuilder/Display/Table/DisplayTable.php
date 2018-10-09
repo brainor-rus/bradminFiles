@@ -8,6 +8,7 @@
 
 namespace Bradmin\SectionBuilder\Display\Table;
 
+use Bradmin\Section;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\View;
 
@@ -21,7 +22,7 @@ class DisplayTable
         $this->setColumns($columns);
     }
 
-    public function render($modelPath)
+    public function render($modelPath, Section $firedSection = null)
     {
         $columns = $this->getColumns();
         $relationData = null;
@@ -66,7 +67,7 @@ class DisplayTable
             $fields[$key]['brRowId'] = $row->id;
         }
         $response['data'] = $data;
-        $response['view'] = View::make('bradmin::SectionBuilder/Display/Table/table')->with(compact('data', 'columns', 'fields'));
+        $response['view'] = View::make('bradmin::SectionBuilder/Display/Table/table')->with(compact('data', 'columns', 'fields', 'firedSection'));
 
         return $response;
     }
