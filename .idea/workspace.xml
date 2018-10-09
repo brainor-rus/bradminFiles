@@ -3,16 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="89eb764b-624e-4dd1-835c-12d761ac1743" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/bradmin.php" beforeDir="false" afterPath="$PROJECT_DIR$/config/bradmin.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/images/wallhaven-34351.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/mix-manifest.json" beforeDir="false" afterPath="$PROJECT_DIR$/mix-manifest.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/css/app.css" beforeDir="false" afterPath="$PROJECT_DIR$/public/css/app.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/js/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/js/app.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/css/sidebarHeader.css" beforeDir="false" afterPath="$PROJECT_DIR$/resources/css/sidebarHeader.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/js/components/App.vue" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/components/App.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/js/components/LeftSidebarHeader.vue" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/components/LeftSidebarHeader.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/js/store/modules/sidebar.js" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/store/modules/sidebar.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Controllers/BrAdminController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controllers/BrAdminController.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -67,8 +57,8 @@
       <file leaf-file-name="LeftSidebarHeader.vue" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/resources/js/components/LeftSidebarHeader.vue">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="216">
-              <caret line="35" column="33" selection-start-line="35" selection-start-column="33" selection-end-line="35" selection-end-column="33" />
+            <state relative-caret-position="440">
+              <caret line="20" column="14" lean-forward="true" selection-start-line="20" selection-start-column="14" selection-end-line="20" selection-end-column="14" />
             </state>
           </provider>
         </entry>
@@ -169,32 +159,7 @@
             <path>
               <item name="bradmin" type="b2602c69:ProjectViewProjectNode" />
               <item name="bradmin" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="resources" type="2a2b976b:PhpTreeStructureProvider$1" />
-            </path>
-            <path>
-              <item name="bradmin" type="b2602c69:ProjectViewProjectNode" />
-              <item name="bradmin" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="resources" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="css" type="2a2b976b:PhpTreeStructureProvider$1" />
-            </path>
-            <path>
-              <item name="bradmin" type="b2602c69:ProjectViewProjectNode" />
-              <item name="bradmin" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="resources" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="js" type="2a2b976b:PhpTreeStructureProvider$1" />
-            </path>
-            <path>
-              <item name="bradmin" type="b2602c69:ProjectViewProjectNode" />
-              <item name="bradmin" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="resources" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="js" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="components" type="2a2b976b:PhpTreeStructureProvider$1" />
-            </path>
-            <path>
-              <item name="bradmin" type="b2602c69:ProjectViewProjectNode" />
-              <item name="bradmin" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="resources" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="views" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="images" type="2a2b976b:PhpTreeStructureProvider$1" />
             </path>
           </expand>
           <select />
@@ -278,11 +243,18 @@
       <option name="project" value="LOCAL" />
       <updated>1539012892936</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="sidebar fix state; sidebar logo;">
+      <created>1539078789999</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1539078789999</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="45036000" />
+    <option name="totallyTimeSpent" value="45907000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
@@ -323,7 +295,8 @@
     <option name="CHECK_NEW_TODO" value="false" />
     <MESSAGE value="update from regenerative" />
     <MESSAGE value="delete rows feat. add&#10;!redirect" />
-    <option name="LAST_COMMIT_MESSAGE" value="delete rows feat. add&#10;!redirect" />
+    <MESSAGE value="sidebar fix state; sidebar logo;" />
+    <option name="LAST_COMMIT_MESSAGE" value="sidebar fix state; sidebar logo;" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -562,8 +535,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/resources/js/components/LeftSidebarHeader.vue">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="216">
-          <caret line="35" column="33" selection-start-line="35" selection-start-column="33" selection-end-line="35" selection-end-column="33" />
+        <state relative-caret-position="440">
+          <caret line="20" column="14" lean-forward="true" selection-start-line="20" selection-start-column="14" selection-end-line="20" selection-end-column="14" />
         </state>
       </provider>
     </entry>
