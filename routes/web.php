@@ -6,6 +6,11 @@ Route::group(['middleware' => config('bradmin.middleware')], function () {
         'uses' => 'Bradmin\Controllers\BrAdminController@getIndex',
     ]);
 
+    Route::any('/'.config('bradmin.admin_url').'/images/{path}', [
+        'as'   => 'bradmin.getImage',
+        'uses' => 'Bradmin\Controllers\BrAdminController@getImage',
+    ]);
+
     Route::get('/'.config('bradmin.admin_url').'/{any}', 'Bradmin\Controllers\BrAdminController@getIndex')->where('any', '.*');
 
     Route::post('/'.config('bradmin.admin_url').'/dashboard', [

@@ -10,6 +10,8 @@
     <link href="{{ asset('packages/bradmin/css/app.css') }}" rel="stylesheet">
     <script>
         window.adminUrl = '{{ config('bradmin.admin_url') }}';
+        window.logoUrl = '{{ config('bradmin.logo') }}';
+        window.logoMiniUrl = '{{ config('bradmin.logo_mini') }}';
     </script>
     <title>{{ config('bradmin.title') }}</title>
 </head>
