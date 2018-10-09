@@ -48,8 +48,8 @@ return [
 
 
 
-//    'logo'      => '/images/asdf.png',
-    'logo'      => 'images/wallhaven-34351.jpg',
+//    'logo'      => '/images/user-logo.jpg',
+    'logo'      => '/bradmin/images/logo.jpg',
 
 //    'logo_mini' => '',
 
