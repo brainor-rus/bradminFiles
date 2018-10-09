@@ -22,6 +22,12 @@ class Section
 
         return get_object_vars(new $section($this->app));
     }
+    
+    public function getSectionByName($sectionName){
+
+        $section =  config('bradmin.user_path').'\\Sections\\'.$sectionName;
+        return new $section($this->app);
+    }
 
     public function fireDisplay($sectionName,array $payload = [])
     {
@@ -105,17 +111,20 @@ class Section
 
     public function isCreatable()
     {
-        return method_exists($this, 'onCreate') && parent::isCreatable($this->getModel());
+//        return method_exists($this, 'onCreate') && parent::isCreatable($this->getModel());
+        return true;
     }
 
-    public function isEditable(Model $model)
+    public function isEditable()
     {
-        return method_exists($this, 'onEdit') && parent::isEditable($model);
+//        return method_exists($this, 'onEdit') && parent::isEditable($model);
+        return true;
     }
 
-    public function isDeletable(Model $model)
+    public function isDeletable()
     {
-        return method_exists($this, 'onDelete') && parent::isDeletable($model);
+//        return method_exists($this, 'onDelete') && parent::isDeletable($model);
+        return true;
     }
 
 
