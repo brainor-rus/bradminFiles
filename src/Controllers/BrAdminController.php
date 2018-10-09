@@ -205,6 +205,6 @@ class BrAdminController extends Controller
     }
 
     public function getImage($path){
-        return response()->file($path);
+        return response()->file(base_path() . '/bradmin/images/' . $path);
     }
 }

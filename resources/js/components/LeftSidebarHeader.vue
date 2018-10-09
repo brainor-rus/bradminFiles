@@ -1,15 +1,21 @@
-<style>
-    @import '../../css/sidebarHeader.css';
-</style>
+<style src="../../css/sidebarHeader.css"></style>
 
 <template>
-    <div class="align-items-center d-flex justify-content-between sidebar-header">
+    <div class="align-items-center d-flex justify-content-between sidebar-header px-3 my-2">
         <router-link to="/bradmin"><img class=" logo-img" :src="getLogoUrl" alt=""></router-link>
         <button class="sidebar-toggle-btn" @click="changeSidebarOpenCookie(sidebarOpenButtonAction)"><i :class="ico"></i></button>
     </div>
 </template>
 
 <script>
+    function menuIconChange(currentState, button)
+    {
+        if(currentState === 'false' || currentState === false || currentState === null || typeof currentState === 'undefined'){
+            button.$data.ico = "fa fa-unlock"
+        }else{
+            button.$data.ico = "fa fa-lock"
+        }
+    }
 
     export default {
         data(){
@@ -20,11 +26,7 @@
         },
         created: function () {
             let val = this.$cookie.get('sidebarOpen');
-            if(val === 'false' || val === false || val === null || typeof val === 'undefined'){
-                this.$data.ico = "fa fa-list-ul"
-            }else{
-                this.$data.ico = "fa fa-bars"
-            }
+            menuIconChange(val, this);
         },
         methods: {
             changeSidebarOpenCookie(actionValue) {
@@ -32,14 +34,13 @@
                 var vm = this;
                 if(actionValue === 'false' || actionValue === false || actionValue === null || typeof actionValue === 'undefined'){
                     value = true;
-                    this.$store.commit('sidebarClassChange', 'open');
-                    this.$store.commit('sidebarOpenState', value);
-                    vm.$data.ico = "fa fa-bars"
+                    this.$store.commit('sidebarFixedState', value);
+                    menuIconChange(value, vm);
 
                 }else{
                     value = false;
-                    this.$store.commit('sidebarClassChange', '');
-                    vm.$data.ico = "fa fa-list-ul"
+                    this.$store.commit('sidebarFixedState', value);
+                    menuIconChange(value, vm);
                 }
                 this.sidebarOpenButtonAction = value;
 
@@ -52,5 +53,5 @@
                 return this.$store.state.sidebar.logoUrl;
             }
         }
-    }
+    };
 </script>
