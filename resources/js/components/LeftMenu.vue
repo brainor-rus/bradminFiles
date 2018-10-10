@@ -6,6 +6,7 @@
                          :to="menuItem.url"
                          :class="['collapsable',{ 'router-link-exact-active' : menuItem.url === activeUrlParams}]"
                          :data-target="'#' + menuItem.url.replace(/\//g, '')"
+                         exact
             >
                 <i v-if="menuItem.iconText" class="icon">{{ menuItem.iconText }}</i>
                 <template v-else>
