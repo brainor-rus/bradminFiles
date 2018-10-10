@@ -3,6 +3,7 @@
         action={{ $action == 'edit' ? "/bradmin/" . $sectionName . "/" . $id . "/edit-action" : "/bradmin/" . $sectionName . "/create-action"}}
         method="post">
     @csrf
+    <input type="hidden" name="pluginData[deleteUrl]" value="{{ $pluginData['redirectUrl'] ?? null }}">
 
     <div class="row">
         @foreach($columns as $column)

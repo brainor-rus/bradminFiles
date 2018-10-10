@@ -39788,6 +39788,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 
 
@@ -39798,6 +39799,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         },
         getCSRF: function getCSRF() {
             return __WEBPACK_IMPORTED_MODULE_0_jquery___default()('meta[name="csrf-token"]').attr('content');
+        },
+        getDeleteUrl: function getDeleteUrl() {
+            return __WEBPACK_IMPORTED_MODULE_0_jquery___default()('.display-table').data('delete-redirect');
         }
     }
 });
@@ -39861,6 +39865,11 @@ var render = function() {
                 _c("input", {
                   attrs: { type: "hidden", name: "_token" },
                   domProps: { value: _vm.getCSRF }
+                }),
+                _vm._v(" "),
+                _c("input", {
+                  attrs: { type: "hidden", name: "pluginData[deleteUrl]" },
+                  domProps: { value: _vm.getDeleteUrl }
                 }),
                 _vm._v(" "),
                 _c(

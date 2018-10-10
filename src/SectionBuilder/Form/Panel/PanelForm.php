@@ -10,6 +10,7 @@ namespace Bradmin\SectionBuilder\Form\Panel;
 
 
 use Illuminate\Support\Facades\View;
+use Bradmin\Section;
 
 class PanelForm
 {
@@ -36,7 +37,7 @@ class PanelForm
         $this->columns = $columns;
     }
 
-    public function render($modelPath, $sectionName, $id = null)
+    public function render($modelPath, $sectionName, Section $firedSection, $id = null, $pluginData = null)
     {
         $columns = $this->getColumns();
         $model = new $modelPath();
@@ -52,8 +53,14 @@ class PanelForm
             $action = 'edit';
         }
 
+        if(isset($pluginData['redirectUrl']))
+        {
+            $rc = new \ReflectionClass($firedSection);
+            $pluginData['redirectUrl'] = strtr($pluginData['redirectUrl'], ['{sectionName}' => $rc->getShortName()]);
+        }
+
         $response = View::make('bradmin::SectionBuilder/Form/Panel/panel')
-            ->with(compact('model', 'columns', 'sectionName', 'action', 'id'));
+            ->with(compact('model', 'columns', 'sectionName', 'action', 'id', 'pluginData'));
 
         return $response;
     }
