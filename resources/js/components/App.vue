@@ -34,21 +34,6 @@
     import LeftMenu from './LeftMenu';
     import LeftSidebarHeader from './LeftSidebarHeader';
 
-    // function checkSideBarState(obj, over) {
-    //     if(obj.sidebarOpenCookieStatus === 'false' || obj.sidebarOpenCookieStatus === false || obj.sidebarOpenCookieStatus === null || typeof obj.sidebarOpenCookieStatus === 'undefined'){
-    //         if(over){
-    //             obj.fixedSidebarclasses = 'open';
-    //             obj.$store.commit('sidebarOpenState', true);
-    //         }
-    //         else{
-    //             obj.fixedSidebarclasses = '';
-    //             obj.$store.commit('sidebarOpenState', false)
-    //         }
-    //     }
-    //     else{
-    //     }
-    // }
-
     export default {
         components: { LeftMenu, LeftSidebarHeader },
         data(){
@@ -78,28 +63,16 @@
         },
         methods: {
             mouseOver: function(){
-                // console.log(this.$store.state.sidebar.sidebarOpen);
-                // console.log(this.$store.state.sidebar.sidebarFixed);
                 if(!this.$store.state.sidebar.sidebarOpen){
-                    // this.fixedSidebarclasses = 'open';
                     this.$store.commit('sidebarOpenState', true);
                     this.$store.commit('sidebarClassChange', 'open');
                 }
-                console.log('over______');
-                console.log('fixedClass: ' + this.fixedSidebarclasses);
-                console.log('fixedState: ' + this.$store.state.sidebar.sidebarFixed);
-                console.log('openState: ' + this.$store.state.sidebar.sidebarOpen);
             },
             mouseLeave: function(){
                 if(!this.$store.state.sidebar.sidebarFixed && this.$store.state.sidebar.sidebarOpen){
-                    // this.fixedSidebarclasses = '';
                     this.$store.commit('sidebarOpenState', false);
                     this.$store.commit('sidebarClassChange', '');
                 }
-                console.log('leave______');
-                console.log('fixedClass: ' + this.fixedSidebarclasses);
-                console.log('fixedState: ' + this.$store.state.sidebar.sidebarFixed);
-                console.log('openState: ' + this.$store.state.sidebar.sidebarOpen);
             },
             checkSidebarState: function(){
                 if(this.sidebarOpenCookieStatus === 'true'){
