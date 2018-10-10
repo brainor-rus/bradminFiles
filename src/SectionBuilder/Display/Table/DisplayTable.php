@@ -11,6 +11,7 @@ namespace Bradmin\SectionBuilder\Display\Table;
 use Bradmin\Section;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\View;
+use BRHelper;
 
 class DisplayTable
 {
@@ -22,7 +23,7 @@ class DisplayTable
         $this->setColumns($columns);
     }
 
-    public function render($modelPath, Section $firedSection = null)
+    public function render($modelPath, Section $firedSection, $pluginData = null)
     {
         $columns = $this->getColumns();
         $relationData = null;
@@ -36,7 +37,6 @@ class DisplayTable
             }
         }
 
-//        require_once( base_path() . $modelPath . '.php');
         $model = new $modelPath();
 
         $data = $model->when(isset($relationData), function ($query) use ($relationData) {
@@ -66,8 +66,15 @@ class DisplayTable
             }
             $fields[$key]['brRowId'] = $row->id;
         }
+
+        if(isset($pluginData['redirectUrl']))
+        {
+            $rc = new \ReflectionClass($firedSection);
+            $pluginData['redirectUrl'] = strtr($pluginData['redirectUrl'], ['{sectionName}' => $rc->getShortName()]);
+        }
+
         $response['data'] = $data;
-        $response['view'] = View::make('bradmin::SectionBuilder/Display/Table/table')->with(compact('data', 'columns', 'fields', 'firedSection'));
+        $response['view'] = View::make('bradmin::SectionBuilder/Display/Table/table')->with(compact('data', 'columns', 'fields', 'firedSection', 'pluginData'));
 
         return $response;
     }
