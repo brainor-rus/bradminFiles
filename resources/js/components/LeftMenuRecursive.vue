@@ -34,6 +34,17 @@
     </ul>
 </template>
 <script>
+    import $ from 'jquery';
+
+    function setParentActive(ul) {
+        if(ul.length !== 0)
+        {
+            ul.collapse('show');
+            ul.siblings('a').addClass('router-link-active collapsable');
+            setParentActive($(ul).parent().closest('.sub-menu'));
+        }
+    };
+    
     export default {
         props: [ 'menuItemNodes','menuParentItemUrl' ],
         name: 'left-menu-recursive',
@@ -50,5 +61,8 @@
                 }
             }
         },
+        mounted: function () {
+            setParentActive($('.router-link-exact-active').closest('.sub-menu'));
+        }
     }
 </script>

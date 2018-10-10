@@ -25,7 +25,7 @@ class PluginNavigation
                         'url' => '/bradmin/BrainorPayBankResponses',
                         'icon' => 'fas fa-address-book',
                         'iconText' => 'ОБ',
-                        'text' => 'Ответы банков'
+                        'text' => 'Ответы банков',
                     ],
                     [
                         'url' => '/bradmin/BrainorPayCommissions',
