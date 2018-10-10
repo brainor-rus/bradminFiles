@@ -27271,6 +27271,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 
 
@@ -34994,7 +34995,8 @@ var render = function() {
                     ],
                     attrs: {
                       to: menuItem.url,
-                      "data-target": "#" + menuItem.url.replace(/\//g, "")
+                      "data-target": "#" + menuItem.url.replace(/\//g, ""),
+                      exact: ""
                     }
                   },
                   [
