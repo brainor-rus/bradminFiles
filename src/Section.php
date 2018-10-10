@@ -16,6 +16,11 @@ class Section
         $this->app = $app;
     }
 
+    public function getClassName()
+    {
+        return __CLASS__;
+    }
+
     public function getSectionSettings($sectionName)
     {
         $section = config('bradmin.user_path').'\\Sections\\'.$sectionName;

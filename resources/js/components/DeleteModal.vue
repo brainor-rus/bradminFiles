@@ -18,6 +18,7 @@
                         </div>
                         <div class="modal-footer">
                             <input type="hidden" name="_token" :value="getCSRF">
+                            <input type="hidden" name="pluginData[deleteUrl]" :value="getDeleteUrl">
                             <button type="button" class="float-right btn btn-secondary mr-3" @click="$emit('close')">Отмена</button>
                             <button class="float-right btn btn-danger" type="submit">Удалить</button>
                         </div>
@@ -38,6 +39,9 @@
             },
             getCSRF() {
                 return $('meta[name="csrf-token"]').attr('content');
+            },
+            getDeleteUrl() {
+                return $('.display-table').data('delete-redirect');
             }
         },
     }
