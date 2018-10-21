@@ -1,6 +1,6 @@
 <?php
 
-namespace Bradmin\Plugins\BrainorCms\Navigation;
+namespace Bradmin\Cms\Navigation;
 
 class PluginNavigation
 {
@@ -24,7 +24,7 @@ class PluginNavigation
     }
 
     public static function getPluginNav(){
-        return (new self)->pluginNav;
+        return (new self())->pluginNav;
     }
 
 }

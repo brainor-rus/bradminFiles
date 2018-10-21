@@ -8,10 +8,12 @@ use Bradmin\Plugins\PluginManager;
 class BrAdminServiceProvider extends ServiceProvider
 {
     public $allPluginsNavigation = [];
+    public $allPluginsCmsData = [];
 
     public function __construct(\Illuminate\Contracts\Foundation\Application  $app=null)
     {
        $this->allPluginsNavigation;
+       $this->allPluginsCmsData;
         parent::__construct($app);
     }
 
@@ -45,6 +47,10 @@ class BrAdminServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        // load config
+        $this->mergeConfigFrom(__DIR__.'/../../config/bradmin.php', 'bradmin');
+
+
         $this->app->singleton('PluginManager', function($app)
         {
             return new PluginManager();
@@ -58,7 +64,35 @@ class BrAdminServiceProvider extends ServiceProvider
             foreach ($pluginProviders['providers'] as $pluginProvider)
             {
                 $this->app->register($pluginProvider['nameSpace'].'\\'.$pluginProvider['class']);
+
+                $pluginData = $this->app->{$pluginProvider['nameSpace'].'\\'.$pluginProvider['class']};
+
+                if(isset($pluginData->navigation)){
+                    $this->allPluginsNavigation = array_merge($this->allPluginsNavigation,$pluginData->navigation);
+                }
+                if(isset($pluginData->cmsData)){
+                    $this->allPluginsCmsData = array_merge($this->allPluginsCmsData,$pluginData->cmsData);
+                }
             }
         }
+        $this->app->bind('PluginsData', function(){
+            return [
+                'PluginsNavigation'=>$this->allPluginsNavigation,
+                'CmsData'=>$this->allPluginsCmsData,
+            ];
+        });
+
+        //CMS
+        $this->app->register('Bradmin\Cms\Providers\Cms');
+
+        $pluginData = $this->app->{'Bradmin\Cms\Providers\Cms'};
+
+        if(isset($pluginData->navigation)){
+            $this->allPluginsNavigation = array_merge($this->allPluginsNavigation,$pluginData->navigation);
+        }
+        if(isset($pluginData->cmsData)){
+            $this->allPluginsCmsData = array_merge($this->allPluginsCmsData,$pluginData->cmsData);
+        }
+        //END CMS
     }
 }

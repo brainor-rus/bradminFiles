@@ -1,20 +1,25 @@
 <?php
 /**
- * class: BrainorCms
- * nameSpace: Bradmin\Plugins\BrainorCms\Providers
+ * class: Cms
+ * nameSpace: Bradmin\Cms\Providers
  */
-namespace Bradmin\Plugins\BrainorCms\Providers;
+namespace Bradmin\Cms\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use Bradmin\Plugins\BrainorCms\Navigation\PluginNavigation;
+use Bradmin\Cms\Navigation\PluginNavigation;
 
-class BrainorCms extends ServiceProvider
+class Cms extends ServiceProvider
 {
     public $navigation;
+    public $cmsData;
 
     public function __construct(\Illuminate\Contracts\Foundation\Application  $app=null)
     {
         $this->navigation = PluginNavigation::getPluginNav();
+        $this->cmsData = [
+            '1'=>'5555',
+            '2'=>'6666'
+        ];
         parent::__construct($app);
     }
 
@@ -28,13 +33,13 @@ class BrainorCms extends ServiceProvider
     {
 
         // load config
-        $this->mergeConfigFrom(__DIR__.'/../../../../config/bradmin.php', 'bradmin');
+        $this->mergeConfigFrom(__DIR__.'/../../../config/bradmin.php', 'bradmin');
         // load routes
         $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
         // load view files
-        $this->loadViewsFrom(__DIR__.'/../resources/views', 'brainor_cms');
+        $this->loadViewsFrom(__DIR__.'/../resources/views', 'cms');
         // publish files
-        $this->publishes([__DIR__.'/../resources/views' => resource_path('views/bradmin/brainor_cms')]);
+        $this->publishes([__DIR__.'/../resources/views' => resource_path('views/bradmin/cms')]);
     }
 
     /**

@@ -2,7 +2,6 @@
 
 namespace Bradmin\Navigation;
 
-use Bradmin\Providers\BrAdminServiceProvider;
 use Bradmin\Plugins\PluginManager;
 
 class NavigationManager
@@ -12,7 +11,7 @@ class NavigationManager
 
     public function __construct(\Illuminate\Contracts\Foundation\Application  $app=null)
     {
-            $this->navigation = $this->getDefaultNavigation();
+        $this->navigation = $this->getDefaultNavigation();
         $this->allPluginsNavigation;
         $this->app = $app;
     }
@@ -26,26 +25,7 @@ class NavigationManager
 
     public function getNavigation()
     {
-        $navigation = $this->navigation;
-        $this->app->singleton('PluginManager', function($app)
-        {
-            return new PluginManager();
-        });
-
-        $pluginManager = $this->app->make('PluginManager');
-
-        // Register other plugin Service Providers in a loop here
-        foreach ($pluginManager->getInstalledPlugins() as $pluginProviders)
-        {
-            foreach ($pluginProviders['providers'] as $pluginProvider)
-            {
-                $this->app->register($pluginProvider['nameSpace'].'\\'.$pluginProvider['class']);
-
-                $pluginNavigation = $this->app->{$pluginProvider['nameSpace'].'\\'.$pluginProvider['class']}->navigation;
-                $this->allPluginsNavigation = array_merge($this->allPluginsNavigation,$pluginNavigation);
-            }
-        }
-        return array_merge($navigation,$this->allPluginsNavigation);
+        return array_merge($this->navigation,$this->app['PluginsData']['PluginsNavigation']);
     }
 
     public static function returnNavigation(\Illuminate\Contracts\Foundation\Application  $app)
