@@ -5,8 +5,7 @@
         <li v-for="menuItem in menuItemNodes">
             <router-link v-if="menuItem.nodes"
                          :to="'#' + menuItem.url.replace(/\//g, '')"
-                         :class="{ 'router-link-exact-active'
-                        : menuItem.url === activeUrlParams}"
+                         :class="['menu-item', { 'router-link-exact-active' : menuItem.url === activeUrlParams}]"
                          :data-toggle="'collapse'"
                          :data-target="'#' + menuItem.url.replace(/\//g, '')"
                          :aria-expanded="true"
@@ -20,7 +19,7 @@
                     <span v-show="sidebarOpen">{{ menuItem.text }}</span>
                 </transition>
             </router-link>
-            <router-link v-else :to="menuItem.url" :class="{ 'router-link-exact-active' : menuItem.url === activeUrlParams}">
+            <router-link v-else :to="menuItem.url" :class="['menu-item', { 'router-link-exact-active' : menuItem.url === activeUrlParams}]">
                 <i v-if="menuItem.iconText" class="icon">{{ menuItem.iconText }}</i>
                 <template v-else>
                     <i v-if="menuItem.icon" class="icon" :class="menuItem.icon"></i>

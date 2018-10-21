@@ -27292,12 +27292,26 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
 
     updated: function updated() {
+
         this.$nextTick(function () {
             __WEBPACK_IMPORTED_MODULE_1_jquery___default()('.collapsable').on('click', function () {
                 var toggleId = __WEBPACK_IMPORTED_MODULE_1_jquery___default()(this).data('target');
                 __WEBPACK_IMPORTED_MODULE_1_jquery___default()(this).toggleClass('toggled');
                 __WEBPACK_IMPORTED_MODULE_1_jquery___default()(toggleId).collapse('toggle');
             });
+
+            //subMenuCollapseFix
+            __WEBPACK_IMPORTED_MODULE_1_jquery___default()('.sub-menu.collapse.show').each(function () {
+                __WEBPACK_IMPORTED_MODULE_1_jquery___default()(this).removeClass('show').removeClass('router-link-active');
+            });
+            __WEBPACK_IMPORTED_MODULE_1_jquery___default()('.menu-item').each(function () {
+                __WEBPACK_IMPORTED_MODULE_1_jquery___default()(this).removeClass('router-link-active');
+            });
+            __WEBPACK_IMPORTED_MODULE_1_jquery___default()('.router-link-exact-active').parents('.sub-menu').each(function () {
+                __WEBPACK_IMPORTED_MODULE_1_jquery___default()(this).addClass('show');
+                __WEBPACK_IMPORTED_MODULE_1_jquery___default()(this).prev('.menu-item').addClass('router-link-active');
+            });
+            //END----subMenuCollapseFix
         });
     },
     computed: {
@@ -34792,7 +34806,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
 
 
 
@@ -34849,10 +34862,13 @@ var render = function() {
             ? _c(
                 "router-link",
                 {
-                  class: {
-                    "router-link-exact-active":
-                      menuItem.url === _vm.activeUrlParams
-                  },
+                  class: [
+                    "menu-item",
+                    {
+                      "router-link-exact-active":
+                        menuItem.url === _vm.activeUrlParams
+                    }
+                  ],
                   attrs: {
                     to: "#" + menuItem.url.replace(/\//g, ""),
                     "data-toggle": "collapse",
@@ -34897,10 +34913,13 @@ var render = function() {
             : _c(
                 "router-link",
                 {
-                  class: {
-                    "router-link-exact-active":
-                      menuItem.url === _vm.activeUrlParams
-                  },
+                  class: [
+                    "menu-item",
+                    {
+                      "router-link-exact-active":
+                        menuItem.url === _vm.activeUrlParams
+                    }
+                  ],
                   attrs: { to: menuItem.url }
                 },
                 [
@@ -34988,6 +35007,7 @@ var render = function() {
                   {
                     class: [
                       "collapsable",
+                      "menu-item",
                       {
                         "router-link-exact-active":
                           menuItem.url === _vm.activeUrlParams
@@ -35037,10 +35057,13 @@ var render = function() {
               : _c(
                   "router-link",
                   {
-                    class: {
-                      "router-link-exact-active":
-                        menuItem.url === _vm.activeUrlParams
-                    },
+                    class: [
+                      "menu-item",
+                      {
+                        "router-link-exact-active":
+                          menuItem.url === _vm.activeUrlParams
+                      }
+                    ],
                     attrs: { to: menuItem.url }
                   },
                   [
