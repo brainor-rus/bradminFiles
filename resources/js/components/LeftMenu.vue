@@ -4,7 +4,7 @@
         <li v-for="menuItem in responseData">
             <router-link v-if="menuItem.nodes"
                          :to="menuItem.url"
-                         :class="['collapsable',{ 'router-link-exact-active' : menuItem.url === activeUrlParams}]"
+                         :class="['collapsable','menu-item', { 'router-link-exact-active' : menuItem.url === activeUrlParams}]"
                          :data-target="'#' + menuItem.url.replace(/\//g, '')"
                          exact
             >
@@ -17,7 +17,7 @@
                 </transition>
                 <i class="toggler fas"></i>
             </router-link>
-            <router-link v-else :to="menuItem.url" :class="{ 'router-link-exact-active' : menuItem.url === activeUrlParams}">
+            <router-link v-else :to="menuItem.url" :class="['menu-item',{ 'router-link-exact-active' : menuItem.url === activeUrlParams}]">
                 <i v-if="menuItem.iconText" class="icon">{{ menuItem.iconText }}</i>
                 <template v-else>
                     <i v-if="menuItem.icon" class="icon" :class="menuItem.icon"></i>
@@ -49,12 +49,27 @@
             this.fetchData();
         },
         updated: function () {
+
             this.$nextTick(function () {
                 $('.collapsable').on('click', function(){
                     let toggleId = $(this).data('target');
                     $(this).toggleClass('toggled')
                     $(toggleId).collapse('toggle')
                 });
+
+                //subMenuCollapseFix
+                $('.sub-menu.collapse.show').each(function() {
+                    $(this).removeClass('show').removeClass('router-link-active');
+                });
+                $('.menu-item').each(function() {
+                    $(this).removeClass('router-link-active');
+                });
+                $('.router-link-exact-active')
+                    .parents('.sub-menu').each(function() {
+                        $(this).addClass('show');
+                        $(this).prev('.menu-item').addClass('router-link-active');
+                    });
+                //END----subMenuCollapseFix
             });
         },
         computed: {
@@ -83,7 +98,7 @@
                     .catch(error => {
                         this.error = error.response.data.message || error.message;
                     });
-            }
+            },
         }
     }
 </script>

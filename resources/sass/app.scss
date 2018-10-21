@@ -132,6 +132,9 @@ body{
 .router-link-active.collapsable .toggler:after{
   content: "\f0d8";
 }
+.router-link-exact-active.collapsable .toggler:after{
+  content: "\f0d8";
+}
 .toggler{
   right: 15px;
   position: absolute;
