@@ -16,14 +16,31 @@ class CmsController extends Controller
         $this->app = $app;
     }
 
-    public function displayPages()
+    public function getDisplay(Section $section, $sectionName, $pluginData = null)
     {
-        return response()->json([
-                'html' => View::make('cms::pages')->render(),
-                'meta' => [
-                    'title' => 'Страницы'
-                ]
-            ]
-        );
+
+        // todo вызывать через экземпляр BrAdminController
+
+        $display = $section->fireDisplay($sectionName, [], 'Bradmin\Cms\Sections\\');
+        $sectionModelSettings = $section->getSectionSettings(studly_case($sectionName), 'Bradmin\Cms\Sections\\');
+
+
+        $firedSection = $section->getSectionByName($sectionName, 'Bradmin\Cms\Sections\\');
+        $results = $display->render($sectionModelSettings['model'], $firedSection, $pluginData);
+
+        $html = $results['view'];
+        $pagination = [
+            'total' => $results['data']->total(),
+            'per_page' => $results['data']->perPage(),
+            'current_page' => $results['data']->currentPage(),
+            'last_page' => $results['data']->lastPage(),
+            'from' => $results['data']->firstItem(),
+            'to' => $results['data']->lastItem()
+        ];
+        $meta = [
+            'title' => $sectionModelSettings['title']
+        ];
+
+        return $this->render($html,$pagination,$meta);
     }
 }

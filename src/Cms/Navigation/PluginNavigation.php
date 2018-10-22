@@ -11,12 +11,12 @@ class PluginNavigation
     {
         $this->pluginNav = [
             [
-                'url' => '/'.config('bradmin.admin_url').'/cms/pages',
+                'url' => '/'.config('bradmin.admin_url').'/cms/brpages',
                 'icon' => 'fas fa-users',
                 'text' => 'Страницы'
             ],
             [
-                'url' => '/'.config('bradmin.admin_url').'/cms/posts',
+                'url' => '/'.config('bradmin.admin_url').'/cms/brposts',
                 'icon' => 'fas fa-address-book',
                 'text' => 'Записи'
             ]

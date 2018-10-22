@@ -21,30 +21,30 @@ class Section
         return __CLASS__;
     }
 
-    public function getSectionSettings($sectionName)
+    public function getSectionSettings($sectionName, $sectionPath = null)
     {
-        $section = config('bradmin.user_path').'\\Sections\\'.$sectionName;
+        $section = ($sectionPath ?? config('bradmin.user_path').'\\Sections\\' ) . $sectionName;
 
         return get_object_vars(new $section($this->app));
     }
     
-    public function getSectionByName($sectionName){
+    public function getSectionByName($sectionName, $sectionPath = null){
 
-        $section =  config('bradmin.user_path').'\\Sections\\'.$sectionName;
+        $section =  ($sectionPath ?? config('bradmin.user_path').'\\Sections\\') . $sectionName;
         return new $section($this->app);
     }
 
-    public function fireDisplay($sectionName,array $payload = [])
+    public function fireDisplay($sectionName, array $payload = [], $sectionPath = null)
     {
 
 //        if (! method_exists($this, 'onDisplay')) {
 //            return;
 //        }
-        $this->setClass(config('bradmin.user_path').'\\Sections\\'.$sectionName);
+        $this->setClass(($sectionPath ?? config('bradmin.user_path').'\\Sections\\') . $sectionName);
 
         if(!class_exists($this->getClass()))
         {
-            throw new \Exception('Section not found.');
+            throw new \Exception('Section ' . $this->getClass() . ' not found.');
         }
 
         $display = $this->app->call([$this->getClass(), 'onDisplay'], $payload);
