@@ -66,7 +66,7 @@ class BRPages extends Section
                     }
                 )
                 ->setDisplay('title'),
-            '0.07' => FormField::textarea('content', 'Содержимое'),
+            '0.07' => FormField::wysiwyg('content', 'Содержимое'),
         ];
         $brFieldsRight = [
             '0.01' => FormField::select('status', 'Статус')

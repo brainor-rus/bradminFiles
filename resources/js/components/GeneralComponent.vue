@@ -58,6 +58,7 @@
     import axios from 'axios';
     import $ from 'jquery'
     import 'selectize';
+    // import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
     import modal from './DeleteModal';
 
     export default {
@@ -114,7 +115,13 @@
                         }
                     }
                 });
+                $(function(){
+                    $('.wysiwyg_editor').each(function(e){
+                        CKEDITOR.replace( this.id );
+                    });
+                });
             });
+
         },
         methods: {
             show_modal: function(event){

@@ -35572,6 +35572,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 
+// import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -35628,6 +35629,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                         text: input
                     };
                 }
+            });
+            __WEBPACK_IMPORTED_MODULE_1_jquery___default()(function () {
+                __WEBPACK_IMPORTED_MODULE_1_jquery___default()('.wysiwyg_editor').each(function (e) {
+                    CKEDITOR.replace(this.id);
+                });
             });
         });
     },
