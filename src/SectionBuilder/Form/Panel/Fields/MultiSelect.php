@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\View;
 
 class MultiSelect
 {
-    private $name, $label, $value, $required, $readonly, $options, $modelForOptions, $display;
+    private $name, $label, $value, $required, $readonly, $options, $modelForOptions, $queryFunctionForModel, $display;
 
     public function __construct($name, $label)
     {
@@ -67,7 +67,7 @@ class MultiSelect
     /**
      * @param mixed $options
      */
-    private function setOptions($options)
+    public function setOptions($options)
     {
         $this->options = $options;
     }
@@ -81,6 +81,14 @@ class MultiSelect
         return $this;
     }
 
+    /**
+     * @param mixed $queryFunctionForModel
+     */
+    public function setQueryFunctionForModel($queryFunctionForModel)
+    {
+        $this->queryFunctionForModel = $queryFunctionForModel;
+        return $this;
+    }
 
     /**
      * @param mixed $display
@@ -152,8 +160,10 @@ class MultiSelect
         {
             if($this->getModelForOptions() !== null)
             {
-                foreach ($this->getModelForOptions()::all() as $row)
-                {
+                foreach ($this->getModelForOptions()::when(
+                    !empty($this->getQueryFunctionForModel()),
+                    $this->getQueryFunctionForModel()
+                )->get() as $row) {
                     $this->options[$row->id] = $row->{$this->getDisplay()};
                 }
             }
@@ -168,6 +178,14 @@ class MultiSelect
     public function getModelForOptions()
     {
         return $this->modelForOptions;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getQueryFunctionForModel()
+    {
+        return $this->queryFunctionForModel;
     }
 
     public function render($value = null)

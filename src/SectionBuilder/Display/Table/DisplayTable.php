@@ -15,7 +15,7 @@ use BRHelper;
 
 class DisplayTable
 {
-    private $pagination, $columns;
+    private $pagination, $columns, $scopes;
 
     public function __construct($columns, $pagination)
     {
@@ -38,6 +38,14 @@ class DisplayTable
         }
 
         $model = new $modelPath();
+
+        if(!empty($this->getScopes()))
+        {
+            foreach ($this->getScopes() as $scope)
+            {
+                $model = $model->{$scope}();
+            }
+        }
 
         $data = $model->when(isset($relationData), function ($query) use ($relationData) {
             $query->with($relationData);
@@ -98,6 +106,15 @@ class DisplayTable
     }
 
     /**
+     * @param mixed $scope
+     */
+    public function setScopes($scopes)
+    {
+        $this->scopes = $scopes;
+        return $this;
+    }
+
+    /**
      * @return mixed
      */
     public function getColumns()
@@ -111,5 +128,13 @@ class DisplayTable
     public function getPagination()
     {
         return $this->pagination;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getScopes()
+    {
+        return $this->scopes;
     }
 }

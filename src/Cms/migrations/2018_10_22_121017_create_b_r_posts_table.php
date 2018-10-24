@@ -15,6 +15,7 @@ class CreateBRPostsTable extends Migration
     {
         Schema::create('b_r_posts', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('type');
             $table->string('title');
             $table->string('slug')->unique();
             $table->text('description')->nullable();

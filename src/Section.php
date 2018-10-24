@@ -52,13 +52,13 @@ class Section
         return $display;
     }
 
-    public function fireCreate($sectionName,array $payload = [])
+    public function fireCreate($sectionName, array $payload = [], $sectionPath = null)
     {
-        $this->setClass(config('bradmin.user_path').'\\Sections\\'.$sectionName);
+        $this->setClass(($sectionPath ?? config('bradmin.user_path').'\\Sections\\') . $sectionName);
 
         if(!class_exists($this->getClass()))
         {
-            throw new \Exception('Section not found.');
+            throw new \Exception('Section ' . $this->getClass() . ' not found.');
         }
 
         $display = $this->app->call([$this->getClass(), 'onCreate'], $payload);
@@ -66,13 +66,13 @@ class Section
         return $display;
     }
 
-    public function fireEdit($sectionName,array $payload = [])
+    public function fireEdit($sectionName,array $payload = [], $sectionPath = null)
     {
-        $this->setClass(config('bradmin.user_path').'\\Sections\\'.$sectionName);
+        $this->setClass(($sectionPath ?? config('bradmin.user_path').'\\Sections\\') . $sectionName);
 
         if(!class_exists($this->getClass()))
         {
-            throw new \Exception('Section not found.');
+            throw new \Exception('Section ' . $this->getClass() . ' not found.');
         }
 
         $display = $this->app->call([$this->getClass(), 'onEdit'], $payload);
@@ -80,19 +80,19 @@ class Section
         return $display;
     }
 
-    public function fireDelete($sectionName,array $payload = [])
+    public function fireDelete($sectionName, array $payload = [], $sectionPath = null)
     {
-        $this->setClass(config('bradmin.user_path').'\\Sections\\'.$sectionName);
+        $this->setClass(($sectionPath ?? config('bradmin.user_path').'\\Sections\\') . $sectionName);
         if(!class_exists($this->getClass()))
         {
-            throw new \Exception('Section not found.');
+            throw new \Exception('Section ' . $this->getClass() . ' not found.');
         }
         return $this->getClass();
     }
 
 //    public function getTitle($sectionName)
 //    {
-//        $this->setClass(config('bradmin.user_path').'\\Sections\\'.$sectionName);
+//        $this->setClass(($sectionPath ?? config('bradmin.user_path').'\\Sections\\') . $sectionName);
 //        $title = model
 //
 //        return $display;

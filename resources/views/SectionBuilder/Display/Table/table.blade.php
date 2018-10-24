@@ -10,7 +10,7 @@
     </div>
 </div>
 
-<div class="table-responsive display-table" data-delete-redirect="{{ $pluginData['redirectUrl'] ?? null }}">
+<div class="table-responsive display-table" data-delete-redirect="{{ $pluginData['redirectUrl'] ?? null }}" data-section-path="{{ $pluginData['sectionPath'] ?? null }}">
     <table class="table">
         <thead>
         <tr>

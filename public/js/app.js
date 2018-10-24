@@ -39814,6 +39814,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 
 
@@ -39827,6 +39828,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         },
         getDeleteUrl: function getDeleteUrl() {
             return __WEBPACK_IMPORTED_MODULE_0_jquery___default()('.display-table').data('delete-redirect');
+        },
+        getSectionPath: function getSectionPath() {
+            return __WEBPACK_IMPORTED_MODULE_0_jquery___default()('.display-table').data('section-path');
         }
     }
 });
@@ -39895,6 +39899,11 @@ var render = function() {
                 _c("input", {
                   attrs: { type: "hidden", name: "pluginData[deleteUrl]" },
                   domProps: { value: _vm.getDeleteUrl }
+                }),
+                _vm._v(" "),
+                _c("input", {
+                  attrs: { type: "hidden", name: "pluginData[sectionPath]" },
+                  domProps: { value: _vm.getSectionPath }
                 }),
                 _vm._v(" "),
                 _c(
