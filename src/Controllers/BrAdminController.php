@@ -40,10 +40,10 @@ class BrAdminController extends Controller
 
     public function getDisplay(Section $section, $sectionName, $pluginData = null)
     {
-        $display = $section->fireDisplay($sectionName);
-        $sectionModelSettings = $section->getSectionSettings(studly_case($sectionName));
+        $display = $section->fireDisplay($sectionName, [], $pluginData['sectionPath'] ?? null);
+        $sectionModelSettings = $section->getSectionSettings(studly_case($sectionName), $pluginData['sectionPath'] ?? null);
 
-        $firedSection = $section->getSectionByName($sectionName);
+        $firedSection = $section->getSectionByName($sectionName, $pluginData['sectionPath'] ?? null);
         $results = $display->render($sectionModelSettings['model'] ?? config('bradmin.base_models_path') . studly_case(strtolower(str_singular($sectionName))), $firedSection, $pluginData);
 
         $html = $results['view'];
