@@ -16,24 +16,29 @@ class PluginNavigation
                 'text' => 'CMS',
                 'nodes' => [
                     [
-                        'url' => '/'.config('bradmin.admin_url').'/cms/brpages',
+                        'url' => '/'.config('bradmin.admin_url').'/cms/BRPages',
                         'icon' => 'fas fa-users',
                         'text' => 'Страницы'
                     ],
                     [
-                        'url' => '/'.config('bradmin.admin_url').'/cms/brposts',
+                        'url' => '/'.config('bradmin.admin_url').'/cms/BRPosts',
                         'icon' => 'fas fa-address-book',
                         'text' => 'Записи'
                     ],
                     [
-                        'url' => '/'.config('bradmin.admin_url').'/cms/brterms',
+                        'url' => '/'.config('bradmin.admin_url').'/cms/BRTerms',
                         'icon' => 'fas fa-users',
                         'text' => 'Рубрики'
                     ],
                     [
-                        'url' => '/'.config('bradmin.admin_url').'/cms/brtags',
+                        'url' => '/'.config('bradmin.admin_url').'/cms/BRTags',
                         'icon' => 'fas fa-address-book',
                         'text' => 'Метки'
+                    ],
+                    [
+                        'url' => '/'.config('bradmin.admin_url').'/cms/BRFiles',
+                        'icon' => 'fas fa-address-book',
+                        'text' => 'Файлы'
                     ]
                 ]
             ]

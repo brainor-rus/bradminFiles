@@ -35701,6 +35701,41 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                     if (typeof response.data.meta.class !== 'undefined') {
                         _this.classes = response.data.meta.class;
                     }
+
+                    if (typeof response.data.meta.scripts !== 'undefined') {
+                        __WEBPACK_IMPORTED_MODULE_1_jquery___default.a.each(response.data.meta.scripts.head, function (index, filename) {
+                            if (filename) {
+                                var fileref = document.createElement('script');
+                                fileref.setAttribute("type", "text/javascript");
+                                fileref.setAttribute("src", filename);
+
+                                document.getElementsByTagName("head")[0].appendChild(fileref);
+                            }
+                        });
+
+                        __WEBPACK_IMPORTED_MODULE_1_jquery___default.a.each(response.data.meta.scripts.body, function (index, filename) {
+                            if (filename) {
+                                var fileref = document.createElement('script');
+                                fileref.setAttribute("type", "text/javascript");
+                                fileref.setAttribute("src", filename);
+
+                                document.getElementsByTagName("body")[0].appendChild(fileref);
+                            }
+                        });
+                    }
+
+                    if (typeof response.data.meta.styles !== 'undefined') {
+                        __WEBPACK_IMPORTED_MODULE_1_jquery___default.a.each(response.data.meta.styles, function (index, filename) {
+                            if (filename) {
+                                var fileref = document.createElement("link");
+                                fileref.setAttribute("rel", "stylesheet");
+                                fileref.setAttribute("type", "text/css");
+                                fileref.setAttribute("href", filename);
+
+                                document.getElementsByTagName("head")[0].appendChild(fileref);
+                            }
+                        });
+                    }
                 }
                 _this.loading = false;
             }).catch(function (error) {
@@ -35711,6 +35746,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         fireAction: function fireAction(event) {
             this.error = this.actionResponseData = this.actionError = null;
             this.loading = true;
+
+            var instance;
+            for (instance in CKEDITOR.instances) {
+                CKEDITOR.instances[instance].updateElement();
+            }
 
             var ajaxUrl = event.target.attributes.action.value,
                 method = event.target.attributes.method.value,

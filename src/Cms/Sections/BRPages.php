@@ -10,6 +10,7 @@ use Bradmin\SectionBuilder\Display\Table\Columns\BaseColumn\Column;
 use Bradmin\SectionBuilder\Form\BaseForm\Form;
 use Bradmin\SectionBuilder\Form\Panel\Columns\BaseColumn\FormColumn;
 use Bradmin\SectionBuilder\Form\Panel\Fields\BaseField\FormField;
+use Illuminate\Http\Request;
 
 class BRPages extends Section
 {
@@ -22,9 +23,11 @@ class BRPages extends Section
             '0.01' => Column::text('id', '#'),
             '0.02' => Column::text('title', 'Заголовок'),
             '0.03' => Column::text('description', 'Краткое описание'),
-            '0.04' => Column::text('status', 'Статус'),
-            '0.05' => Column::text('created_at', 'Дата создания'),
-            '0.06' => Column::text('published_at', 'Дата публикации'),
+            '0.04' => Column::text('tags.title', 'Метки'),
+            '0.05' => Column::text('categories.title', 'Рубрики'),
+            '0.06' => Column::text('status', 'Статус'),
+            '0.07' => Column::text('created_at', 'Дата создания'),
+            '0.08' => Column::text('published_at', 'Дата публикации'),
         ];
 
         $mergedFields = array_merge($pluginsFields, $brFields);
@@ -99,5 +102,14 @@ class BRPages extends Section
         ]);
 
         return $form;
+    }
+
+    public function afterSave(Request $request, $model = null)
+    {
+        $terms = [];
+        $terms = array_merge($request->tags ?? [], $terms);
+        $terms = array_merge($request->categories ?? [], $terms);
+        $model->terms()->detach();
+        $model->terms()->attach($terms);
     }
 }

@@ -3,6 +3,7 @@
 namespace Bradmin\Controllers;
 
 use Bradmin\SectionBuilder\Form\FormAction\FormAction;
+use Bradmin\SectionBuilder\Meta\Meta;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Schema;
@@ -41,6 +42,7 @@ class BrAdminController extends Controller
     public function getDisplay(Section $section, $sectionName, $pluginData = null)
     {
         $display = $section->fireDisplay($sectionName, [], $pluginData['sectionPath'] ?? null);
+        $meta = $display->getMeta();
         $sectionModelSettings = $section->getSectionSettings(studly_case($sectionName), $pluginData['sectionPath'] ?? null);
 
         $firedSection = $section->getSectionByName($sectionName, $pluginData['sectionPath'] ?? null);
@@ -56,7 +58,9 @@ class BrAdminController extends Controller
             'to' => $results['data']->lastItem()
         ];
         $meta = [
-            'title' => $sectionModelSettings['title']
+            'title' => $sectionModelSettings['title'],
+            'scripts' => $meta->getScripts(),
+            'styles' => $meta->getStyles(),
         ];
 
         return $this->render($html,$pagination,$meta);
@@ -68,11 +72,14 @@ class BrAdminController extends Controller
         if(isset($firedSection)) {
             if ($firedSection->isCreatable()) {
                 $display = $section->fireCreate(studly_case($sectionName), [], $pluginData['sectionPath'] ?? null);
+                $meta = $display->getMeta();
                 $sectionModelSettings = $section->getSectionSettings(studly_case($sectionName), $pluginData['sectionPath'] ?? null);
 
                 $html = $display->render($sectionModelSettings['model'] ?? config('bradmin.base_models_path') . studly_case(strtolower(str_singular($sectionName))), $sectionName, $firedSection, null, $pluginData);
                 $meta = [
-                    'title' => $sectionModelSettings['title'] . '| Новая запись'
+                    'title' => $sectionModelSettings['title'] . '| Новая запись',
+                    'scripts' => $meta->getScripts(),
+                    'styles' => $meta->getStyles(),
                 ];
 
                 return $this->render($html, '', $meta);
@@ -93,11 +100,14 @@ class BrAdminController extends Controller
         if(isset($firedSection)) {
             if ($firedSection->isEditable()) {
                 $display = $section->fireEdit(studly_case($sectionName), [], $pluginData['sectionPath'] ?? null);
+                $meta = $display->getMeta();
                 $sectionModelSettings = $section->getSectionSettings(studly_case($sectionName), $pluginData['sectionPath'] ?? null);
 
                 $html = $display->render($sectionModelSettings['model'] ?? config('bradmin.base_models_path') . studly_case(strtolower(str_singular($sectionName))), $sectionName, $firedSection, $id, $pluginData);
                 $meta = [
-                    'title' => $sectionModelSettings['title'] . '| Редактирование'
+                    'title' => $sectionModelSettings['title'] . '| Редактирование',
+                    'scripts' => $meta->getScripts(),
+                    'styles' => $meta->getStyles(),
                 ];
 
                 return $this->render($html, '', $meta);
@@ -134,6 +144,8 @@ class BrAdminController extends Controller
             FormAction::saveBelongsToRelations($model, $request);
             FormAction::saveBelongsToManyRelations($model, $request);
             FormAction::saveHasOneRelations($model, $request);
+
+            $class->afterSave($request, $model);
 
             //        return redirect()->back();
 
@@ -176,6 +188,8 @@ class BrAdminController extends Controller
             FormAction::saveBelongsToRelations($model, $request);
             FormAction::saveBelongsToManyRelations($model, $request);
             FormAction::saveHasOneRelations($model, $request);
+
+            $class->afterSave($request, $model);
 
             //        $modelPath::where('id', $id)->update($request->all());
 

@@ -9,16 +9,18 @@
 namespace Bradmin\SectionBuilder\Form\Panel;
 
 
+use Bradmin\SectionBuilder\Meta\Meta;
 use Illuminate\Support\Facades\View;
 use Bradmin\Section;
 
 class PanelForm
 {
-    private $columns;
+    private $columns, $meta;
 
     public function __construct($columns)
     {
         $this->setColumns($columns);
+        $this->meta = new Meta;
     }
 
     /**
@@ -30,11 +32,29 @@ class PanelForm
     }
 
     /**
+     * @return mixed
+     */
+    public function getMeta()
+    {
+        return $this->meta;
+    }
+
+    /**
      * @param mixed $columns
      */
     public function setColumns($columns): void
     {
         $this->columns = $columns;
+    }
+
+    /**
+     * @param mixed $meta
+     * @return DisplayTable
+     */
+    public function setMeta($meta)
+    {
+        $this->meta = $meta;
+        return $this;
     }
 
     public function render($modelPath, $sectionName, Section $firedSection, $id = null, $pluginData = null)

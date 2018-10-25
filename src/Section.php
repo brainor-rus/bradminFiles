@@ -2,7 +2,9 @@
 
 namespace Bradmin;
 
+use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Model;
+use Meta;
 
 class Section
 {
@@ -132,5 +134,9 @@ class Section
         return true;
     }
 
+    public function afterSave(Request $request, $model = null)
+    {
+        // override in child
+    }
 
 }

@@ -14,6 +14,6 @@ class BRTag extends BRTerm
      * @var array
      */
     protected $fillable = [
-        'type', 'title', 'slug', 'description', 'parent_id', '_lft', '_rgt', 'depth'
+        'type', 'title', 'slug', 'description', 'parent_id', '_lft', '_rgt', 'depth', 'created_at', 'updated_at'
     ];
 }

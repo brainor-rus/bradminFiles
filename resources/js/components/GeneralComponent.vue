@@ -191,6 +191,41 @@
                             if (typeof response.data.meta.class !== 'undefined') {
                                 this.classes = response.data.meta.class;
                             }
+
+                            if (typeof response.data.meta.scripts !== 'undefined') {
+                                $.each(response.data.meta.scripts.head, function(index, filename){
+                                    if(filename) {
+                                        var fileref = document.createElement('script');
+                                        fileref.setAttribute("type","text/javascript");
+                                        fileref.setAttribute("src", filename);
+
+                                        document.getElementsByTagName("head")[0].appendChild(fileref)
+                                    }
+                                });
+
+                                $.each(response.data.meta.scripts.body, function(index, filename){
+                                    if(filename) {
+                                        var fileref = document.createElement('script');
+                                        fileref.setAttribute("type","text/javascript");
+                                        fileref.setAttribute("src", filename);
+
+                                        document.getElementsByTagName("body")[0].appendChild(fileref)
+                                    }
+                                });
+                            }
+
+                            if (typeof response.data.meta.styles !== 'undefined') {
+                                $.each(response.data.meta.styles, function(index, filename){
+                                    if(filename) {
+                                        var fileref = document.createElement("link");
+                                        fileref.setAttribute("rel", "stylesheet");
+                                        fileref.setAttribute("type", "text/css");
+                                        fileref.setAttribute("href", filename);
+
+                                        document.getElementsByTagName("head")[0].appendChild(fileref)
+                                    }
+                                });
+                            }
                         }
                         this.loading = false;
 
@@ -204,6 +239,12 @@
             fireAction(event) {
                 this.error = this.actionResponseData = this.actionError = null;
                 this.loading = true;
+
+                var instance;
+                for ( instance in CKEDITOR.instances )
+                {
+                    CKEDITOR.instances[instance].updateElement();
+                }
 
                 let ajaxUrl = event.target.attributes.action.value,
                     method = event.target.attributes.method.value,

@@ -9,18 +9,20 @@
 namespace Bradmin\SectionBuilder\Display\Table;
 
 use Bradmin\Section;
+use Bradmin\SectionBuilder\Meta\Meta;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\View;
 use BRHelper;
 
 class DisplayTable
 {
-    private $pagination, $columns, $scopes;
+    private $pagination, $columns, $scopes, $meta;
 
     public function __construct($columns, $pagination)
     {
         $this->setPagination($pagination);
         $this->setColumns($columns);
+        $this->meta = new Meta;
     }
 
     public function render($modelPath, Section $firedSection, $pluginData = null)
@@ -89,6 +91,7 @@ class DisplayTable
 
     /**
      * @param mixed $pagination
+     * @return DisplayTable
      */
     public function setPagination($pagination)
     {
@@ -98,6 +101,7 @@ class DisplayTable
 
     /**
      * @param mixed $columns
+     * @return DisplayTable
      */
     public function setColumns($columns)
     {
@@ -107,10 +111,21 @@ class DisplayTable
 
     /**
      * @param mixed $scope
+     * @return DisplayTable
      */
     public function setScopes($scopes)
     {
         $this->scopes = $scopes;
+        return $this;
+    }
+
+    /**
+     * @param mixed $meta
+     * @return DisplayTable
+     */
+    public function setMeta($meta)
+    {
+        $this->meta = $meta;
         return $this;
     }
 
@@ -136,5 +151,13 @@ class DisplayTable
     public function getScopes()
     {
         return $this->scopes;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getMeta()
+    {
+        return $this->meta;
     }
 }
