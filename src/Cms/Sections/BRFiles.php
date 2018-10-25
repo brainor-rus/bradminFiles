@@ -11,7 +11,7 @@ use Bradmin\SectionBuilder\Form\Panel\Fields\BaseField\FormField;
 
 class BRFiles extends Section
 {
-    protected $title = 'Метки';
+    protected $title = 'Файлы';
     protected $model = 'Bradmin\Cms\Models\BRFile';
 
     public static function onDisplay(){

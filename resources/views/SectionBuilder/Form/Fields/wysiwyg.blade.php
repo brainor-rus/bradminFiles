@@ -7,5 +7,5 @@
               rows="{{ $rows }}"
               @if($required) required @endif
               @if($readonly) readonly @endif
-              placeholder="{{ $placeholder ?? null }}">{!! $value ?? null !!}</textarea>
+              placeholder="{{ $placeholder ?? null }}">{!! htmlspecialchars($value) ?? null !!}</textarea>
 </div>
