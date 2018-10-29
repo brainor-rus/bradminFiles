@@ -1,13 +1,10 @@
 {
-    "name": "BRAdmin/BRAdmin",
+    "name": "Bradmin",
     "description": "Admin's panel",
     "keywords": ["BRAdmin", "panel"],
     "license": "MIT",
     "type": "project",
     "require": {
-
-    },
-    "require-dev": {
         "kalnoy/nestedset": "^4.3"
     },
     "autoload": {

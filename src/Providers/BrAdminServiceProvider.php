@@ -25,6 +25,7 @@ class BrAdminServiceProvider extends ServiceProvider
 
     public function boot()
     {
+        require(__DIR__ . '/../../vendor/autoload.php');
         // load config
         $this->mergeConfigFrom(__DIR__.'/../../config/bradmin.php', 'bradmin');
 
