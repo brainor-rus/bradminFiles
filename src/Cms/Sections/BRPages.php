@@ -2,8 +2,10 @@
 
 namespace Bradmin\Cms\Sections;
 
+use Bradmin\Cms\Models\BRPost;
 use Bradmin\Cms\Models\BRTag;
 use Bradmin\Cms\Models\BRTerm;
+use Bradmin\Cms\Helpers\TemplatesHelper;
 use Bradmin\Section;
 use Bradmin\SectionBuilder\Display\BaseDisplay\Display;
 use Bradmin\SectionBuilder\Display\Table\Columns\BaseColumn\Column;
@@ -40,13 +42,18 @@ class BRPages extends Section
 
     public static function onCreate()
     {
-        return self::onEdit();
+        return self::onEdit(null);
     }
 
-    public static function onEdit()
+    public static function onEdit($id)
     {
         $pluginsFieldsLeft = app()['PluginsData']['CmsData']['Pages']['EditField']['Left'] ?? [];
         $pluginsFieldsRight = app()['PluginsData']['CmsData']['Pages']['EditField']['Right'] ?? [];
+
+        $templates = TemplatesHelper::getTemplates('page');
+        $pages_tree = BRPost::where('type', 'page')->orderBy('title')->get()->toTree()->toArray();
+        $cur_page = $id ? BRPost::with('ancestors')->where('id', $id)->first()->toArray() : null;
+        $pagesTreeView = view('bradmin::cms.partials.pagesTree')->with(compact('pages_tree', 'cur_page'));
 
         $brFieldsLeft = [
             '0.01' => FormField::input('title', 'Заголовок')->setRequired(true),
@@ -78,15 +85,17 @@ class BRPages extends Section
                     'published' => 'Опубликовано'
                 ])
                 ->setRequired(true),
-            '0.02' => FormField::select('template', 'Шаблон'),
-            '0.03' => FormField::select('comment_on', 'Комментарии')
+            '0.02' => FormField::select('template', 'Шаблон')
+                ->setOptions($templates),
+            '0.03' => FormField::custom($pagesTreeView),
+            '0.04' => FormField::select('comment_on', 'Комментарии')
                 ->setOptions([
                     0 => 'Запрещены',
                     1 => 'Разрешены'
                 ])
                 ->setRequired(true),
-            '0.04' => FormField::input('published_at', 'Дата публикации')->setRequired(true),
-            '0.05' => FormField::input('thumb', 'Миниатюра'),
+            '0.05' => FormField::input('published_at', 'Дата публикации')->setRequired(true),
+            '0.06' => FormField::input('thumb', 'Миниатюра'),
             '99.99' => FormField::hidden('type')->setValue("page"),
         ];
 
@@ -111,5 +120,10 @@ class BRPages extends Section
         $terms = array_merge($request->categories ?? [], $terms);
         $model->terms()->detach();
         $model->terms()->attach($terms);
+
+        if(isset($_POST['parent_id'])) {
+            $parent = BRPost::where('id', $request->parent_id)->first();
+            $parent->appendNode($model);
+        }
     }
 }

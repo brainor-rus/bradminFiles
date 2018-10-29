@@ -36,3 +36,13 @@ Route::post('/'.config('bradmin.admin_url').'/cms/{sectionName}/{id}/delete', [
     'as'   => 'bradmin.cms.banks.delete-action-plugin',
     'uses' => 'Bradmin\Cms\Controllers\CmsController@deleteActionRouteRedirect',
 ]);
+
+Route::get(config('bradmin.cms_url_prefix') . '/' .config('bradmin.cms_page_prefix') . '/{slug}' , [
+    'as'   => 'bradmin.cms.page.show',
+    'uses' => 'Bradmin\Cms\Controllers\CmsController@showPage',
+]);
+
+Route::get(config('bradmin.cms_url_prefix') . '/' .config('bradmin.cms_post_prefix') . '/{slug}' , [
+    'as'   => 'bradmin.cms.post.show',
+    'uses' => 'Bradmin\Cms\Controllers\CmsController@showPost',
+]);

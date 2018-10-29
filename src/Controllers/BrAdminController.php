@@ -99,7 +99,7 @@ class BrAdminController extends Controller
         $firedSection = $section->getSectionByName($sectionName, $pluginData['sectionPath'] ?? null);
         if(isset($firedSection)) {
             if ($firedSection->isEditable()) {
-                $display = $section->fireEdit(studly_case($sectionName), [], $pluginData['sectionPath'] ?? null);
+                $display = $section->fireEdit(studly_case($sectionName), [$id], $pluginData['sectionPath'] ?? null);
                 $meta = $display->getMeta();
                 $sectionModelSettings = $section->getSectionSettings(studly_case($sectionName), $pluginData['sectionPath'] ?? null);
 

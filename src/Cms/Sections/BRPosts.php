@@ -2,6 +2,7 @@
 
 namespace Bradmin\Cms\Sections;
 
+use Bradmin\Cms\Helpers\TemplatesHelper;
 use Bradmin\Cms\Models\BRTag;
 use Bradmin\Cms\Models\BRTerm;
 use Bradmin\Section;
@@ -71,6 +72,8 @@ class BRPosts extends Section
         $pluginsFieldsLeft = app()['PluginsData']['CmsData']['Posts']['EditField']['Left'] ?? [];
         $pluginsFieldsRight = app()['PluginsData']['CmsData']['Posts']['EditField']['Right'] ?? [];
 
+        $templates = TemplatesHelper::getTemplates('post');
+
         $brFieldsLeft = [
             '0.01' => FormField::input('title', 'Заголовок')->setRequired(true),
             '0.02' => FormField::textarea('description', 'Краткое описание')->setRows(3),
@@ -101,7 +104,8 @@ class BRPosts extends Section
                     'published' => 'Опубликовано'
                 ])
                 ->setRequired(true),
-            '0.02' => FormField::select('template', 'Шаблон'),
+            '0.02' => FormField::select('template', 'Шаблон')
+                ->setOptions($templates),
             '0.03' => FormField::select('comment_on', 'Комментарии')
                 ->setOptions([
                     0 => 'Запрещены',

@@ -68,7 +68,7 @@ class Section
         return $display;
     }
 
-    public function fireEdit($sectionName,array $payload = [], $sectionPath = null)
+    public function fireEdit($sectionName, array $payload = [], $sectionPath = null)
     {
         $this->setClass(($sectionPath ?? config('bradmin.user_path').'\\Sections\\') . $sectionName);
 

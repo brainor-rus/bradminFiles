@@ -3,9 +3,12 @@
 namespace Bradmin\Cms\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Kalnoy\Nestedset\NodeTrait;
 
 class BRPost extends Model
 {
+    use NodeTrait;
+
     /**
      * The attributes that are mass assignable.
      *
