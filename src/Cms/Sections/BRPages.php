@@ -121,9 +121,11 @@ class BRPages extends Section
         $model->terms()->detach();
         $model->terms()->attach($terms);
 
-        if(isset($_POST['parent_id'])) {
+        if($request->has('parent_id')) {
             $parent = BRPost::where('id', $request->parent_id)->first();
             $parent->appendNode($model);
+        } else {
+            $model->makeRoot();
         }
     }
 }
