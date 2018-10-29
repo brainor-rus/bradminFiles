@@ -8,6 +8,9 @@ namespace Bradmin\Cms\Providers;
 use Illuminate\Support\ServiceProvider;
 use Bradmin\Cms\Navigation\PluginNavigation;
 
+use Bradmin\Cms\Exceptions\BradminExceptionsHandler;
+use Illuminate\Contracts\Debug\ExceptionHandler;
+
 class Cms extends ServiceProvider
 {
     public $navigation;
@@ -41,6 +44,11 @@ class Cms extends ServiceProvider
         // publish files
         $this->publishes([__DIR__.'/../resources/views' => resource_path('views/bradmin/cms')]);
         $this->loadMigrationsFrom(__DIR__.'/../Migrations');
+
+        $this->app->bind(
+            ExceptionHandler::class,
+            BradminExceptionsHandler::class
+        );
     }
 
     /**
