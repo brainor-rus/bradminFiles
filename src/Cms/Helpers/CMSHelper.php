@@ -73,4 +73,7 @@ class CMSHelper
             ->where('status', 'published');
     }
 
+    public static function getByUrl($url) {
+        return BRPost::where('url',$url)->first();
+    }
 }

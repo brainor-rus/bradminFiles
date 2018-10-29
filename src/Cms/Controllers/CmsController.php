@@ -65,7 +65,7 @@ class CmsController extends Controller
         return $mainController->deleteAction($section, $sectionName, $id, $request);
     }
 
-    public function showPage($slug)
+    public static function showPage($slug)
     {
         $args = [
             'type' => 'page',
@@ -85,10 +85,13 @@ class CmsController extends Controller
             throw new \Exception('Шаблон ' . $templatePath . ' не найден');
         }
 
-        return view($templatePath)->with(compact('page'));
+        return [
+            'view'=>$templatePath,
+            'data'=>compact('page')
+        ];
     }
 
-    public function showPost($slug)
+    public static function showPost($slug)
     {
         $args = [
             'type' => 'post',
@@ -108,6 +111,9 @@ class CmsController extends Controller
             throw new \Exception('Шаблон ' . $templatePath . ' не найден');
         }
 
-        return view($templatePath)->with(compact('post'));
+        return [
+            'view'=>$templatePath,
+            'data'=>compact('post')
+        ];
     }
 }
