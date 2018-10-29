@@ -27,6 +27,19 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | CMS
+    |--------------------------------------------------------------------------
+    |
+    */
+
+    'cms_pages_templates_path' => 'cms.templates.pages',
+    'cms_posts_templates_path' => 'cms.templates.posts',
+    'cms_url_prefix' => 'cms',
+    'cms_page_prefix' => 'page',
+    'cms_post_prefix' => 'post',
+
+    /*
+    |--------------------------------------------------------------------------
     | Title
     |--------------------------------------------------------------------------
     |
@@ -44,8 +57,6 @@ return [
     | Displayed in navigation panel.
     |
     */
-
-
 
 
 //    'logo'      => '/images/user-logo.jpg',

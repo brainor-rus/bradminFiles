@@ -13,6 +13,7 @@
         window.logoUrl = '{{ config('bradmin.logo') }}';
         window.logoMiniUrl = '{{ config('bradmin.logo_mini') }}';
     </script>
+    <script src="{{ asset('packages/bradmin/js/ckeditor/ckeditor.js') }}"></script>
     <title>{{ config('bradmin.title') }}</title>
 </head>
 <body>

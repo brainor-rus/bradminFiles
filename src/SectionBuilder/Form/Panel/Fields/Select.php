@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\View;
 
 class Select
 {
-    private $name, $label, $value, $required, $readonly, $options, $modelForOptions, $display;
+    private $name, $label, $value, $required, $readonly, $options, $modelForOptions, $queryFunctionForModel, $display;
 
     public function __construct($name, $label)
     {
@@ -67,9 +67,10 @@ class Select
     /**
      * @param mixed $options
      */
-    private function setOptions($options)
+    public function setOptions($options)
     {
         $this->options = $options;
+        return $this;
     }
 
     /**
@@ -81,6 +82,15 @@ class Select
         return $this;
     }
 
+
+    /**
+     * @param mixed $queryFunctionForModel
+     */
+    public function setQueryFunctionForModel($queryFunctionForModel)
+    {
+        $this->queryFunctionForModel = $queryFunctionForModel;
+        return $this;
+    }
 
     /**
      * @param mixed $display
@@ -152,8 +162,10 @@ class Select
         {
             if($this->getModelForOptions() !== null)
             {
-                foreach ($this->getModelForOptions()::all() as $row)
-                {
+                foreach ($this->getModelForOptions()::when(
+                    !empty($this->getQueryFunctionForModel()),
+                    $this->getQueryFunctionForModel()
+                )->get() as $row) {
                     $this->options[$row->id] = $row->{$this->getDisplay()};
                 }
             }
@@ -168,6 +180,14 @@ class Select
     public function getModelForOptions()
     {
         return $this->modelForOptions;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getQueryFunctionForModel()
+    {
+        return $this->queryFunctionForModel;
     }
 
     public function render($value = null)
