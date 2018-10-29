@@ -35572,6 +35572,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 
+// import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -35628,6 +35629,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                         text: input
                     };
                 }
+            });
+            __WEBPACK_IMPORTED_MODULE_1_jquery___default()(function () {
+                __WEBPACK_IMPORTED_MODULE_1_jquery___default()('.wysiwyg_editor').each(function (e) {
+                    CKEDITOR.replace(this.id);
+                });
             });
         });
     },
@@ -35695,6 +35701,41 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                     if (typeof response.data.meta.class !== 'undefined') {
                         _this.classes = response.data.meta.class;
                     }
+
+                    if (typeof response.data.meta.scripts !== 'undefined') {
+                        __WEBPACK_IMPORTED_MODULE_1_jquery___default.a.each(response.data.meta.scripts.head, function (index, filename) {
+                            if (filename) {
+                                var fileref = document.createElement('script');
+                                fileref.setAttribute("type", "text/javascript");
+                                fileref.setAttribute("src", filename);
+
+                                document.getElementsByTagName("head")[0].appendChild(fileref);
+                            }
+                        });
+
+                        __WEBPACK_IMPORTED_MODULE_1_jquery___default.a.each(response.data.meta.scripts.body, function (index, filename) {
+                            if (filename) {
+                                var fileref = document.createElement('script');
+                                fileref.setAttribute("type", "text/javascript");
+                                fileref.setAttribute("src", filename);
+
+                                document.getElementsByTagName("body")[0].appendChild(fileref);
+                            }
+                        });
+                    }
+
+                    if (typeof response.data.meta.styles !== 'undefined') {
+                        __WEBPACK_IMPORTED_MODULE_1_jquery___default.a.each(response.data.meta.styles, function (index, filename) {
+                            if (filename) {
+                                var fileref = document.createElement("link");
+                                fileref.setAttribute("rel", "stylesheet");
+                                fileref.setAttribute("type", "text/css");
+                                fileref.setAttribute("href", filename);
+
+                                document.getElementsByTagName("head")[0].appendChild(fileref);
+                            }
+                        });
+                    }
                 }
                 _this.loading = false;
             }).catch(function (error) {
@@ -35705,6 +35746,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         fireAction: function fireAction(event) {
             this.error = this.actionResponseData = this.actionError = null;
             this.loading = true;
+
+            var instance;
+            for (instance in CKEDITOR.instances) {
+                CKEDITOR.instances[instance].updateElement();
+            }
 
             var ajaxUrl = event.target.attributes.action.value,
                 method = event.target.attributes.method.value,
@@ -39814,6 +39860,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 
 
@@ -39827,6 +39874,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         },
         getDeleteUrl: function getDeleteUrl() {
             return __WEBPACK_IMPORTED_MODULE_0_jquery___default()('.display-table').data('delete-redirect');
+        },
+        getSectionPath: function getSectionPath() {
+            return __WEBPACK_IMPORTED_MODULE_0_jquery___default()('.display-table').data('section-path');
         }
     }
 });
@@ -39895,6 +39945,11 @@ var render = function() {
                 _c("input", {
                   attrs: { type: "hidden", name: "pluginData[deleteUrl]" },
                   domProps: { value: _vm.getDeleteUrl }
+                }),
+                _vm._v(" "),
+                _c("input", {
+                  attrs: { type: "hidden", name: "pluginData[sectionPath]" },
+                  domProps: { value: _vm.getSectionPath }
                 }),
                 _vm._v(" "),
                 _c(

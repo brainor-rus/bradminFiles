@@ -1,0 +1,32 @@
+{
+    "name": "BRAdmin/BRAdmin",
+    "description": "Admin's panel",
+    "keywords": ["BRAdmin", "panel"],
+    "license": "MIT",
+    "type": "project",
+    "require": {
+
+    },
+    "require-dev": {
+        "kalnoy/nestedset": "^4.3"
+    },
+    "autoload": {
+
+    },
+    "autoload-dev": {
+
+    },
+    "extra": {
+
+    },
+    "scripts": {
+
+    },
+    "config": {
+        "preferred-install": "dist",
+        "sort-packages": true,
+        "optimize-autoloader": true
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}

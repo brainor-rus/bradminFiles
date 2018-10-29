@@ -4,6 +4,7 @@
         method="post">
     @csrf
     <input type="hidden" name="pluginData[deleteUrl]" value="{{ $pluginData['redirectUrl'] ?? null }}">
+    <input type="hidden" name="pluginData[sectionPath]" value="{{ $pluginData['sectionPath'] ?? null }}">
 
     <div class="row">
         @foreach($columns as $column)

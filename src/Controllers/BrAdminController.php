@@ -3,6 +3,7 @@
 namespace Bradmin\Controllers;
 
 use Bradmin\SectionBuilder\Form\FormAction\FormAction;
+use Bradmin\SectionBuilder\Meta\Meta;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Schema;
@@ -40,10 +41,11 @@ class BrAdminController extends Controller
 
     public function getDisplay(Section $section, $sectionName, $pluginData = null)
     {
-        $display = $section->fireDisplay($sectionName);
-        $sectionModelSettings = $section->getSectionSettings(studly_case($sectionName));
+        $display = $section->fireDisplay($sectionName, [], $pluginData['sectionPath'] ?? null);
+        $meta = $display->getMeta();
+        $sectionModelSettings = $section->getSectionSettings(studly_case($sectionName), $pluginData['sectionPath'] ?? null);
 
-        $firedSection = $section->getSectionByName($sectionName);
+        $firedSection = $section->getSectionByName($sectionName, $pluginData['sectionPath'] ?? null);
         $results = $display->render($sectionModelSettings['model'] ?? config('bradmin.base_models_path') . studly_case(strtolower(str_singular($sectionName))), $firedSection, $pluginData);
 
         $html = $results['view'];
@@ -56,7 +58,9 @@ class BrAdminController extends Controller
             'to' => $results['data']->lastItem()
         ];
         $meta = [
-            'title' => $sectionModelSettings['title']
+            'title' => $sectionModelSettings['title'],
+            'scripts' => $meta->getScripts(),
+            'styles' => $meta->getStyles(),
         ];
 
         return $this->render($html,$pagination,$meta);
@@ -64,15 +68,18 @@ class BrAdminController extends Controller
 
     public function getCreate(Section $section, $sectionName, $pluginData = null)
     {
-        $firedSection = $section->getSectionByName($sectionName);
+        $firedSection = $section->getSectionByName($sectionName, $pluginData['sectionPath'] ?? null);
         if(isset($firedSection)) {
             if ($firedSection->isCreatable()) {
-                $display = $section->fireCreate(studly_case($sectionName));
-                $sectionModelSettings = $section->getSectionSettings(studly_case($sectionName));
+                $display = $section->fireCreate(studly_case($sectionName), [], $pluginData['sectionPath'] ?? null);
+                $meta = $display->getMeta();
+                $sectionModelSettings = $section->getSectionSettings(studly_case($sectionName), $pluginData['sectionPath'] ?? null);
 
                 $html = $display->render($sectionModelSettings['model'] ?? config('bradmin.base_models_path') . studly_case(strtolower(str_singular($sectionName))), $sectionName, $firedSection, null, $pluginData);
                 $meta = [
-                    'title' => $sectionModelSettings['title'] . '| Новая запись'
+                    'title' => $sectionModelSettings['title'] . '| Новая запись',
+                    'scripts' => $meta->getScripts(),
+                    'styles' => $meta->getStyles(),
                 ];
 
                 return $this->render($html, '', $meta);
@@ -89,15 +96,18 @@ class BrAdminController extends Controller
 
     public function getEdit(Section $section, $sectionName, $id, $pluginData = null)
     {
-        $firedSection = $section->getSectionByName($sectionName);
+        $firedSection = $section->getSectionByName($sectionName, $pluginData['sectionPath'] ?? null);
         if(isset($firedSection)) {
             if ($firedSection->isEditable()) {
-                $display = $section->fireEdit(studly_case($sectionName));
-                $sectionModelSettings = $section->getSectionSettings(studly_case($sectionName));
+                $display = $section->fireEdit(studly_case($sectionName), [$id], $pluginData['sectionPath'] ?? null);
+                $meta = $display->getMeta();
+                $sectionModelSettings = $section->getSectionSettings(studly_case($sectionName), $pluginData['sectionPath'] ?? null);
 
                 $html = $display->render($sectionModelSettings['model'] ?? config('bradmin.base_models_path') . studly_case(strtolower(str_singular($sectionName))), $sectionName, $firedSection, $id, $pluginData);
                 $meta = [
-                    'title' => $sectionModelSettings['title'] . '| Редактирование'
+                    'title' => $sectionModelSettings['title'] . '| Редактирование',
+                    'scripts' => $meta->getScripts(),
+                    'styles' => $meta->getStyles(),
                 ];
 
                 return $this->render($html, '', $meta);
@@ -110,14 +120,14 @@ class BrAdminController extends Controller
 
     public function createAction(Section $section, $sectionName, Request $request)
     {
-        $class = $section->getSectionByName($sectionName);
+        $class = $section->getSectionByName($sectionName, $request->pluginData['sectionPath'] ?? null);
         $redirectUrl = $request->pluginData['deleteUrl'] ?? '/' . config('bradmin.admin_url') . '/' . $sectionName;
         if(!isset($class)) { abort(500); }
         if ($class->isEditable()) {
             $request->offsetUnset('_token');
-            $request->offsetUnset('pluginData');
-            $sectionModelSettings = $section->getSectionSettings(studly_case($sectionName));
+            $sectionModelSettings = $section->getSectionSettings(studly_case($sectionName), $request->pluginData['sectionPath'] ?? null);
             $modelPath = $sectionModelSettings['model'] ?? config('bradmin.base_models_path') . studly_case(strtolower(str_singular($sectionName)));
+            $request->offsetUnset('pluginData');
 
             $model = new $modelPath;
             $attrFields = Schema::getColumnListing($model->getTable());
@@ -134,6 +144,8 @@ class BrAdminController extends Controller
             FormAction::saveBelongsToRelations($model, $request);
             FormAction::saveBelongsToManyRelations($model, $request);
             FormAction::saveHasOneRelations($model, $request);
+
+            $class->afterSave($request, $model);
 
             //        return redirect()->back();
 
@@ -153,14 +165,14 @@ class BrAdminController extends Controller
 
     public function editAction(Section $section, $sectionName, Request $request, $id)
     {
-        $class = $section->getSectionByName($sectionName);
+        $class = $section->getSectionByName($sectionName, $request->pluginData['sectionPath'] ?? null);
         $redirectUrl = $request->pluginData['deleteUrl'] ?? '/' . config('bradmin.admin_url') . '/' . $sectionName;
         if(!isset($class)) { abort(500); }
         if ($class->isEditable()) {
             $request->offsetUnset('_token');
-            $request->offsetUnset('pluginData');
-            $sectionModelSettings = $section->getSectionSettings(studly_case($sectionName));
+            $sectionModelSettings = $section->getSectionSettings(studly_case($sectionName), $request->pluginData['sectionPath'] ?? null);
             $modelPath = $sectionModelSettings['model'] ?? config('bradmin.base_models_path') . studly_case(strtolower(str_singular($sectionName)));
+            $request->offsetUnset('pluginData');
 
             $model = new $modelPath;
             $attrFields = Schema::getColumnListing($model->getTable());
@@ -176,6 +188,8 @@ class BrAdminController extends Controller
             FormAction::saveBelongsToRelations($model, $request);
             FormAction::saveBelongsToManyRelations($model, $request);
             FormAction::saveHasOneRelations($model, $request);
+
+            $class->afterSave($request, $model);
 
             //        $modelPath::where('id', $id)->update($request->all());
 
@@ -195,10 +209,10 @@ class BrAdminController extends Controller
 
     public function deleteAction(Section $section, $sectionName, $id, Request $request)
     {
-        $sectionModelSettings = $section->getSectionSettings($sectionName);
+        $sectionModelSettings = $section->getSectionSettings($sectionName, $request->pluginData['sectionPath'] ?? null);
         $modelPath = $sectionModelSettings['model'] ?? config('bradmin.base_models_path') . studly_case(strtolower(str_singular($sectionName)));
         $model = new $modelPath;
-        $class = $section->getSectionByName($sectionName);
+        $class = $section->getSectionByName($sectionName, $request->pluginData['sectionPath'] ?? null);
         if(!isset($class)) { abort(500); }
         $redirectUrl = $request->pluginData['deleteUrl'] ?? '/'.config('bradmin.admin_url').'/'.$sectionName;
         if($class->isDeletable()){

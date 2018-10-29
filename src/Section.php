@@ -2,7 +2,9 @@
 
 namespace Bradmin;
 
+use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Model;
+use Meta;
 
 class Section
 {
@@ -21,30 +23,30 @@ class Section
         return __CLASS__;
     }
 
-    public function getSectionSettings($sectionName)
+    public function getSectionSettings($sectionName, $sectionPath = null)
     {
-        $section = config('bradmin.user_path').'\\Sections\\'.$sectionName;
+        $section = ($sectionPath ?? config('bradmin.user_path').'\\Sections\\' ) . $sectionName;
 
         return get_object_vars(new $section($this->app));
     }
     
-    public function getSectionByName($sectionName){
+    public function getSectionByName($sectionName, $sectionPath = null){
 
-        $section =  config('bradmin.user_path').'\\Sections\\'.$sectionName;
+        $section =  ($sectionPath ?? config('bradmin.user_path').'\\Sections\\') . $sectionName;
         return new $section($this->app);
     }
 
-    public function fireDisplay($sectionName,array $payload = [])
+    public function fireDisplay($sectionName, array $payload = [], $sectionPath = null)
     {
 
 //        if (! method_exists($this, 'onDisplay')) {
 //            return;
 //        }
-        $this->setClass(config('bradmin.user_path').'\\Sections\\'.$sectionName);
+        $this->setClass(($sectionPath ?? config('bradmin.user_path').'\\Sections\\') . $sectionName);
 
         if(!class_exists($this->getClass()))
         {
-            throw new \Exception('Section not found.');
+            throw new \Exception('Section ' . $this->getClass() . ' not found.');
         }
 
         $display = $this->app->call([$this->getClass(), 'onDisplay'], $payload);
@@ -52,13 +54,13 @@ class Section
         return $display;
     }
 
-    public function fireCreate($sectionName,array $payload = [])
+    public function fireCreate($sectionName, array $payload = [], $sectionPath = null)
     {
-        $this->setClass(config('bradmin.user_path').'\\Sections\\'.$sectionName);
+        $this->setClass(($sectionPath ?? config('bradmin.user_path').'\\Sections\\') . $sectionName);
 
         if(!class_exists($this->getClass()))
         {
-            throw new \Exception('Section not found.');
+            throw new \Exception('Section ' . $this->getClass() . ' not found.');
         }
 
         $display = $this->app->call([$this->getClass(), 'onCreate'], $payload);
@@ -66,13 +68,13 @@ class Section
         return $display;
     }
 
-    public function fireEdit($sectionName,array $payload = [])
+    public function fireEdit($sectionName, array $payload = [], $sectionPath = null)
     {
-        $this->setClass(config('bradmin.user_path').'\\Sections\\'.$sectionName);
+        $this->setClass(($sectionPath ?? config('bradmin.user_path').'\\Sections\\') . $sectionName);
 
         if(!class_exists($this->getClass()))
         {
-            throw new \Exception('Section not found.');
+            throw new \Exception('Section ' . $this->getClass() . ' not found.');
         }
 
         $display = $this->app->call([$this->getClass(), 'onEdit'], $payload);
@@ -80,19 +82,19 @@ class Section
         return $display;
     }
 
-    public function fireDelete($sectionName,array $payload = [])
+    public function fireDelete($sectionName, array $payload = [], $sectionPath = null)
     {
-        $this->setClass(config('bradmin.user_path').'\\Sections\\'.$sectionName);
+        $this->setClass(($sectionPath ?? config('bradmin.user_path').'\\Sections\\') . $sectionName);
         if(!class_exists($this->getClass()))
         {
-            throw new \Exception('Section not found.');
+            throw new \Exception('Section ' . $this->getClass() . ' not found.');
         }
         return $this->getClass();
     }
 
 //    public function getTitle($sectionName)
 //    {
-//        $this->setClass(config('bradmin.user_path').'\\Sections\\'.$sectionName);
+//        $this->setClass(($sectionPath ?? config('bradmin.user_path').'\\Sections\\') . $sectionName);
 //        $title = model
 //
 //        return $display;
@@ -132,5 +134,9 @@ class Section
         return true;
     }
 
+    public function afterSave(Request $request, $model = null)
+    {
+        // override in child
+    }
 
 }

@@ -15,6 +15,7 @@ use Bradmin\SectionBuilder\Form\Panel\Fields\Input;
 use Bradmin\SectionBuilder\Form\Panel\Fields\MultiSelect;
 use Bradmin\SectionBuilder\Form\Panel\Fields\Select;
 use Bradmin\SectionBuilder\Form\Panel\Fields\Textarea;
+use Bradmin\SectionBuilder\Form\Panel\Fields\Wysiwyg;
 
 class FormField
 {
@@ -26,6 +27,11 @@ class FormField
     public static function textarea($name, $label)
     {
         return new Textarea($name, $label);
+    }
+
+    public static function Wysiwyg($name, $label)
+    {
+        return new Wysiwyg($name, $label);
     }
 
     public static function select($name, $label)

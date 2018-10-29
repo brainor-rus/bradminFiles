@@ -37,6 +37,7 @@ class BrAdminServiceProvider extends ServiceProvider
         // publish files
         $this->publishes([
             __DIR__.'/../../resources/views' => resource_path('views/bradmin'),
+            __DIR__.'/../../public/packages/bradmin/js/ckeditor' => public_path('packages/bradmin/js'),
         ]);
     }
 
