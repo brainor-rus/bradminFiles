@@ -79,6 +79,7 @@ class BRFiles extends Section
 
         $brFieldsRight = [
             "0.01" => FormField::custom(view('bradmin::cms.partials.filesInput')->with(compact('file'))),
+            "0.02" => FormField::dropZone('dropzone_files','Дропзона', 'dropzone','/test'),
         ];
 
         $mergedFieldsLeft = array_merge($pluginsFieldsLeft, $brFieldsLeft);

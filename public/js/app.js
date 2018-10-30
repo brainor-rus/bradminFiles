@@ -35634,6 +35634,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 __WEBPACK_IMPORTED_MODULE_1_jquery___default()('.wysiwyg_editor').each(function (e) {
                     CKEDITOR.replace(this.id);
                 });
+
+                var dropZones = [];
+                __WEBPACK_IMPORTED_MODULE_1_jquery___default()('.dropzone').each(function (e) {
+                    dropZones[this.id] = new Dropzone("#" + this.id, { url: this.getAttribute('data-dropzone-url') });
+                });
             });
         });
     },
@@ -35752,7 +35757,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 CKEDITOR.instances[instance].updateElement();
             }
 
-            var ajaxUrl = event.target.attributes.action.value,
+            var ajaxUrl = event.target.attributes.action.value + document.location.search,
                 method = event.target.attributes.method.value,
                 formId = event.target.attributes.id.value,
                 formData = __WEBPACK_IMPORTED_MODULE_1_jquery___default()('#' + formId).serialize(),

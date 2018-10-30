@@ -119,6 +119,11 @@
                     $('.wysiwyg_editor').each(function(e){
                         CKEDITOR.replace( this.id );
                     });
+
+                    var dropZones = [];
+                    $('.dropzone').each(function(e){
+                        dropZones[this.id] = new Dropzone("#"+this.id, { url: this.getAttribute('data-dropzone-url')});
+                    });
                 });
             });
 
@@ -246,7 +251,7 @@
                     CKEDITOR.instances[instance].updateElement();
                 }
 
-                let ajaxUrl = event.target.attributes.action.value,
+                let ajaxUrl = event.target.attributes.action.value + document.location.search,
                     method = event.target.attributes.method.value,
                     formId = event.target.attributes.id.value,
                     formData = $('#'+formId).serialize(),
