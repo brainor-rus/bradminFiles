@@ -14,11 +14,11 @@ class BrainorPayController extends Controller
         'redirectUrl' => '/bradmin/pay/{sectionName}'
     ];
 
-    public function showRouteRedirect(Section $section, $sectionName)
+    public function showRouteRedirect(Section $section, $sectionName, Request $request)
     {
         $mainController = new BrAdminController;
 
-        return $mainController->getDisplay($section, $sectionName, $this->pluginData);
+        return $mainController->getDisplay($section, $sectionName, $this->pluginData, $request);
     }
 
     public function createRouteRedirect(Section $section, $sectionName)

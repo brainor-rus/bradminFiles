@@ -42,10 +42,10 @@
                 return $('meta[name="csrf-token"]').attr('content');
             },
             getDeleteUrl() {
-                return $('.display-table').data('delete-redirect');
+                return $('.br-display').data('delete-redirect');
             },
             getSectionPath() {
-                return $('.display-table').data('section-path');
+                return $('.br-display').data('section-path');
             }
         },
     }

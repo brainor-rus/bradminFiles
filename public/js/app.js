@@ -39873,10 +39873,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             return __WEBPACK_IMPORTED_MODULE_0_jquery___default()('meta[name="csrf-token"]').attr('content');
         },
         getDeleteUrl: function getDeleteUrl() {
-            return __WEBPACK_IMPORTED_MODULE_0_jquery___default()('.display-table').data('delete-redirect');
+            return __WEBPACK_IMPORTED_MODULE_0_jquery___default()('.br-display').data('delete-redirect');
         },
         getSectionPath: function getSectionPath() {
-            return __WEBPACK_IMPORTED_MODULE_0_jquery___default()('.display-table').data('section-path');
+            return __WEBPACK_IMPORTED_MODULE_0_jquery___default()('.br-display').data('section-path');
         }
     }
 });

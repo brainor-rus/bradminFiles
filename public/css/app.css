@@ -10679,3 +10679,10 @@ body {
   left: 0;
 }
 
+.tiles-display.br-display .card .card-img-top {
+  height: 200px !important;
+  background-size: cover;
+  background-position: center;
+  color: black;
+}
+
