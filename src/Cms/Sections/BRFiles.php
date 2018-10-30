@@ -2,6 +2,7 @@
 
 namespace Bradmin\Cms\Sections;
 
+use Bradmin\Cms\Models\BRFile;
 use Bradmin\Section;
 use Bradmin\SectionBuilder\Display\BaseDisplay\Display;
 use Bradmin\SectionBuilder\Display\Table\Columns\BaseColumn\Column;
@@ -55,25 +56,48 @@ class BRFiles extends Section
 
     public static function onCreate()
     {
-        return self::onEdit();
+        return self::onEdit(null);
     }
 
-    public static function onEdit()
+    public static function onEdit($id)
     {
-        $pluginsFields = app()['PluginsData']['CmsData']['Tags']['Files'] ?? [];
+        $pluginsFieldsLeft = app()['PluginsData']['CmsData']['Tags']['Files']['Edit']['Left'] ?? [];
+        $pluginsFieldsRight = app()['PluginsData']['CmsData']['Tags']['Files']['Edit']['Right'] ?? [];
+        $file = BRFile::where('id', $id)->first();
 
-        $brFields = [
-            // todo
+        $brFieldsLeft = [
+            "0.01" => FormField::input('title', 'Title'),
+            "0.02" => FormField::input('alt', 'Alt'),
+            "0.03" => FormField::input('description', 'Описание'),
+            "9.94" => FormField::hidden('mime')->setValue('.'),
+            "9.95" => FormField::hidden('url')->setValue('.'),
+            "9.96" => FormField::hidden('base_url')->setValue('.'),
+            "9.97" => FormField::hidden('size')->setValue(123),
+            "9.98" => FormField::hidden('extension')->setValue('.'),
+            "9.99" => FormField::hidden('path')->setValue('.'),
         ];
 
-        $mergedFields = array_merge($pluginsFields, $brFields);
+        $brFieldsRight = [
+            "0.01" => FormField::custom(view('bradmin::cms.partials.filesInput')->with(compact('file'))),
+        ];
 
-        ksort($mergedFields);
+        $mergedFieldsLeft = array_merge($pluginsFieldsLeft, $brFieldsLeft);
+        $mergedFieldsRight = array_merge($pluginsFieldsRight, $brFieldsRight);
+
+        ksort($mergedFieldsLeft);
+        ksort($mergedFieldsRight);
 
         $form = Form::panel([
-            FormColumn::column($mergedFields),
+            FormColumn::column($mergedFieldsLeft, 'col-lg-9 col-md-8 col-12'),
+            FormColumn::column($mergedFieldsRight, 'col'),
         ]);
 
         return $form;
+    }
+
+    public function afterSave(Request $request, $model = null)
+    {
+        // todo Тут нужно сделать сохранение документа.
+        // После загрузки документа нужно обновить поля в модели.
     }
 }
