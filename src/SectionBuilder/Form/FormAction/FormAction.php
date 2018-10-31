@@ -20,7 +20,7 @@ class FormAction
     public static function save(Model $model, Request $request)
     {
         foreach ($model->getAttributes() as $name => $attribute) {
-            $model->{$name} = $request->{$name} ?? null;
+            $model->{$name} = $request->{$name} ?? $model->{$name};
         }
         $model->save();
     }

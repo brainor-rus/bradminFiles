@@ -173,3 +173,10 @@ body{
   box-shadow: 0 1px 15px 1px rgba(39,39,39,.1);
 }
 .content{top:0;left:0}
+
+.tiles-display.br-display .card .card-img-top {
+  height: 200px !important;
+  background-size: cover;
+  background-position: center;
+  color: black;
+}

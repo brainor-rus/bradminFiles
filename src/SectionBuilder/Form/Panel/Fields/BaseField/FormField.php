@@ -16,6 +16,7 @@ use Bradmin\SectionBuilder\Form\Panel\Fields\MultiSelect;
 use Bradmin\SectionBuilder\Form\Panel\Fields\Select;
 use Bradmin\SectionBuilder\Form\Panel\Fields\Textarea;
 use Bradmin\SectionBuilder\Form\Panel\Fields\Wysiwyg;
+use Bradmin\SectionBuilder\Form\Panel\Fields\DropZone;
 
 class FormField
 {
@@ -52,5 +53,9 @@ class FormField
     public static function custom($html)
     {
         return new Custom($html);
+    }
+    public static function dropZone($label, $name, $id, $url)
+    {
+        return new DropZone($label, $name, $id, $url);
     }
 }

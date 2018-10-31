@@ -12,6 +12,7 @@ use Bradmin\SectionBuilder\Display\Table\Columns\BaseColumn\Column;
 use Bradmin\SectionBuilder\Form\BaseForm\Form;
 use Bradmin\SectionBuilder\Form\Panel\Columns\BaseColumn\FormColumn;
 use Bradmin\SectionBuilder\Form\Panel\Fields\BaseField\FormField;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class BRPages extends Section
@@ -58,8 +59,10 @@ class BRPages extends Section
         $brFieldsLeft = [
             '0.01' => FormField::input('title', 'Заголовок')->setRequired(true),
             '0.02' => FormField::textarea('description', 'Краткое описание')->setRows(3),
-            '0.03' => FormField::input('slug', 'Слаг')->setRequired(true),
-            '0.04' => FormField::input('url', 'Ссылка')->setRequired(true),
+            '0.03' => FormField::input('slug', 'Слаг (необязательно)'),
+            '0.04' => FormField::input('url', 'Ссылка ("." для автогенерации)')
+                ->setRequired(true)
+                ->setValue('.'),
             '0.05' => FormField::multiselect('tags', 'Метки')
                 ->setModelForOptions(BRTag::class)
                 ->setQueryFunctionForModel(
@@ -84,6 +87,7 @@ class BRPages extends Section
                     'draft' => 'Черновик',
                     'published' => 'Опубликовано'
                 ])
+                ->setDefaultSelected('published')
                 ->setRequired(true),
             '0.02' => FormField::select('template', 'Шаблон')
                 ->setOptions($templates),
@@ -93,8 +97,11 @@ class BRPages extends Section
                     0 => 'Запрещены',
                     1 => 'Разрешены'
                 ])
+                ->setDefaultSelected(0)
                 ->setRequired(true),
-            '0.05' => FormField::input('published_at', 'Дата публикации')->setRequired(true),
+            '0.05' => FormField::input('published_at', 'Дата публикации')
+                ->setValue(Carbon::now())
+                ->setRequired(true),
             '0.06' => FormField::input('thumb', 'Миниатюра'),
             '99.99' => FormField::hidden('type')->setValue("page"),
         ];
@@ -121,11 +128,17 @@ class BRPages extends Section
         $model->terms()->detach();
         $model->terms()->attach($terms);
 
+        if($request->url == '.')
+        {
+            $model->url = $model->default_url;
+            $model->save();
+        }
+
         if($request->has('parent_id')) {
             $parent = BRPost::where('id', $request->parent_id)->first();
             $parent->appendNode($model);
         } else {
-            $model->makeRoot();
+            $model->saveAsRoot();
         }
     }
 }

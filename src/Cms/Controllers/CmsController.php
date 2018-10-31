@@ -24,10 +24,10 @@ class CmsController extends Controller
         $this->app = $app;
     }
 
-    public function showRouteRedirect(Section $section, $sectionName)
+    public function showRouteRedirect(Section $section, $sectionName, Request $request)
     {
         $mainController = new BrAdminController;
-        return $mainController->getDisplay($section, $sectionName, $this->pluginData);
+        return $mainController->getDisplay($section, $sectionName, $this->pluginData,  $request);
     }
 
     public function createRouteRedirect(Section $section, $sectionName)
