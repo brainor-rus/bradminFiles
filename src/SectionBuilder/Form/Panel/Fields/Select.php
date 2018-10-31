@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\View;
 
 class Select
 {
-    private $name, $label, $value, $required, $readonly, $options, $modelForOptions, $queryFunctionForModel, $display;
+    private $name, $label, $value, $required, $readonly, $options, $modelForOptions, $queryFunctionForModel, $display, $defaultSelected;
 
     public function __construct($name, $label)
     {
@@ -39,6 +39,7 @@ class Select
 
     /**
      * @param mixed $value
+     * @return Select
      */
     public function setValue($value)
     {
@@ -48,6 +49,7 @@ class Select
 
     /**
      * @param mixed $readonly
+     * @return Select
      */
     public function setReadonly($readonly)
     {
@@ -57,6 +59,7 @@ class Select
 
     /**
      * @param mixed $required
+     * @return Select
      */
     public function setRequired($required)
     {
@@ -66,6 +69,7 @@ class Select
 
     /**
      * @param mixed $options
+     * @return Select
      */
     public function setOptions($options)
     {
@@ -75,6 +79,7 @@ class Select
 
     /**
      * @param mixed $modelForOptions
+     * @return Select
      */
     public function setModelForOptions($modelForOptions)
     {
@@ -85,6 +90,7 @@ class Select
 
     /**
      * @param mixed $queryFunctionForModel
+     * @return Select
      */
     public function setQueryFunctionForModel($queryFunctionForModel)
     {
@@ -94,6 +100,7 @@ class Select
 
     /**
      * @param mixed $display
+     * @return Select
      */
     public function setDisplay($display)
     {
@@ -190,6 +197,25 @@ class Select
         return $this->queryFunctionForModel;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getDefaultSelected()
+    {
+        return $this->defaultSelected;
+    }
+
+    /**
+     * @param mixed $defaultSelected
+     * @return Select
+     */
+    public function setDefaultSelected($defaultSelected)
+    {
+        $this->defaultSelected = $defaultSelected;
+        return $this;
+    }
+
+
     public function render($value = null)
     {
         $name = $this->getName();
@@ -197,8 +223,9 @@ class Select
         $required = $this->getRequired();
         $readonly = $this->getReadonly();
         $options = $this->getOptions();
+        $defaultSelected = $this->getDefaultSelected();
 
         return View::make('bradmin::SectionBuilder/Form/Fields/select')
-            ->with(compact('name', 'label', 'value', 'required', 'readonly', 'options'));
+            ->with(compact('name', 'label', 'value', 'required', 'readonly', 'options', 'defaultSelected'));
     }
 }

@@ -11,6 +11,7 @@ use Bradmin\SectionBuilder\Display\Table\Columns\BaseColumn\Column;
 use Bradmin\SectionBuilder\Form\BaseForm\Form;
 use Bradmin\SectionBuilder\Form\Panel\Columns\BaseColumn\FormColumn;
 use Bradmin\SectionBuilder\Form\Panel\Fields\BaseField\FormField;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Bradmin\SectionBuilder\Meta\Meta;
 
@@ -20,15 +21,15 @@ class BRPosts extends Section
     protected $model = 'Bradmin\Cms\Models\BRPost';
 
     public static function onDisplay(){
-        $meta = new Meta;
-        $meta->setStyles([
-            '' => ''
-        ])->setScripts([
-            'head' => [],
-            'body' => [
-                'test' => asset('js/test.js')
-            ]
-        ]);
+//        $meta = new Meta;
+//        $meta->setStyles([
+//            '' => ''
+//        ])->setScripts([
+//            'head' => [],
+//            'body' => [
+//                'test' => asset('js/test.js')
+//            ]
+//        ]);
 
         $pluginsFields = app()['PluginsData']['CmsData']['Posts']['DisplayField'] ?? [];
         $brFields = [
@@ -46,7 +47,7 @@ class BRPosts extends Section
         ksort($mergedFields);
 
         $display = Display::table($mergedFields)
-            ->setMeta($meta)
+//            ->setMeta($meta)
             ->setPagination(10);
 
         return $display->setScopes(['posts']);
@@ -59,15 +60,15 @@ class BRPosts extends Section
 
     public static function onEdit()
     {
-        $meta = new Meta;
-        $meta->setStyles([
-            '' => ''
-        ])->setScripts([
-            'head' => [],
-            'body' => [
-                'test' => asset('js/test.js')
-            ]
-        ]);
+//        $meta = new Meta;
+//        $meta->setStyles([
+//            '' => ''
+//        ])->setScripts([
+//            'head' => [],
+//            'body' => [
+//                'test' => asset('js/test.js')
+//            ]
+//        ]);
 
         $pluginsFieldsLeft = app()['PluginsData']['CmsData']['Posts']['EditField']['Left'] ?? [];
         $pluginsFieldsRight = app()['PluginsData']['CmsData']['Posts']['EditField']['Right'] ?? [];
@@ -77,8 +78,10 @@ class BRPosts extends Section
         $brFieldsLeft = [
             '0.01' => FormField::input('title', 'Заголовок')->setRequired(true),
             '0.02' => FormField::textarea('description', 'Краткое описание')->setRows(3),
-            '0.03' => FormField::input('slug', 'Слаг')->setRequired(true),
-            '0.04' => FormField::input('url', 'Ссылка')->setRequired(true),
+            '0.03' => FormField::input('slug', 'Слаг (необязательно)'),
+            '0.04' => FormField::input('url', 'Ссылка ("." для автогенерации)')
+                ->setRequired(true)
+                ->setValue('.'),
             '0.05' => FormField::multiselect('tags', 'Метки')
                 ->setModelForOptions(BRTag::class)
                 ->setQueryFunctionForModel(
@@ -103,6 +106,7 @@ class BRPosts extends Section
                     'draft' => 'Черновик',
                     'published' => 'Опубликовано'
                 ])
+                ->setDefaultSelected('published')
                 ->setRequired(true),
             '0.02' => FormField::select('template', 'Шаблон')
                 ->setOptions($templates),
@@ -111,8 +115,11 @@ class BRPosts extends Section
                     0 => 'Запрещены',
                     1 => 'Разрешены'
                 ])
+                ->setDefaultSelected(0)
                 ->setRequired(true),
-            '0.04' => FormField::input('published_at', 'Дата публикации')->setRequired(true),
+            '0.04' => FormField::input('published_at', 'Дата публикации')
+                ->setValue(Carbon::now())
+                ->setRequired(true),
             '0.05' => FormField::input('thumb', 'Миниатюра'),
             '99.99' => FormField::hidden('type')->setValue("post"),
         ];
@@ -126,7 +133,8 @@ class BRPosts extends Section
         $form = Form::panel([
             FormColumn::column($mergedFieldsLeft, 'col-md-8 col-12'),
             FormColumn::column($mergedFieldsRight, 'col-md-4 col-12'),
-        ])->setMeta($meta);
+        ]);
+//            ->setMeta($meta);
 
         return $form;
     }
@@ -138,5 +146,18 @@ class BRPosts extends Section
         $terms = array_merge($request->categories ?? [], $terms);
         $model->terms()->detach();
         $model->terms()->attach($terms);
+
+        if($request->url == '.')
+        {
+            $model->url = $model->default_url;
+            $model->save();
+        }
+
+        if($request->has('parent_id')) {
+            $parent = BRPost::where('id', $request->parent_id)->first();
+            $parent->appendNode($model);
+        } else {
+            $model->saveAsRoot();
+        }
     }
 }

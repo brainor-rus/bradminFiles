@@ -39,10 +39,12 @@ class Input
 
     /**
      * @param mixed $value
+     * @return Input
      */
-    public function setValue($value): void
+    public function setValue($value)
     {
         $this->value = $value;
+        return $this;
     }
 
     /**
@@ -127,6 +129,7 @@ class Input
         $placeholder = $this->getPlaceholder();
         $required = $this->getRequired();
         $readonly = $this->getReadonly();
+        $value = $value ?? $this->getValue();
 
         return View::make('bradmin::SectionBuilder/Form/Fields/input')
             ->with(compact('name', 'label', 'value', 'placeholder', 'required', 'readonly'));
