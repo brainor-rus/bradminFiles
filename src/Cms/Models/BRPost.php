@@ -45,7 +45,7 @@ class BRPost extends Model
         'parent_id', '_lft', '_rgt', 'depth', 'user_id', 'template', 'thumb', 'comment_on', 'published_at', 'created_at', 'updated_at'
     ];
 
-    public function getDefaultUrlAttribute()
+    public function getDefaultUrlAttribute($withCategory = false)
     {
         $ancestors[] = $this->slug;
         foreach ($this->ancestors as $ancestor)
@@ -59,6 +59,11 @@ class BRPost extends Model
         foreach ($ancestors as $ancestor)
         {
             $url .= ('/' . $ancestor);
+        }
+
+        if($withCategory)
+        {
+            $url = ($this->categories->last()->slug ?? 'not-category') . $url;
         }
 
         return $url;

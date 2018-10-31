@@ -147,9 +147,10 @@ class BRPosts extends Section
         $model->terms()->detach();
         $model->terms()->attach($terms);
 
+        // todo После изменения рубрики меняет url только со второго раза
         if($request->url == '.')
         {
-            $model->url = $model->default_url;
+            $model->url = $model->getDefaultUrlAttribute(true);
             $model->save();
         }
 
