@@ -8,12 +8,14 @@
     <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700,200" rel=stylesheet>
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css">
     <link href="{{ asset('packages/bradmin/css/app.css') }}" rel="stylesheet">
+    <link href="{{ asset('packages/bradmin/js/dropzone/dropzone.min.css') }}" rel="stylesheet">
     <script>
         window.adminUrl = '{{ config('bradmin.admin_url') }}';
         window.logoUrl = '{{ config('bradmin.logo') }}';
         window.logoMiniUrl = '{{ config('bradmin.logo_mini') }}';
     </script>
     <script src="{{ asset('packages/bradmin/js/ckeditor/ckeditor.js') }}"></script>
+    <script src="{{ asset('packages/bradmin/js/dropzone/dropzone.min.js') }}"></script>
     <title>{{ config('bradmin.title') }}</title>
 </head>
 <body>

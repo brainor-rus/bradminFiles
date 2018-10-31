@@ -39,9 +39,9 @@ class BrAdminController extends Controller
         return response()->json($navigation);
     }
 
-    public function getDisplay(Section $section, $sectionName, $pluginData = null)
+    public function getDisplay(Section $section, $sectionName, $pluginData = null, Request $request)
     {
-        $display = $section->fireDisplay($sectionName, [], $pluginData['sectionPath'] ?? null);
+        $display = $section->fireDisplay($sectionName, [$request], $pluginData['sectionPath'] ?? null);
         $meta = $display->getMeta();
         $sectionModelSettings = $section->getSectionSettings(studly_case($sectionName), $pluginData['sectionPath'] ?? null);
 

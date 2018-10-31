@@ -42,7 +42,7 @@ class BRTerms extends Section
 
         $brFields = [
             '0.01' => FormField::input('title', 'Название')->setRequired(true),
-            '0.02' => FormField::input('slug', 'Ярлык')->setRequired(true),
+            '0.02' => FormField::input('slug', 'Ярлык (необязательно)'),
             '0.03' => FormField::textarea('description', 'Описание'),
             '99.99' => FormField::hidden('type')->setValue("category"),
         ];

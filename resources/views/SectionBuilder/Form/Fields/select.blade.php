@@ -22,7 +22,12 @@
                                     selected
                                 @endif
                             @endif
-                        @endif>{{ $option }}</option>
+                        @else
+                            @if($key == $defaultSelected)
+                                selected
+                            @endif
+                        @endif
+                >{{ $option }}</option>
             @endforeach
         @endif
     </select>

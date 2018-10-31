@@ -15,7 +15,7 @@ class TemplatesHelper
     public static function getTemplates($type)
     {
         $templatesDirectory = $type == 'page' ? config('bradmin.cms_pages_templates_path') : config('bradmin.cms_posts_templates_path');
-        $templatesDirectory = Config::get('view.paths')[0] . '\\' . str_replace('.', '\\', $templatesDirectory);
+        $templatesDirectory = Config::get('view.paths')[0] . '/' . str_replace('.', '/', $templatesDirectory);
         $templates = [];
 
         if ($handle = opendir($templatesDirectory)) {
