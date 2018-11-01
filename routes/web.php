@@ -58,4 +58,9 @@ Route::group(['middleware' => config('bradmin.middleware')], function () {
         'uses' => 'Bradmin\Controllers\BrAdminController@deleteAction',
     ]);
 
+    Route::post('/'.config('bradmin.admin_url').'/api/media_library/insert_media/image_list', [
+        'as'   => 'bradmin.media_library.insert_media.image_list',
+        'uses' => 'Bradmin\Controllers\BrAdminController@imageList',
+    ]);
+
 });

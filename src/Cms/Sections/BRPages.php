@@ -79,7 +79,7 @@ class BRPages extends Section
                     }
                 )
                 ->setDisplay('title'),
-            '0.07' => FormField::custom(view('bradmin::SectionBuilder.Form.Fields.InsertMedia.insertMedia')->with($id='test1')),
+            '0.07' => FormField::custom(view('bradmin::SectionBuilder.Form.Fields.InsertMedia.insertMedia')->with('id','input_content')),
             '0.08' => FormField::wysiwyg('content', 'Содержимое'),
         ];
         $brFieldsRight = [

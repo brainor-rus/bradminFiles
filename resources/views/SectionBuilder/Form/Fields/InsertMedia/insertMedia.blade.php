@@ -15,23 +15,22 @@
                 <li><a href="#imageGalleryTab" class="image-list-request" data-toggle="tab" data-wrapper-key="imageGalleryTabContent" data-file-type="image"  data-request-count="0">Галерея</a></li>
                 <li><a href="#thumbImageTab" id="thumbImageTabToggle" class="image-list-request" data-toggle="tab" data-wrapper-key="thumbImageTabContent" data-file-type="image"  data-request-count="0">Миниатюра</a></li>
             </ul>
-
             <!-- Tab panes -->
             <div class="tab-content">
                 <div class="tab-pane active" id="uploadFilesTab">
-                    @include('bradmin::SectionBuilder.Form.Fields.InsertMedia.InsertMediaTabs.uploadFiles')
+                    @include('bradmin::SectionBuilder.Form.Fields.InsertMedia.InsertMediaTabs.uploadFiles',['id' => $id])
                 </div>
 
                 <div class="tab-pane" id="singleImageTab">
-                    @include('bradmin::SectionBuilder.Form.Fields.InsertMedia.InsertMediaTabs.singleImage')
+                    @include('bradmin::SectionBuilder.Form.Fields.InsertMedia.InsertMediaTabs.singleImage',['id' => $id])
                 </div>
 
                 <div class="tab-pane" id="imageGalleryTab">
-                    @include('bradmin::SectionBuilder.Form.Fields.InsertMedia.InsertMediaTabs.gallery')
+                    @include('bradmin::SectionBuilder.Form.Fields.InsertMedia.InsertMediaTabs.gallery',['id' => $id])
                 </div>
 
                 <div class="tab-pane" id="thumbImageTab">
-                    @include('bradmin::SectionBuilder.Form.Fields.InsertMedia.InsertMediaTabs.thumbImage')
+                    @include('bradmin::SectionBuilder.Form.Fields.InsertMedia.InsertMediaTabs.thumbImage',['id' => $id])
                 </div>
             </div>
         </div>

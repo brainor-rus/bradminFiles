@@ -1,20 +1,5 @@
 $(document).ready(function(){
 
-    $(document).on('click', '#insertMedia', function (e) {
-        // Get the editor instance that you want to interact with.
-        var editor = CKEDITOR.instances.content;
-        var value = 'Redvfdvdsfv';
-
-        // Check the active editing mode.
-        if ( editor.mode == 'wysiwyg' )
-        {
-            // Insert HTML code.
-            // https://docs.ckeditor.com/ckeditor4/docs/#!/api/CKEDITOR.editor-method-insertHtml
-            editor.insertHtml( value );
-        }
-        else{alert( 'You must be in WYSIWYG mode!' );}
-    });
-
     $(document).on('click', '.image-list-request', function (e) {
         var wrapperId = $(this).data('wrapperKey');
         var fileType = $(this).data('fileType');
@@ -27,14 +12,14 @@ $(document).ready(function(){
         });
         $.ajax({
             type: 'post',
-            url: '/api/insert_media/image_list',
+            url: '/' + window.adminUrl + '/api/media_library/insert_media/image_list',
             data: {wrapperId:wrapperId,fileType:fileType,requestCount:requestCount,quantity:quantity},
             cache: false,
             beforeSend: function() {
-                document.getElementById('ajax-loading-gif').style.display = 'block';
+                // document.getElementById('ajax-loading-gif').style.display = 'block';
             },
             success: function(html){
-                document.getElementById('ajax-loading-gif').style.display = 'none';
+                // document.getElementById('ajax-loading-gif').style.display = 'none';
                 $('#'+wrapperId).html(html);
             }
         });
@@ -54,14 +39,14 @@ $(document).ready(function(){
         });
         $.ajax({
             type: 'post',
-            url: '/api/insert_media/image_list',
+            url: '/' + window.adminUrl + '/api/media_library/insert_media/image_list',
             data: {wrapperId:wrapperId,fileType:fileType,requestCount:requestCount,quantity:quantity},
             cache: false,
             beforeSend: function() {
-                document.getElementById('ajax-loading-gif').style.display = 'block';
+                // document.getElementById('ajax-loading-gif').style.display = 'block';
             },
             success: function(html){
-                document.getElementById('ajax-loading-gif').style.display = 'none';
+                // document.getElementById('ajax-loading-gif').style.display = 'none';
                 $('#image-list-more-last-'+wrapperId).before(html);
                 var requestCount = parseInt(requestCountForBtn) + 1;
                 $('#image-list-more').data('requestCount', requestCount);
@@ -77,6 +62,7 @@ $(document).ready(function(){
     $(document).on('click', '#insertSingleMedia', function (e) {
         var elements = document.querySelectorAll('.insert-media-element.ui-selected img');
         var insertString = '';
+        var ckeditorId = $(this).data('ckeditorId');
         function elementsOutput(element, index, array) {
             var lightBoxData = 'data-lightbox="'+element.getAttribute("data-insert-media-id")+'"';
             if(element.getAttribute("data-insert-media-title").length > 0){
@@ -87,15 +73,14 @@ $(document).ready(function(){
             }
             insertString = insertString+
                 '<p>'+
-                    '<a href="'+element.getAttribute("data-insert-media-url")+'" '+lightBoxData+'>'+
-                        '<img src="'+element.getAttribute("data-insert-media-url")+'"'+'/>'+
-                    '</a>'+
+                '<a href="'+element.getAttribute("data-insert-media-url")+'" '+lightBoxData+'>'+
+                '<img src="'+element.getAttribute("data-insert-media-url")+'"'+'/>'+
+                '</a>'+
                 '</p>';
         }
         elements.forEach(elementsOutput);
 
-        var editor = CKEDITOR.instances.content;
-
+        var editor = CKEDITOR.instances[ckeditorId];
         // Check the active editing mode.
         if ( editor.mode == 'wysiwyg' )
         {
@@ -105,7 +90,8 @@ $(document).ready(function(){
         }
         else{alert( 'You must be in WYSIWYG mode!' );}
 
-        $('#insertMediaModal').modal('hide')
+        $('#insertMediaModal').modal('toggle');
+        $( ".modal-backdrop.fade.show" ).remove();
     });
 
     $(document).on('click', '#createGallery', function (e) {
@@ -115,16 +101,16 @@ $(document).ready(function(){
 
             insertString = insertString+
                 '<div class="insert-media-element ui-state-default">'+
-                    '<div class="insert-media-file-wrapper">'+
-                        '<img src="'+element.getAttribute("data-insert-media-base_url")+'-200x200.'+element.getAttribute("data-insert-media-extension")+'"'+
-                            ' data-insert-media-id="'+element.getAttribute("data-insert-media-id")+'"'+
-                            ' data-insert-media-url="'+element.getAttribute("data-insert-media-url")+'"'+
-                            ' data-insert-media-base_url="'+element.getAttribute("data-insert-media-base_url")+'"'+
-                            ' data-insert-media-extension="'+element.getAttribute("data-insert-media-extension")+'"'+
-                            ' data-insert-media-title="'+element.getAttribute("data-insert-media-title")+'"'+
-                            ' data-insert-media-alt="'+element.getAttribute("data-insert-media-alt")+'"'+
-                        '>'+
-                    '</div>'+
+                '<div class="insert-media-file-wrapper">'+
+                '<img src="'+element.getAttribute("data-insert-media-base_url")+'-200x200.'+element.getAttribute("data-insert-media-extension")+'"'+
+                ' data-insert-media-id="'+element.getAttribute("data-insert-media-id")+'"'+
+                ' data-insert-media-url="'+element.getAttribute("data-insert-media-url")+'"'+
+                ' data-insert-media-base_url="'+element.getAttribute("data-insert-media-base_url")+'"'+
+                ' data-insert-media-extension="'+element.getAttribute("data-insert-media-extension")+'"'+
+                ' data-insert-media-title="'+element.getAttribute("data-insert-media-title")+'"'+
+                ' data-insert-media-alt="'+element.getAttribute("data-insert-media-alt")+'"'+
+                '>'+
+                '</div>'+
                 '</div>';
         }
         elements.forEach(elementsOutput);
@@ -138,6 +124,7 @@ $(document).ready(function(){
     });
 
     $(document).on('click', '#insertGalleryMedia', function (e) {
+        var ckeditorId = $(this).data('ckeditorId');
         var elements = document.querySelectorAll('#galleryDataContent .insert-media-element img');
         console.log(elements);
         var insertString = '';
@@ -154,15 +141,15 @@ $(document).ready(function(){
             }
             insertString = insertString+
                 '<div class="gallary-item">'+
-                    '<a href="'+element.getAttribute("data-insert-media-url")+'" '+lightBoxData+'>'+
-                        '<img src="'+element.getAttribute("data-insert-media-base_url")+'-200x200.'+element.getAttribute("data-insert-media-extension")+'"'+'/>'+
-                    '</a>'+
+                '<a href="'+element.getAttribute("data-insert-media-url")+'" '+lightBoxData+'>'+
+                '<img src="'+element.getAttribute("data-insert-media-base_url")+'-200x200.'+element.getAttribute("data-insert-media-extension")+'"'+'/>'+
+                '</a>'+
                 '</div>';
         }
         elements.forEach(elementsOutput);
         insertString = insertString+
             '</div>'
-        var editor = CKEDITOR.instances.content;
+        var editor = CKEDITOR.instances[ckeditorId];
 
         // Check the active editing mode.
         if ( editor.mode == 'wysiwyg' )
@@ -173,9 +160,11 @@ $(document).ready(function(){
         }
         else{alert( 'You must be in WYSIWYG mode!' );}
 
-        $('#createGalleyModal').modal('hide')
+        $('#createGalleyModal').modal('toggle');
 
-        $('#insertMediaModal').modal('hide')
+        $('#insertMediaModal').modal('toggle');
+
+        $( ".modal-backdrop.fade.show" ).remove();
     });
 
 

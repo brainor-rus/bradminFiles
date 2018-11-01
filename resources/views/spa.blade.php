@@ -33,6 +33,7 @@
     <app></app>
 </div>
 <script src="{{ asset('packages/bradmin/js/app.js') }}"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
 <script src="{{ asset('packages/bradmin/js/jquery-ui/jquery-ui.min.js') }}"></script>
 <script src="{{ asset('packages/bradmin/js/insertMedia/insertMedia.js') }}"></script>
 </body>
