@@ -5,6 +5,7 @@
     "license": "MIT",
     "type": "project",
     "require": {
+        "cviebrock/eloquent-sluggable": "4.6",
         "kalnoy/nestedset": "^4.3"
     },
     "autoload": {
