@@ -6,7 +6,8 @@
     "type": "project",
     "require": {
         "cviebrock/eloquent-sluggable": "4.6",
-        "kalnoy/nestedset": "^4.3"
+        "kalnoy/nestedset": "^4.3",
+        "intervention/image": "2.*"
     },
     "autoload": {
 
