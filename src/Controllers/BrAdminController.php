@@ -9,9 +9,12 @@ use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Storage;
+use Carbon\Carbon;
+use Image;
 
 use Bradmin\Section;
 use Bradmin\Navigation\NavigationManager;
+use Bradmin\Cms\Models\BRFile;
 
 class BrAdminController extends Controller
 {
@@ -264,4 +267,83 @@ class BrAdminController extends Controller
     {
 
     }
+
+    public function imageList(Request $request)
+    {
+        $files = BRFile::
+//            when(
+//                $request->has('fileType'),
+//                function ($query) use ($request) {
+//                    return $query->where('mime','ilike','%'.$request->fileType.'%');
+//                }
+//            )
+        limit($request->quantity)
+        ->offset($request->requestCount*$request->quantity)
+            ->orderBy('created_at','DESC')
+            ->get();
+        $requestCount = $request->requestCount+1;
+        $wrapperId = $request->wrapperId;
+        if ($request->requestCount > 0){
+            return view('bradmin::SectionBuilder.Form.Fields.InsertMedia.imagesListElements')->with(compact('files','requestCount','wrapperId'));
+        }
+        else{
+            return view('bradmin::SectionBuilder.Form.Fields.InsertMedia.imagesList')->with(compact('files','requestCount','wrapperId'));
+        }
+    }
+
+    public function fileUpload(Request $request)
+    {
+        $file = $request->file('file');
+        $year = Carbon::now()->year;
+        $month = Carbon::now()->month;
+        $day = Carbon::now()->day;
+        $timestamp = Carbon::now()->format('YmdHis');
+        $pathPart='/uploads/'.$year.'/'.$month.'/'.$day;
+        $destinationPath = public_path().''.$pathPart;
+        if (!file_exists($destinationPath)) {
+            mkdir($destinationPath, 0755, true);
+        }
+        $originalFilename = $file->getClientOriginalName();
+        $basename = preg_replace('/\.\w+$/', '', $originalFilename);
+        $extension = $file->getClientOriginalExtension();
+        $filename = $basename;
+        if (file_exists(''.$destinationPath.'/'.$filename.'.'.$extension)) {
+            $filename = $basename.'-'.$timestamp;
+        }
+        $resultFileName = $filename.'.'.$extension;
+        $fileMime = $file->getMimeType();
+        $fileSize = $file->getSize();
+        $upload_success = $file->move($destinationPath, $resultFileName);
+        $newFilePath = $destinationPath.'/'.$resultFileName;
+        if ($upload_success) {
+            $url = $pathPart.'/'.$resultFileName;
+            $base_url = $pathPart.'/'.$filename;
+            $newFile = new BRFile;
+
+            $newFile->mime = $fileMime;
+            $newFile->url = $url;
+            $newFile->base_url = $base_url;
+            $newFile->extension = $extension;
+            $newFile->path = $destinationPath;
+            $newFile->size = $fileSize;
+
+            $newFile->save();
+            if(strstr($fileMime, "image/")){
+                $thumbPath = $destinationPath.'/'.$filename.'-200x200'.'.'.$extension;
+                Image::make($newFilePath)->fit(200)->save($thumbPath);
+            }
+            return response()->json(
+                [
+                    'success' => 200,
+                ]
+            );
+        } else {
+            return response()->json(
+                [
+                    'error' => 400,
+                ]
+            );
+        }
+    }
+
 }

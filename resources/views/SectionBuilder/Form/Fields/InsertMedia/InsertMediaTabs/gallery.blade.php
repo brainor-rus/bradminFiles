@@ -27,7 +27,7 @@
 
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
-                <button type="button" class="btn  btn-success" id="insertGalleryMedia">Вставить в запись</button>
+                <button type="button" class="btn  btn-success" id="insertGalleryMedia"  data-ckeditor-id="{{ $id }}">Вставить в запись</button>
             </div>
         </div>
     </div>
