@@ -2,12 +2,25 @@
 
 namespace Bradmin\Cms\Models;
 
+use Cviebrock\EloquentSluggable\Services\SlugService;
 use Illuminate\Database\Eloquent\Model;
 use Cviebrock\EloquentSluggable\Sluggable;
+use Kalnoy\Nestedset\NodeTrait;
 
 class BRTerm extends Model
 {
-    use Sluggable;
+    use Sluggable, NodeTrait {
+        NodeTrait::replicate as replicateNode;
+        Sluggable::replicate as replicateSlug;
+    }
+
+    public function replicate(array $except = null)
+    {
+        $instance = $this->replicateNode($except);
+        (new SlugService())->slug($instance, true);
+
+        return $instance;
+    }
 
     /**
      * Return the sluggable configuration array for this model.
@@ -40,5 +53,10 @@ class BRTerm extends Model
     public function scopeCategories($query)
     {
         return $query->where('type', 'category');
+    }
+
+    public function scopeOfferCategories($query)
+    {
+        return $query->where('type', 'offer_category');
     }
 }

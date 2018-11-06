@@ -20,6 +20,12 @@ class PluginNavigation
                         'icon' => 'fas fa-address-book',
                         'iconText' => 'Т',
                         'text' => 'Товары'
+                    ],
+                    [
+                        'url' => '/bradmin/BRCommerce/BRCategories',
+                        'icon' => 'fas fa-address-book',
+                        'iconText' => 'К',
+                        'text' => 'Категории'
                     ]
                 ]
             ]

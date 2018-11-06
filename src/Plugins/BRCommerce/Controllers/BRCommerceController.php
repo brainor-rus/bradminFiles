@@ -11,7 +11,8 @@ use Illuminate\Support\Facades\View;
 class BRCommerceController extends Controller
 {
     private $pluginData = [
-        'redirectUrl' => '/bradmin/BRCommerce/{sectionName}'
+        'redirectUrl' => '/bradmin/BRCommerce/{sectionName}',
+        'sectionPath' => 'Bradmin\Plugins\BRCommerce\Sections\\'
     ];
 
     public function showRouteRedirect(Section $section, $sectionName, Request $request)
