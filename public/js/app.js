@@ -35619,6 +35619,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     updated: function updated() {
 
         this.$nextTick(function () {
+            __WEBPACK_IMPORTED_MODULE_1_jquery___default()('.datepicker').datepicker({
+                format: this.getAttribute('data-datepicker-format'),
+                language: this.getAttribute('data-datepicker-language'),
+                todayBtn: this.getAttribute('data-datepicker-todayBtn'),
+                clearBtn: this.getAttribute('data-datepicker-clearBtn')
+            });
             __WEBPACK_IMPORTED_MODULE_1_jquery___default()('.multiselect').selectize({
                 plugins: ['remove_button'],
                 delimiter: ',',

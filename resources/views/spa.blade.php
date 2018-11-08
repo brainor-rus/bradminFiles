@@ -17,6 +17,10 @@
     </script>
     <script src="{{ asset('packages/bradmin/js/ckeditor/ckeditor.js') }}"></script>
 
+    <script src="{{ asset('packages/bradmin/js/datepicker/js/bootstrap-datepicker.js') }}"></script>
+    <script src="{{ asset('packages/bradmin/js/datepicker/locales/bootstrap-datepicker.ru.min.js') }}"></script>
+    <script src="{{ asset('packages/bradmin/js/datepicker/css/bootstrap-datepicker.css') }}"></script>
+
     <link href="{{ asset('packages/bradmin/js/dropzone/dropzone.min.css') }}" rel="stylesheet">
     <script src="{{ asset('packages/bradmin/js/dropzone/dropzone.min.js') }}"></script>
 

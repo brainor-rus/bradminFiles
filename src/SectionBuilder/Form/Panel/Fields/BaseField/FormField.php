@@ -10,6 +10,7 @@ namespace Bradmin\SectionBuilder\Form\Panel\Fields\BaseField;
 
 
 use Bradmin\SectionBuilder\Form\Panel\Fields\Custom;
+use Bradmin\SectionBuilder\Form\Panel\Fields\DatePicker;
 use Bradmin\SectionBuilder\Form\Panel\Fields\Hidden;
 use Bradmin\SectionBuilder\Form\Panel\Fields\Input;
 use Bradmin\SectionBuilder\Form\Panel\Fields\MultiSelect;
@@ -23,6 +24,11 @@ class FormField
     public static function input($name, $label)
     {
         return new Input($name, $label);
+    }
+
+    public static function datepicker($name, $label)
+    {
+        return new DatePicker($name, $label);
     }
 
     public static function textarea($name, $label)
@@ -54,6 +60,7 @@ class FormField
     {
         return new Custom($html);
     }
+
     public static function dropZone($label, $name, $id, $url)
     {
         return new DropZone($label, $name, $id, $url);

@@ -104,6 +104,12 @@
         updated: function () {
 
             this.$nextTick(function () {
+                $('.datepicker').datepicker({
+                    format: this.getAttribute('data-datepicker-format'),
+                    language: this.getAttribute('data-datepicker-language'),
+                    todayBtn: this.getAttribute('data-datepicker-todayBtn'),
+                    clearBtn: this.getAttribute('data-datepicker-clearBtn')
+                });
                 $('.multiselect').selectize({
                     plugins: ['remove_button'],
                     delimiter: ',',
