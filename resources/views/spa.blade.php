@@ -8,7 +8,7 @@
     <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700,200" rel=stylesheet>
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css">
     <link href="{{ asset('packages/bradmin/css/app.css') }}" rel="stylesheet">
-    <link href="{{ asset('packages/bradmin/js/datepicker/css/bootstrap-datepicker.css') }}" rel="stylesheet">
+    <link href="{{ asset('packages/bradmin/js/datetime/bootstrap-datetimepicker.css') }}" rel="stylesheet">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
 
@@ -17,6 +17,10 @@
         window.logoUrl = '{{ config('bradmin.logo') }}';
         window.logoMiniUrl = '{{ config('bradmin.logo_mini') }}';
     </script>
+
+    <script src="{{ asset('packages/bradmin/js/datetime/bootstrap-datetimepicker.js') }}"></script>
+    <script src="{{ asset('packages/bradmin/js/datetime/locales/bootstrap-datetimepicker.ru.js') }}"></script>
+
     <script src="{{ asset('packages/bradmin/js/ckeditor/ckeditor.js') }}"></script>
 
     <link href="{{ asset('packages/bradmin/js/dropzone/dropzone.min.css') }}" rel="stylesheet">
@@ -38,7 +42,5 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
 <script src="{{ asset('packages/bradmin/js/jquery-ui/jquery-ui.min.js') }}"></script>
 <script src="{{ asset('packages/bradmin/js/insertMedia/insertMedia.js') }}"></script>
-<script src="{{ asset('packages/bradmin/js/datepicker/js/bootstrap-datepicker.js') }}"></script>
-<script src="{{ asset('packages/bradmin/js/datepicker/locales/bootstrap-datepicker.ru.min.js') }}"></script>
 </body>
 </html>

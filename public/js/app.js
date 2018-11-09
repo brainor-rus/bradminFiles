@@ -35639,10 +35639,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
                 jQuery(function ($) {
                     $('.date input').each(function () {
-                        console.log($(this).data('datepicker-todaybtn'));
-                        $(this).datepicker({
+                        $(this).datetimepicker({
                             format: $(this).data('datepicker-format'),
                             language: $(this).data('datepicker-language'),
+                            todayHighlight: true,
+                            minuteStep: $(this).data('datepicker-minutestep'),
                             todayBtn: $(this).data('datepicker-todaybtn') === 1 ? 'linked' : false,
                             clearBtn: $(this).data('datepicker-clearbtn') === 1
                         });
