@@ -5,9 +5,11 @@
            type="text"
            class="form-control datepicker"
            value="{{ $value }}"
+           autocomplete="off"
            data-datepicker-format="{{ $format }}"
            data-datepicker-language="{{ $language }}"
            data-datepicker-todayBtn="{{ $todayBtn }}"
            data-datepicker-clearBtn="{{ $clearBtn }}"
+           data-datepicker-minuteStep="{{ $minuteStep }}"
            @if($required) required @endif>
 </div>
