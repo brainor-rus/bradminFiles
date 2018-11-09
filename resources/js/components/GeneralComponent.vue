@@ -125,9 +125,11 @@
 
                     jQuery(function($) {
                         $('.date input').each(function () {
-                           $(this).datepicker({
+                           $(this).datetimepicker({
                                format: $(this).data('datepicker-format'),
                                language: $(this).data('datepicker-language'),
+                               todayHighlight: true,
+                               minuteStep: $(this).data('datepicker-minutestep'),
                                todayBtn: ($(this).data('datepicker-todaybtn')===1) ? 'linked' : false,
                                clearBtn: ($(this).data('datepicker-clearbtn')===1)
                            });

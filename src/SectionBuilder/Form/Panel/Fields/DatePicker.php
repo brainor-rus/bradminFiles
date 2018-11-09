@@ -13,13 +13,31 @@ use Illuminate\Support\Facades\View;
 
 class DatePicker
 {
-    private $name, $label, $value, $required, $format, $language, $todayBtn, $clearBtn;
+    private $name, $label, $value, $required, $format, $language, $todayBtn, $clearBtn, $minuteStep;
 
-    public function __construct($name, $label, $format = 'yyyy-mm-dd')
+    public function __construct($name, $label, $format = 'yyyy-mm-dd', $minuteStep = 1)
     {
         $this->setName($name);
         $this->setLabel($label);
         $this->setFormat($format);
+        $this->setMinuteStep($minuteStep);
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getMinuteStep()
+    {
+        return $this->minuteStep;
+    }
+
+    /**
+     * @param mixed $minuteStep
+     */
+    public function setMinuteStep($minuteStep)
+    {
+        $this->minuteStep = $minuteStep;
+        return $this;
     }
 
     /**
@@ -169,8 +187,9 @@ class DatePicker
         $language = $this->getLanguage();
         $todayBtn = $this->getTodayBtn();
         $clearBtn = $this->getClearBtn();
+        $minuteStep = $this->getMinuteStep();
 
         return View::make('bradmin::SectionBuilder/Form/Fields/datePicker')
-            ->with(compact('name', 'label', 'value', 'required', 'format', 'language', 'todayBtn', 'clearBtn'));
+            ->with(compact('name', 'label', 'value', 'required', 'format', 'language', 'todayBtn', 'clearBtn', 'minuteStep'));
     }
 }
