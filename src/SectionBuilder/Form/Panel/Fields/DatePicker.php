@@ -15,6 +15,14 @@ class DatePicker
 {
     private $name, $label, $value, $required, $format, $language, $todayBtn, $clearBtn;
 
+
+    public function __construct($name, $label, $value)
+    {
+        $this->setName($name);
+        $this->setLabel($label);
+        $this->setValue($value);
+    }
+    
     /**
      * @return mixed
      */
@@ -147,12 +155,6 @@ class DatePicker
     {
         $this->clearBtn = $clearBtn;
         return $this;
-    }
-
-    public function __construct($name, $label)
-    {
-        $this->setName($name);
-        $this->setLabel($label);
     }
 
 

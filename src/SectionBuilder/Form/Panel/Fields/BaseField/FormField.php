@@ -26,9 +26,9 @@ class FormField
         return new Input($name, $label);
     }
 
-    public static function datepicker($name, $label)
+    public static function datepicker($name, $label, $value=null)
     {
-        return new DatePicker($name, $label);
+        return new DatePicker($name, $label, $value);
     }
 
     public static function textarea($name, $label)

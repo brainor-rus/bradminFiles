@@ -1,4 +1,4 @@
-<div class="form-group">
+<div class="form-group date" data-provide="datepicker">
     <label for="input_{{ $name }}">{{ $label }}</label>
     <input id="input_{{ $name }}"
            type="text"
