@@ -35572,7 +35572,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 
-// import datepicker from 'public/packages/bradmin/js/datepicker/js/bootstrap-datepicker.js';
 
 // import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
@@ -35638,11 +35637,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                     CKEDITOR.replace(this.id);
                 });
 
-                __WEBPACK_IMPORTED_MODULE_1_jquery___default()('.datepicker').datepicker({
-                    // format: this.data('datepicker-format'),
-                    // language: this.data('datepicker-language'),
-                    // todayBtn: this.data('datepicker-todayBtn'),
-                    // clearBtn: this.data('datepicker-clearBtn')
+                jQuery(function ($) {
+                    $('.date input').each(function () {
+                        console.log($(this).data('datepicker-todaybtn'));
+                        $(this).datepicker({
+                            format: $(this).data('datepicker-format'),
+                            language: $(this).data('datepicker-language'),
+                            todayBtn: $(this).data('datepicker-todaybtn') === 1 ? 'linked' : false,
+                            clearBtn: $(this).data('datepicker-clearbtn') === 1
+                        });
+                    });
                 });
 
                 var dropZones = [];

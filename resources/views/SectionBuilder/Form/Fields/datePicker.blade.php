@@ -1,9 +1,10 @@
-<div class="form-group date" data-provide="datepicker">
+<div class="form-group date">
     <label for="input_{{ $name }}">{{ $label }}</label>
     <input id="input_{{ $name }}"
+           name="{{ $name }}"
            type="text"
            class="form-control datepicker"
-           value="{{$value}}"
+           value="{{ $value }}"
            data-datepicker-format="{{ $format }}"
            data-datepicker-language="{{ $language }}"
            data-datepicker-todayBtn="{{ $todayBtn }}"

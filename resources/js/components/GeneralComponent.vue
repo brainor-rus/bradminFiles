@@ -56,9 +56,8 @@
 
 <script>
     import axios from 'axios';
-    import $ from 'jquery'
+    import $ from 'jquery';
     import 'selectize';
-    // import datepicker from 'public/packages/bradmin/js/datepicker/js/bootstrap-datepicker.js';
 
     // import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
     import modal from './DeleteModal';
@@ -124,11 +123,15 @@
                         CKEDITOR.replace( this.id );
                     });
 
-                    $('.datepicker').datepicker({
-                        // format: this.data('datepicker-format'),
-                        // language: this.data('datepicker-language'),
-                        // todayBtn: this.data('datepicker-todayBtn'),
-                        // clearBtn: this.data('datepicker-clearBtn')
+                    jQuery(function($) {
+                        $('.date input').each(function () {
+                           $(this).datepicker({
+                               format: $(this).data('datepicker-format'),
+                               language: $(this).data('datepicker-language'),
+                               todayBtn: ($(this).data('datepicker-todaybtn')===1) ? 'linked' : false,
+                               clearBtn: ($(this).data('datepicker-clearbtn')===1)
+                           });
+                        });
                     });
 
                     var dropZones = [];

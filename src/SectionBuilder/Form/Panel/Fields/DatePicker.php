@@ -15,14 +15,31 @@ class DatePicker
 {
     private $name, $label, $value, $required, $format, $language, $todayBtn, $clearBtn;
 
-
-    public function __construct($name, $label, $value)
+    public function __construct($name, $label, $format = 'yyyy-mm-dd')
     {
         $this->setName($name);
         $this->setLabel($label);
-        $this->setValue($value);
+        $this->setFormat($format);
     }
-    
+
+    /**
+     * @return mixed
+     */
+    public function getTodayBtn()
+    {
+        return $this->todayBtn;
+    }
+
+
+    /**
+     * @param mixed $todayBtn
+     */
+    public function setTodayBtn($todayBtn)
+    {
+       $this->todayBtn = $todayBtn;
+       return $this;
+    }
+
     /**
      * @return mixed
      */
@@ -106,23 +123,7 @@ class DatePicker
         $this->language = $language;
         return $this;
     }
-
-    /**
-     * @return mixed
-     */
-    public function getTodayBtn()
-    {
-        return $this->todayBtn;
-    }
-
-    /**
-     * @param mixed $todayBtn
-     */
-    public function setTodayBtn($todayBtn)
-    {
-        $this->todayBtn = $todayBtn;
-        return $this;
-    }
+    
 
     /**
      * @return mixed
@@ -158,12 +159,12 @@ class DatePicker
     }
 
 
-    public function render($value = null, $required = false)
+    public function render($value = null)
     {
         $name = $this->getName();
         $label = $this->getLabel();
         $required = $this->getRequired();
-        $value = $this->getValue();
+        $value = $value ?? $this->getValue();
         $format = $this->getFormat();
         $language = $this->getLanguage();
         $todayBtn = $this->getTodayBtn();
