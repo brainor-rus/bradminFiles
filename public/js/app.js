@@ -35572,6 +35572,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 
+
 // import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
 
@@ -35619,6 +35620,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     updated: function updated() {
 
         this.$nextTick(function () {
+
             __WEBPACK_IMPORTED_MODULE_1_jquery___default()('.multiselect').selectize({
                 plugins: ['remove_button'],
                 delimiter: ',',
@@ -35633,6 +35635,18 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             __WEBPACK_IMPORTED_MODULE_1_jquery___default()(function () {
                 __WEBPACK_IMPORTED_MODULE_1_jquery___default()('.wysiwyg_editor').each(function (e) {
                     CKEDITOR.replace(this.id);
+                });
+
+                jQuery(function ($) {
+                    $('.date input').each(function () {
+                        console.log($(this).data('datepicker-todaybtn'));
+                        $(this).datepicker({
+                            format: $(this).data('datepicker-format'),
+                            language: $(this).data('datepicker-language'),
+                            todayBtn: $(this).data('datepicker-todaybtn') === 1 ? 'linked' : false,
+                            clearBtn: $(this).data('datepicker-clearbtn') === 1
+                        });
+                    });
                 });
 
                 var dropZones = [];
