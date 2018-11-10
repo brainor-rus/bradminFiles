@@ -11,5 +11,6 @@
            data-datepicker-todayBtn="{{ $todayBtn }}"
            data-datepicker-clearBtn="{{ $clearBtn }}"
            data-datepicker-minuteStep="{{ $minuteStep }}"
+           @if($readonly) disabled @endif
            @if($required) required @endif>
 </div>
