@@ -1,5 +1,5 @@
 <div class="form-group date">
-    <label for="input_{{ $name }}">{{ $label }}</label>
+    <label for="input_{{ $name }}">{{ $label }} @if($required) <span class="text-danger">*</span> @endif </label>
     <input id="input_{{ $name }}"
            name="{{ $name }}"
            type="text"
