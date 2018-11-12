@@ -136,12 +136,15 @@ class BrAdminController extends Controller
             $attrFields = Schema::getColumnListing($model->getTable());
             $relationFields = array_diff_key($request->all(), array_flip($attrFields));
 
+            $class->beforeSave($request, $model);
+
             $model = $model::create($request->all());
             $model = $model->where('id', $model->id)
                 ->when(isset($relationFields), function ($query) use ($relationFields) {
                     $query->with(array_keys($relationFields));
                 })
                 ->first();
+
 
             //        FormAction::save($model, $request);
             FormAction::saveBelongsToRelations($model, $request);
@@ -186,6 +189,8 @@ class BrAdminController extends Controller
                     $query->with(array_keys($relationFields));
                 })
                 ->first();
+
+            $class->beforeSave($request, $model);
 
             FormAction::save($model, $request);
             FormAction::saveBelongsToRelations($model, $request);
