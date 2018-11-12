@@ -13,12 +13,28 @@ use Illuminate\Support\Facades\View;
 
 class Input
 {
-    private $name, $label, $value, $placeholder, $required, $readonly;
+    private $name, $label, $value, $placeholder, $required, $readonly, $type;
 
     public function __construct($name, $label)
     {
         $this->setName($name);
         $this->setLabel($label);
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
+    /**
+     * @param mixed $type
+     */
+    public function setType($type)
+    {
+        $this->type = $type;
+        return $this;
     }
 
     /**
@@ -129,9 +145,10 @@ class Input
         $placeholder = $this->getPlaceholder();
         $required = $this->getRequired();
         $readonly = $this->getReadonly();
+        $type = $this->getType();
         $value = $value ?? $this->getValue();
 
         return View::make('bradmin::SectionBuilder/Form/Fields/input')
-            ->with(compact('name', 'label', 'value', 'placeholder', 'required', 'readonly'));
+            ->with(compact('name', 'label', 'value', 'placeholder', 'required', 'readonly', 'type'));
     }
 }

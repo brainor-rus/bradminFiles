@@ -1,6 +1,6 @@
 <div class="form-group">
     <label for="input_{{ $name }}">{{ $label }} @if($required) <span class="text-danger">*</span> @endif</label>
-    <input type="text"
+    <input type="{{$type}}"
            class="form-control"
            id="input_{{ $name }}"
            name="{{ $name }}"
