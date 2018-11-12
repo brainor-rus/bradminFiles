@@ -139,4 +139,9 @@ class Section
         // override in child
     }
 
+    public function beforeSave(Request $request, $model = null)
+    {
+        // override in child
+    }
+
 }
