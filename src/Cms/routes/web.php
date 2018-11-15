@@ -46,3 +46,8 @@ Route::get(config('bradmin.cms_url_prefix') . '/' .config('bradmin.cms_post_pref
     'as'   => 'bradmin.cms.post.show',
     'uses' => 'Bradmin\Cms\Controllers\CmsController@showPost',
 ]);
+
+Route::post('/'.config('bradmin.admin_url').'/cms/files/upload', [
+    'as'   => 'bradmin.cms.file-upload',
+    'uses' => 'Bradmin\Cms\Controllers\CmsController@fileUpload',
+]);

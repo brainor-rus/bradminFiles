@@ -52,6 +52,18 @@ class BrAdminServiceProvider extends ServiceProvider
         // load config
         $this->mergeConfigFrom(__DIR__.'/../../config/bradmin.php', 'bradmin');
 
+        /*
+        * Register the service provider for the dependency.
+        */
+
+//        $this->app->register('Intervention\Image\ImageServiceProvider');
+
+        /*
+        * Create aliases for the dependency.
+        */
+
+//        $loader = \Illuminate\Foundation\AliasLoader::getInstance();
+//        $loader->alias('Image', 'Intervention\Image\Facades\Image');
 
         $this->app->singleton('PluginManager', function($app)
         {
