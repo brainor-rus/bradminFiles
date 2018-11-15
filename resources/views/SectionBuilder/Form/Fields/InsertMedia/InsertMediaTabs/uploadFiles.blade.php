@@ -4,12 +4,7 @@
 <div class="modal-body">
     <div class="row">
         <p>Перетащите нужные файлы на окошно ниже</p>
-
-        <div action="/api/file-upload" class="dropzone" id="my-awesome-dropzone">
-            <div class="fallback">
-                {{--<input name="file" type="file" multiple />--}}
-            </div>
-        </div>
+        <div action="/{{ config('bradmin.admin_url') }}/cms/files/upload" class="dropzone" id="cms-dropzone"></div>
     </div>
 </div>
 <div class="modal-footer">
