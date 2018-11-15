@@ -30,7 +30,7 @@ class CreateBRPostsTable extends Migration
             $table->string('template')->nullable();
             $table->string('thumb')->nullable();
             $table->boolean('comment_on');
-            $table->timestamp('published_at');
+            $table->dateTime('published_at');
             $table->timestamps();
         });
     }
