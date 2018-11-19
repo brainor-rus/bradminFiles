@@ -61,7 +61,7 @@ class BRPost extends Model
 
         if($withCategory)
         {
-            $url = ($this->categories->last()->slug ?? 'not-category') . $url;
+            $url = '/' . ($this->categories->last()->slug ?? 'not-category') . $url;
         }
 
         return $url;
