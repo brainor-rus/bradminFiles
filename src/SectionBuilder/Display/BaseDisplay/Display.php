@@ -9,6 +9,7 @@
 namespace Bradmin\SectionBuilder\Display\BaseDisplay;
 
 
+use Bradmin\SectionBuilder\Display\Custom\DisplayCustom;
 use Bradmin\SectionBuilder\Display\Table\DisplayTable;
 use Bradmin\SectionBuilder\Display\Tiles\DisplayTiles;
 
@@ -22,5 +23,10 @@ class Display
     public static function tiles($columns = null, $pagination = null)
     {
         return new DisplayTiles($columns ?? null, $pagination ?? 15);
+    }
+
+    public static function custom($columns = null, $pagination = null, $view = null, $vars = null)
+    {
+        return new DisplayCustom($columns ?? null, $pagination ?? 15, $view ?? null, $vars ?? null);
     }
 }
