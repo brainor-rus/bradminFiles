@@ -181,8 +181,7 @@ class BrAdminController extends Controller
             $request->offsetUnset('pluginData');
 
             $model = new $modelPath;
-            $attrFields = Schema::getColumnListing($model->getTable());
-            $relationFields = array_diff_key($request->all(), array_flip($attrFields));
+            $relationFields = array_keys($model->getRelations());
 
             $model = $model->where('id', $id)
                 ->when(isset($relationFields), function ($query) use ($relationFields) {
