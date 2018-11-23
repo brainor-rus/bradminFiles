@@ -16,11 +16,11 @@
                                 </div>
                                 <div class="col-6">
                                     <label for="attrName_{{$attribute->id}}">Название</label>
-                                    <input id="attrName_{{$attribute->id}}" class="form-control" type="text" name="attributes[{{$attribute->id}}][name]" value="{{$attribute->name}}">
+                                    <input id="attrName_{{$attribute->id}}" class="form-control" type="text" name="attributes[exist_{{$attribute->id}}][name]" value="{{$attribute->name}}">
                                 </div>
                                 <div class="col-6">
                                     <label for="attrValue_{{$attribute->id}}">Значение</label>
-                                    <input id="attrValue_{{$attribute->id}}" class="form-control" type="text" name="attributes[{{$attribute->id}}][value]" value="{{$attribute->first_value->value}}">
+                                    <input id="attrValue_{{$attribute->id}}" class="form-control" type="text" name="attributes[exist_{{$attribute->id}}][value]" value="{{$attribute->first_value->value}}">
                                 </div>
                             </div>
                             <hr>

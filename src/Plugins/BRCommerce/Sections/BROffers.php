@@ -44,15 +44,15 @@ class BROffers extends Section
 
     public static function onEdit($id)
     {
-        $meta = new Meta;
-        $meta->setStyles([
-            '' => ''
-        ])->setScripts([
-            'head' => [],
-            'body' => [
-                'test' => asset('js/OffersAttrFormAdd.js')
-            ]
-        ]);
+//        $meta = new Meta;
+//        $meta->setStyles([
+//            '' => ''
+//        ])->setScripts([
+//            'head' => [],
+//            'body' => [
+//                'test' => asset('bradmin/src/Plugins/BRCommerce/js/OffersAttrFormAdd.js')
+//            ]
+//        ]);
 
         $attributes = null;
         if($id) {
@@ -95,12 +95,14 @@ class BROffers extends Section
             ])
         ]);
 
-        return $form->setMeta($meta);
+        return $form;
+//            ->setMeta($meta);
     }
     
     public function afterSave(Request $request, $model = null)
     {
         // Атрибуты
+        DB::table('b_r_attribute_values')->where('offer_id', $model->id)->delete();
         if(isset($_POST['attributes'])){
             foreach ($_POST['attributes'] as $attribute){
                 $attribute_name_check = BRAttributeName::where('name', trim($attribute['name']))->where('category_id', $_POST['category_id'])->first();
