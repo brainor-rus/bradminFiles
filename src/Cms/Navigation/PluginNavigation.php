@@ -26,6 +26,11 @@ class PluginNavigation
                         'text' => 'Записи'
                     ],
                     [
+                        'url' => '/'.config('bradmin.admin_url').'/cms/BRComments',
+                        'icon' => 'fas fa-users',
+                        'text' => 'Комментарии'
+                    ],
+                    [
                         'url' => '/'.config('bradmin.admin_url').'/cms/BRTerms',
                         'icon' => 'fas fa-users',
                         'text' => 'Рубрики'

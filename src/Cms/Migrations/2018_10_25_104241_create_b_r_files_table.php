@@ -35,8 +35,6 @@ class CreateBRFilesTable extends Migration
      */
     public function down()
     {
-        Schema::table('b_r_files', function (Blueprint $table) {
-            Schema::dropIfExists('b_r_files');
-        });
+        Schema::dropIfExists('b_r_files');
     }
 }

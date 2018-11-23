@@ -34,8 +34,6 @@ class CreateBRTermsTable extends Migration
      */
     public function down()
     {
-        Schema::table('b_r_terms', function (Blueprint $table) {
-            Schema::dropIfExists('b_r_terms');
-        });
+        Schema::dropIfExists('b_r_terms');
     }
 }

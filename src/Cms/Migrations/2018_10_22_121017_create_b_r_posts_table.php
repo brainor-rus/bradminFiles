@@ -42,8 +42,6 @@ class CreateBRPostsTable extends Migration
      */
     public function down()
     {
-        Schema::table('b_r_posts', function (Blueprint $table) {
-            //
-        });
+        Schema::dropIfExists('b_r_posts');
     }
 }
