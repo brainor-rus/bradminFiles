@@ -32,4 +32,16 @@ class BROffer extends Model
     {
         return $this->hasOne(BRTerm::class, 'id', 'category_id');
     }
+
+    public function attribute_names()
+    {
+        return $this->hasMany(BRAttributeName::class)
+            ->orderBy('order')
+            ->orderBy('name');
+    }
+
+    public function attribute_value()
+    {
+        return $this->hasMany(BRAttributeValue::class);
+    }
 }
