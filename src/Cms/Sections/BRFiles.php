@@ -11,6 +11,7 @@ use Bradmin\SectionBuilder\Form\BaseForm\Form;
 use Bradmin\SectionBuilder\Form\Panel\Columns\BaseColumn\FormColumn;
 use Bradmin\SectionBuilder\Form\Panel\Fields\BaseField\FormField;
 use Bradmin\SectionBuilder\Meta\Meta;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 
 class BRFiles extends Section
@@ -34,6 +35,7 @@ class BRFiles extends Section
             ksort($mergedFields);
 
             $display = Display::tiles($mergedFields)->setPagination(10);
+            $display->setNav(view('bradmin::cms.partials.filesNav'));
         } else {
             $pluginsFields = app()['PluginsData']['CmsData']['Files']['DisplayField'] ?? [];
             $brFields = [

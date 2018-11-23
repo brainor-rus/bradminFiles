@@ -4,6 +4,7 @@
             <div class="card">
                 <div class="card-body">
                     <a @click.prevent="$emit('redirectTo',$event)" href="{{ Request::url() }}/create" class="btn btn-primary">Создать</a>
+                    {!! $nav !!}
                 </div>
             </div>
         @endif
