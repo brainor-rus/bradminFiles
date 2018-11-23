@@ -82,6 +82,11 @@ class BRPost extends Model
         return $this->morphToMany('Bradmin\Cms\Models\BRTerm', 'b_r_termable', 'b_r_termables', 'b_r_termable_id', 'b_r_term_id')->where('type', 'category');
     }
 
+    public function comments()
+    {
+        return $this->morphToMany('Bradmin\Cms\Models\BRComment', 'b_r_commentable', 'b_r_commentables', 'b_r_commentable_id', 'b_r_comment_id');
+    }
+
     public function scopePages($query)
     {
         return $query->where('type', 'page');
