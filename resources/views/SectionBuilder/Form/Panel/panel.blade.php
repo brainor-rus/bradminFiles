@@ -22,14 +22,16 @@
             </div>
         @endforeach
     </div>
-    <div class="row pt-3">
-        <div class="col-12">
-            <div class="card">
-                <div class="card-body">
-                    <button type="submit" class="btn btn-success">Сохранить</button>
-                    <a @click.prevent="$emit('redirectTo',$event)" href="/bradmin/{{ $sectionName }}" class="btn btn-secondary">Отмена</a>
+    @if($showButtons)
+        <div class="row pt-3">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <button type="submit" class="btn btn-success">Сохранить</button>
+                        <a @click.prevent="$emit('redirectTo',$event)" href="/bradmin/{{ $sectionName }}" class="btn btn-secondary">Отмена</a>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    @endif
 </form>

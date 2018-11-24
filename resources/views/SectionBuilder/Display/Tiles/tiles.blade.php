@@ -27,22 +27,24 @@
                             @php
                                 if(isset($field['image'])) {
                                     $field['name'] =  pathinfo($field['image'])['basename'];
-                                    $field['utl'] =  $field['image'];
+                                    $field['url'] =  $field['image'];
                                     switch (pathinfo($field['image'])['extension']) {
                                         case 'jpg':
                                         case 'png':
+                                        case 'svg':
                                         case 'gif': break;
+                                        case 'txt': $field['image'] = '/bradmin/images/txt.png'; break;
                                         case 'doc':
-                                        case 'docx':
+                                        case 'docx': $field['image'] = '/bradmin/images/doc.png'; break;
                                         case 'xlsx':
-                                        case 'xml': $field['image'] = '/bradmin/images/doc.png'; break;
-                                        default: $field['image'] = '/bradmin/images/logo.jpg'; break;
+                                        case 'xml': $field['image'] = '/bradmin/images/excel.png'; break;
+                                        default: $field['image'] = '/bradmin/images/file.png'; break;
                                     }
                                 }
                             @endphp
                             <div class="card-img-top text-center pt-3" style="background-image: url({{ $field['image'] ?? null }})">
                                 @if(isset($field['name']))
-                                    <a href="{{ url($field['utl']) }}" target="_blank" class="px-1"><i class="fas fa-link"></i> {{ $field['name'] }}</a>
+                                    <a href="{{ url($field['url']) }}" target="_blank" class="px-1"><i class="fas fa-link"></i> {{ $field['name'] }}</a>
                                 @endif
                             </div>
                             <div class="card-body pb-0 pt-0 px-0">

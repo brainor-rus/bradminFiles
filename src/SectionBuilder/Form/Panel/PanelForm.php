@@ -15,7 +15,7 @@ use Bradmin\Section;
 
 class PanelForm
 {
-    private $columns, $meta;
+    private $columns, $meta, $showButtons = true;
 
     public function __construct($columns)
     {
@@ -57,6 +57,24 @@ class PanelForm
         return $this;
     }
 
+    /**
+     * @return bool
+     */
+    public function isShowButtons()
+    {
+        return $this->showButtons;
+    }
+
+    /**
+     * @param bool $showButtons
+     * @return PanelForm
+     */
+    public function setShowButtons($showButtons)
+    {
+        $this->showButtons = $showButtons;
+        return $this;
+    }
+
     public function render($modelPath, $sectionName, Section $firedSection, $id = null, $pluginData = null)
     {
         $columns = $this->getColumns();
@@ -79,8 +97,10 @@ class PanelForm
             $pluginData['redirectUrl'] = strtr($pluginData['redirectUrl'], ['{sectionName}' => $rc->getShortName()]);
         }
 
+        $showButtons = self::isShowButtons();
+
         $response = View::make('bradmin::SectionBuilder/Form/Panel/panel')
-            ->with(compact('model', 'columns', 'sectionName', 'action', 'id', 'pluginData'));
+            ->with(compact('model', 'columns', 'sectionName', 'action', 'id', 'pluginData', 'showButtons'));
 
         return $response;
     }
