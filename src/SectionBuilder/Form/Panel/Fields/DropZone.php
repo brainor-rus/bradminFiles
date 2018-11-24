@@ -25,34 +25,42 @@ class DropZone
 
     /**
      * @param mixed $name
+     * @return DropZone
      */
-    private function setName($name): void
+    public function setName($name)
     {
         $this->name = $name;
+        return $this;
     }
 
     /**
      * @param mixed $label
+     * @return DropZone
      */
-    private function setLabel($label): void
+    public function setLabel($label)
     {
         $this->label = $label;
+        return $this;
     }
 
     /**
      * @param mixed $id
+     * @return DropZone
      */
-    private function setId($id): void
+    public function setId($id)
     {
         $this->id = $id;
+        return $this;
     }
 
     /**
      * @param mixed $url
+     * @return DropZone
      */
-    private function setUrl($url): void
+    public function setUrl($url)
     {
         $this->url = $url;
+        return $this;
     }
 
     /**

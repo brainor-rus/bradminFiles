@@ -140,7 +140,7 @@ class CmsController extends Controller
         if (file_exists(''.$destinationPath.'/'.$filename.'.'.$extension)) {
             $filename = $basename.'-'.$timestamp;
         }
-        $resultFileName = $filename.'.'.$extension;
+        $resultFileName = str_replace(' ', '_', $filename.'.'.$extension);
         $fileMime = $file->getMimeType();
         $fileSize = $file->getSize();
         $upload_success = $file->move($destinationPath, $resultFileName);

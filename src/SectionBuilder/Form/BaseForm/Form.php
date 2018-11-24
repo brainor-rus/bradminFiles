@@ -9,12 +9,17 @@
 namespace Bradmin\SectionBuilder\Form\BaseForm;
 
 
-use Bradmin\SectionBuilder\Form\Panel\PanelForm;
+use Bradmin\SectionBuilder\Form\Panel\CustomForm;
 
 class Form
 {
     public static function panel($columns)
     {
-        return new PanelForm($columns);
+        return new CustomForm($columns);
+    }
+
+    public static function custom()
+    {
+        return new CustomForm();
     }
 }

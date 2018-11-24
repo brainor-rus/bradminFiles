@@ -69,21 +69,33 @@ class BRFiles extends Section
         $file = BRFile::where('id', $id)->first();
 
         $brFieldsLeft = [
-            "0.01" => FormField::input('title', 'Title'),
-            "0.02" => FormField::input('alt', 'Alt'),
-            "0.03" => FormField::input('description', 'Описание'),
+            "0.01" => FormField::input('title', 'Заголовок'),
+            "0.02" => FormField::input('alt', 'Alt (для изображений)'),
+            "0.03" => FormField::textarea('description', 'Описание'),
             "9.94" => FormField::hidden('mime')->setValue('.'),
             "9.95" => FormField::hidden('url')->setValue('.'),
             "9.96" => FormField::hidden('base_url')->setValue('.'),
-            "9.97" => FormField::hidden('size')->setValue(123),
+            "9.97" => FormField::hidden('size')->setValue(0),
             "9.98" => FormField::hidden('extension')->setValue('.'),
             "9.99" => FormField::hidden('path')->setValue('.'),
         ];
 
-        $brFieldsRight = [
-            "0.01" => FormField::custom(view('bradmin::cms.partials.filesInput')->with(compact('file'))),
-            "0.02" => FormField::dropZone('dropzone_files','Дропзона', 'dropzone','/test'),
-        ];
+        if($file) {
+            $brFieldsRight = [
+                "0.01" => FormField::custom(view('bradmin::cms.partials.filesInput')->with(compact('file'))),
+            ];
+        } else {
+            $brFieldsRight = [
+                "0.01" => FormField::custom(view('bradmin::cms.partials.filesInput')->with(compact('file'))),
+                "0.02" => FormField::dropZone(
+                    'dropzone_files',
+                    'Выберите файл',
+                    'dropzone',
+                    '/'.config('bradmin.admin_url').'/cms/files/upload'
+                )
+            ];
+        }
+
 
         $mergedFieldsLeft = array_merge($pluginsFieldsLeft, $brFieldsLeft);
         $mergedFieldsRight = array_merge($pluginsFieldsRight, $brFieldsRight);

@@ -10681,8 +10681,15 @@ body {
 
 .tiles-display.br-display .card .card-img-top {
   height: 200px !important;
-  background-size: cover;
+  background-size: contain;
+  background-repeat: no-repeat;
   background-position: center;
+  background-color: rgba(0, 0, 0, 0.3);
+  color: black;
+}
+
+.tiles-display.br-display .card .card-img-top a {
+  background: rgba(255, 255, 255, 0.7);
   color: black;
 }
 
