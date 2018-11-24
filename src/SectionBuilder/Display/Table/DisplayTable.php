@@ -16,7 +16,7 @@ use BRHelper;
 
 class DisplayTable
 {
-    private $pagination, $columns, $scopes, $meta;
+    private $pagination, $columns, $scopes, $meta, $nav;
 
     public function __construct($columns, $pagination)
     {
@@ -83,8 +83,10 @@ class DisplayTable
             $pluginData['redirectUrl'] = strtr($pluginData['redirectUrl'], ['{sectionName}' => $rc->getShortName()]);
         }
 
+        $nav = self::getNav();
+
         $response['data'] = $data;
-        $response['view'] = View::make('bradmin::SectionBuilder/Display/Table/table')->with(compact('data', 'columns', 'fields', 'firedSection', 'pluginData'));
+        $response['view'] = View::make('bradmin::SectionBuilder/Display/Table/table')->with(compact('data', 'columns', 'fields', 'firedSection', 'pluginData', 'nav'));
 
         return $response;
     }
@@ -159,5 +161,23 @@ class DisplayTable
     public function getMeta()
     {
         return $this->meta;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getNav()
+    {
+        return $this->nav;
+    }
+
+    /**
+     * @param mixed $nav
+     * @return DisplayTable
+     */
+    public function setNav($nav)
+    {
+        $this->nav = $nav;
+        return $this;
     }
 }

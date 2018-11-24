@@ -2,9 +2,15 @@
     <div class="col-12">
         @if($firedSection->isCreatable())
             <div class="card">
-                <div class="card-body">
-                    <a @click.prevent="$emit('redirectTo',$event)" href="{{ Request::url() }}/create" class="btn btn-primary">Создать</a>
-                    {!! $nav !!}
+                <div class="card-body align-items-center d-flex">
+                    <div class="row w-100 align-items-center">
+                        <div class="col-auto">
+                            <a @click.prevent="$emit('redirectTo',$event)" href="{{ Request::url() }}/create" class="btn btn-primary">Создать</a>
+                        </div>
+                        <div class="col">
+                            {!! $nav !!}
+                        </div>
+                    </div>
                 </div>
             </div>
         @endif
