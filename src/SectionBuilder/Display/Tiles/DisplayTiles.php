@@ -16,7 +16,7 @@ use BRHelper;
 
 class DisplayTiles
 {
-    private $pagination, $elements, $scopes, $meta;
+    private $pagination, $elements, $scopes, $meta, $nav;
 
     public function __construct($elements, $pagination)
     {
@@ -92,8 +92,10 @@ class DisplayTiles
             $pluginData['redirectUrl'] = strtr($pluginData['redirectUrl'], ['{sectionName}' => $rc->getShortName()]);
         }
 
+        $nav = self::getNav();
+
         $response['data'] = $data;
-        $response['view'] = View::make('bradmin::SectionBuilder/Display/Tiles/tiles')->with(compact('data', 'elements', 'fields', 'firedSection', 'pluginData'));
+        $response['view'] = View::make('bradmin::SectionBuilder/Display/Tiles/tiles')->with(compact('data', 'elements', 'fields', 'firedSection', 'pluginData', 'nav'));
 
         return $response;
     }
@@ -167,6 +169,24 @@ class DisplayTiles
     public function setMeta($meta)
     {
         $this->meta = $meta;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getNav()
+    {
+        return $this->nav;
+    }
+
+    /**
+     * @param mixed $nav
+     * @return DisplayTiles
+     */
+    public function setNav($nav)
+    {
+        $this->nav = $nav;
         return $this;
     }
 }

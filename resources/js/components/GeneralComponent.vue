@@ -163,7 +163,7 @@
                     ajaxUrl = this.$route.path;
                 }
                 axios
-                    .post(ajaxUrl,
+                    .post(ajaxUrl + document.location.search,
                         {'page':this.currentPage,}
                     )
                     .then(response => {
