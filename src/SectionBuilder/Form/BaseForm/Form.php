@@ -9,6 +9,7 @@
 namespace Bradmin\SectionBuilder\Form\BaseForm;
 
 
+use Bradmin\SectionBuilder\Form\Panel\CustomForm;
 use Bradmin\SectionBuilder\Form\Panel\PanelForm;
 
 class Form

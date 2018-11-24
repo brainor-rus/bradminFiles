@@ -1,19 +1,19 @@
 <div class="row pb-3">
     <div class="col-12">
-        @if($firedSection->isCreatable())
-            <div class="card">
-                <div class="card-body align-items-center d-flex">
-                    <div class="row w-100 align-items-center">
-                        <div class="col-auto">
+        <div class="card">
+            <div class="card-body">
+                <div class="row w-100 align-items-center">
+                    <div class="col-auto">
+                        @if($firedSection->isCreatable())
                             <a @click.prevent="$emit('redirectTo',$event)" href="{{ Request::url() }}/create" class="btn btn-primary">Создать</a>
-                        </div>
-                        <div class="col">
-                            {!! $nav !!}
-                        </div>
+                        @endif
+                    </div>
+                    <div class="col">
+                        {!! $nav !!}
                     </div>
                 </div>
             </div>
-        @endif
+        </div>
     </div>
 </div>
 
@@ -23,8 +23,30 @@
             <div class="row">
                 @foreach($fields as $field)
                     <div class="col-lg-2 col-sm-6 col-12 mb-3">
-                        <div class="card">
-                            <div class="card-img-top" style="background-image: url({{ $field['image'] ?? null }})"></div>
+                        <div class="card tile">
+                            @php
+                                if(isset($field['image'])) {
+                                    $field['name'] =  pathinfo($field['image'])['basename'];
+                                    $field['url'] =  $field['image'];
+                                    switch (pathinfo($field['image'])['extension']) {
+                                        case 'jpg':
+                                        case 'png':
+                                        case 'svg':
+                                        case 'gif': break;
+                                        case 'txt': $field['image'] = '/bradmin/images/txt.png'; break;
+                                        case 'doc':
+                                        case 'docx': $field['image'] = '/bradmin/images/doc.png'; break;
+                                        case 'xlsx':
+                                        case 'xml': $field['image'] = '/bradmin/images/excel.png'; break;
+                                        default: $field['image'] = '/bradmin/images/file.png'; break;
+                                    }
+                                }
+                            @endphp
+                            <div class="card-img-top text-center pt-3" style="background-image: url({{ $field['image'] ?? null }})">
+                                @if(isset($field['name']))
+                                    <a href="{{ url($field['url']) }}" target="_blank" class="px-1"><i class="fas fa-link"></i> {{ $field['name'] }}</a>
+                                @endif
+                            </div>
                             <div class="card-body pb-0 pt-0 px-0">
                                 <table class="table table-responsive mb-0">
                                     @foreach($elements as $element)
