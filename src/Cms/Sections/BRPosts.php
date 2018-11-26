@@ -117,7 +117,11 @@ class BRPosts extends Section
                 ])
                 ->setDefaultSelected(0)
                 ->setRequired(true),
-            '0.04' => FormField::input('published_at', 'Дата публикации')
+            '0.04' => FormField::datepicker('published_at', 'Дата публикации')
+                ->setLanguage('ru')
+                ->setFormat('yyyy-mm-dd hh:ii:ss')
+                ->setClearBtn(true)
+                ->setTodayBtn(true)
                 ->setValue(Carbon::now())
                 ->setRequired(true),
             '0.05' => FormField::input('thumb', 'Миниатюра'),
