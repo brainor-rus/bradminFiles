@@ -44,15 +44,15 @@ class BROffers extends Section
 
     public static function onEdit($id)
     {
-//        $meta = new Meta;
-//        $meta->setStyles([
-//            '' => ''
-//        ])->setScripts([
-//            'head' => [],
-//            'body' => [
-//                'test' => asset('bradmin/src/Plugins/BRCommerce/js/OffersAttrFormAdd.js')
-//            ]
-//        ]);
+        $meta = new Meta;
+        $meta->setStyles([
+            '' => ''
+        ])->setScripts([
+            'head' => [],
+            'body' => [
+                'OffersAttrFormAdd' => ('/packages/bradmin/js/OffersAttrFormAdd.js')
+            ]
+        ]);
 
         $attributes = null;
         if($id) {
@@ -95,8 +95,7 @@ class BROffers extends Section
             ])
         ]);
 
-        return $form;
-//            ->setMeta($meta);
+        return $form->setMeta($meta);
     }
     
     public function afterSave(Request $request, $model = null)
