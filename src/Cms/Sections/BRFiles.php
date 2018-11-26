@@ -34,7 +34,7 @@ class BRFiles extends Section
         if($currentDisplay == 'table') {
             $pluginsFields = app()['PluginsData']['CmsData']['Files']['DisplayField'] ?? [];
             $brFields = [
-                '0.01' => Column::text('id', '#'),
+                '0.01' => Column::link('id', '#'),
                 '0.02' => Column::text('mime', 'Тип'),
                 '0.03' => Column::text('url', 'Url'),
                 '0.04' => Column::text('path', 'Путь на сервере'),

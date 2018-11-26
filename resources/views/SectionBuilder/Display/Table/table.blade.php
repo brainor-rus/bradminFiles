@@ -32,9 +32,7 @@
             <tr>
                 @foreach($columns as $column)
                     <td scope="col">
-                        @if(!$field[$column->getName()] instanceof Countable)
-                            {!! $field[$column->getName()] !!}
-                        @else
+                        @if($field[$column->getName()] instanceof Countable)
                             @php
                                 $path = explode('.', $column->getName());
                                 $name = end($path);
@@ -42,6 +40,18 @@
                             @foreach($field[$column->getName()] as $value)
                                 <span class="badge badge-info text-white">{!! $value->{$name} !!}</span>
                             @endforeach
+                        @else
+                            @switch(basename(get_class($column)))
+                                @case('Text')
+                                    {!! $field[$column->getName()] !!}
+                                    @break
+                                @case('Link')
+                                    <a href="{{ parse_url(Request::url(), PHP_URL_PATH) . '/' . $field['brRowId'] . '/edit' }}">{!! $field[$column->getName()] !!}</a>
+                                    @break
+                                @default
+                                    {!! $field[$column->getName()] !!}
+                                    @break
+                            @endswitch
                         @endif
                     </td>
                 @endforeach
