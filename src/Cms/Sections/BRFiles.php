@@ -13,6 +13,7 @@ use Bradmin\SectionBuilder\Form\Panel\Fields\BaseField\FormField;
 use Bradmin\SectionBuilder\Meta\Meta;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cookie;
 
 class BRFiles extends Section
 {
@@ -20,7 +21,17 @@ class BRFiles extends Section
     protected $model = 'Bradmin\Cms\Models\BRFile';
 
     public static function onDisplay(Request $request){
+        $currentDisplay = Cookie::get('BRFilesDisplay');
+
         if($request->get('display') == 'table') {
+            setcookie('BRFilesDisplay', 'table', time()+60*60*24*365);
+            $currentDisplay = 'table';
+        } else if($request->get('display') == 'tiles') {
+            setcookie('BRFilesDisplay', 'tiles', time()+60*60*24*365);
+            $currentDisplay = 'tiles';
+        }
+
+        if($currentDisplay == 'table') {
             $pluginsFields = app()['PluginsData']['CmsData']['Files']['DisplayField'] ?? [];
             $brFields = [
                 '0.01' => Column::text('id', '#'),
@@ -39,11 +50,6 @@ class BRFiles extends Section
             $pluginsFields = app()['PluginsData']['CmsData']['Files']['DisplayField'] ?? [];
             $brFields = [
                 '0.01' => Element::text('url', 'Url')->setIsHeaderImage(true, false),
-//                '0.01' => Element::text('id', '#'),
-//                '0.02' => Element::text('mime', 'Тип'),
-//                '0.04' => Element::text('path', 'Путь на сервере'),
-//                '0.05' => Element::text('size', 'Размер'),
-//                '0.06' => Element::text('created_at', 'Создан'),
             ];
 
             $mergedFields = array_merge($pluginsFields, $brFields);
