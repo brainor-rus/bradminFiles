@@ -2,6 +2,7 @@
 
 namespace Bradmin\Controllers;
 
+use Bradmin\SectionBuilder\Display\Custom\DisplayCustom;
 use Bradmin\SectionBuilder\Form\FormAction\FormAction;
 use Bradmin\SectionBuilder\Meta\Meta;
 use Illuminate\Http\Request;
@@ -49,17 +50,27 @@ class BrAdminController extends Controller
         $sectionModelSettings = $section->getSectionSettings(studly_case($sectionName), $pluginData['sectionPath'] ?? null);
 
         $firedSection = $section->getSectionByName($sectionName, $pluginData['sectionPath'] ?? null);
-        $results = $display->render($sectionModelSettings['model'] ?? config('bradmin.base_models_path') . studly_case(strtolower(str_singular($sectionName))), $firedSection, $pluginData);
+        if($display instanceof DisplayCustom) {
+            $results = $display->render($firedSection, $pluginData);
+        } else {
+            $results = $display->render($sectionModelSettings['model'] ?? config('bradmin.base_models_path') . studly_case(strtolower(str_singular($sectionName))), $firedSection, $pluginData);
+        }
 
         $html = $results['view'];
-        $pagination = [
-            'total' => $results['data']->total(),
-            'per_page' => $results['data']->perPage(),
-            'current_page' => $results['data']->currentPage(),
-            'last_page' => $results['data']->lastPage(),
-            'from' => $results['data']->firstItem(),
-            'to' => $results['data']->lastItem()
-        ];
+
+        $pagination = [];
+        if(!isset($results['isCustom'])) {
+            $pagination = [
+                'total' => $results['data']->total(),
+                'per_page' => $results['data']->perPage(),
+                'current_page' => $results['data']->currentPage(),
+                'last_page' => $results['data']->lastPage(),
+                'from' => $results['data']->firstItem(),
+                'to' => $results['data']->lastItem()
+            ];
+        }
+
+
         $meta = [
             'title' => $sectionModelSettings['title'],
             'scripts' => $meta->getScripts(),
