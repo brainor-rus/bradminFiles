@@ -25,8 +25,8 @@ class Display
         return new DisplayTiles($columns ?? null, $pagination ?? 15);
     }
 
-    public static function custom($columns = null, $pagination = null, $view = null, $vars = null)
+    public static function custom($columns = null, $pagination = null, $view = null)
     {
-        return new DisplayCustom($columns ?? null, $pagination ?? 15, $view ?? null, $vars ?? null);
+        return new DisplayCustom($columns ?? null, $pagination ?? 15, $view ?? null);
     }
 }

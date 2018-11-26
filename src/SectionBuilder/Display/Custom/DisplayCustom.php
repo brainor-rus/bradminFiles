@@ -16,15 +16,14 @@ use BRHelper;
 
 class DisplayCustom
 {
-    private $pagination, $columns, $scopes, $meta, $view, $vars;
+    private $pagination, $columns, $scopes, $meta, $view;
 
 
-    public function __construct($columns, $pagination, $view, $vars)
+    public function __construct($columns, $pagination, $view)
     {
         $this->setPagination($pagination);
         $this->setColumns($columns);
         $this->setView($view);
-        $this->setVars($vars);
         $this->meta = new Meta;
     }
 
