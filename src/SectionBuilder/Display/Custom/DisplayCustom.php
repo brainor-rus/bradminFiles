@@ -10,6 +10,7 @@ namespace Bradmin\SectionBuilder\Display\Custom;
 
 use Bradmin\Section;
 use Bradmin\SectionBuilder\Meta\Meta;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\View;
 use BRHelper;
@@ -19,66 +20,14 @@ class DisplayCustom
     private $pagination, $columns, $scopes, $meta, $view;
 
 
-    public function __construct($columns, $pagination, $view)
+    public function __construct($view)
     {
-        $this->setPagination($pagination);
-        $this->setColumns($columns);
         $this->setView($view);
         $this->meta = new Meta;
     }
 
-    public function render($modelPath, Section $firedSection, $pluginData = null)
+    public function render(Section $firedSection, $pluginData = null)
     {
-        $columns = $this->getColumns();
-        $relationData = null;
-
-        foreach ($columns as $column)
-        {
-            $exp = explode('.', $column->getName());
-            if(count($exp) > 1)
-            {
-                $relationData[] = implode(".", array_slice($exp, 0, -1));
-            }
-        }
-
-        $model = new $modelPath();
-
-        if(!empty($this->getScopes()))
-        {
-            foreach ($this->getScopes() as $scope)
-            {
-                $model = $model->{$scope}();
-            }
-        }
-
-        $data = $model->when(isset($relationData), function ($query) use ($relationData) {
-            $query->with($relationData);
-        })->paginate($this->getPagination());
-        $fields = array();
-
-        foreach ($data as $key => $row)
-        {
-            foreach ($columns as $column)
-            {
-                $names = explode('.', $column->getName());
-
-                $rowVal = $row;
-                foreach ($names as $name)
-                {
-                    if(!(is_array($rowVal) || $rowVal instanceof \Countable))
-                    {
-                        $rowVal = $rowVal->{$name} ?? null;
-                    } else
-                    {
-                        break;
-                    }
-                }
-
-                $fields[$key][$column->getName()] = $column->render($rowVal);
-            }
-            $fields[$key]['brRowId'] = $row->id;
-        }
-
         if(isset($pluginData['redirectUrl']))
         {
             $rc = new \ReflectionClass($firedSection);
@@ -86,7 +35,7 @@ class DisplayCustom
         }
 
 
-        $response['data'] = $data;
+        $response['isCustom'] = true;
         $response['view'] = self::getView();
 
         return $response;
