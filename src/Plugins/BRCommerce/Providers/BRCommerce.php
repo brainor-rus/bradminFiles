@@ -31,7 +31,10 @@ class BRCommerce extends ServiceProvider
         $this->mergeConfigFrom(__DIR__.'/../../../../config/bradmin.php', 'bradmin');
         $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'BRCommerce');
-        $this->publishes([__DIR__.'/../resources/views' => resource_path('views/bradmin/BRCommerce')]);
+        $this->publishes([
+            __DIR__.'/../resources/views' => resource_path('views/bradmin/BRCommerce'),
+            __DIR__.'/../resources/js' => public_path('packages/bradmin/js')
+        ]);
         $this->loadMigrationsFrom(__DIR__.'/../Migrations');
     }
 
