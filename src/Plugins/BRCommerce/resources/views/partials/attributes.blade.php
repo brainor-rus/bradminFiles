@@ -1,3 +1,6 @@
+<label for="">
+    Атрибуты
+</label>
 <p>
     <a class="btn btn-primary" data-toggle="collapse" href="#attrAccordion" role="button" aria-expanded="false" aria-controls="attrAccordion">
         Развернуть/Свернуть
