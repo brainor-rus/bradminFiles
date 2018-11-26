@@ -18,7 +18,7 @@ class BRComments extends Section
     public static function onDisplay(){
         $pluginsFields = app()['PluginsData']['CmsData']['Comments']['DisplayField'] ?? [];
         $brFields = [
-            '0.01' => Column::text('id', '#'),
+            '0.01' => Column::link('id', '#'),
             '0.02' => Column::text('user_id', 'ID пользователя'),
             '0.03' => Column::text('email', 'Email'),
             '0.04' => Column::text('fio', 'ФИО'),

@@ -9,6 +9,7 @@
 namespace Bradmin\SectionBuilder\Display\Table\Columns\BaseColumn;
 
 
+use Bradmin\SectionBuilder\Display\Table\Columns\Types\Link;
 use Bradmin\SectionBuilder\Display\Table\Columns\Types\Text;
 
 class Column
@@ -16,5 +17,10 @@ class Column
     public static function text($label, $name)
     {
         return new Text($label, $name);
+    }
+
+    public static function link($label, $name)
+    {
+        return new Link($label, $name);
     }
 }

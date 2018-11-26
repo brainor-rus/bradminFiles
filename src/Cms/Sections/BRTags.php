@@ -18,7 +18,7 @@ class BRTags extends Section
         $pluginsFields = app()['PluginsData']['CmsData']['Posts']['DisplayField'] ?? [];
         $brFields = [
             '0.01' => Column::text('id', '#'),
-            '0.02' => Column::text('title', 'Название'),
+            '0.02' => Column::link('title', 'Название'),
             '0.03' => Column::text('slug', 'Ярлык'),
             '0.04' => Column::text('description', 'Описание')
         ];
