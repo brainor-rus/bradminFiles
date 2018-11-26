@@ -34,7 +34,7 @@ class BRPosts extends Section
         $pluginsFields = app()['PluginsData']['CmsData']['Posts']['DisplayField'] ?? [];
         $brFields = [
             '0.01' => Column::text('id', '#'),
-            '0.02' => Column::text('title', 'Заголовок'),
+            '0.02' => Column::link('title', 'Заголовок'),
             '0.03' => Column::text('description', 'Краткое описание'),
             '0.04' => Column::text('tags.title', 'Метки'),
             '0.05' => Column::text('categories.title', 'Рубрики'),
