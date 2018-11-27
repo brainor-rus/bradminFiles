@@ -145,15 +145,15 @@ class BrAdminController extends Controller
 
             $model = new $modelPath;
             $attrFields = Schema::getColumnListing($model->getTable());
-            $relationFields = array_diff_key($request->all(), array_flip($attrFields));
+//            $relationFields = array_diff_key($request->all(), array_flip($attrFields));
 
             $class->beforeSave($request, $model);
 
-            $model = $model::create($request->all());
+            $model = $model::create($request->only($attrFields));
             $model = $model->where('id', $model->id)
-                ->when(isset($relationFields), function ($query) use ($relationFields) {
-                    $query->with(array_keys($relationFields));
-                })
+//                ->when(isset($relationFields), function ($query) use ($relationFields) {
+//                    $query->with(array_keys($relationFields));
+//                })
                 ->first();
 
 
