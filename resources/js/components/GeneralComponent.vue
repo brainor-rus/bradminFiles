@@ -154,6 +154,12 @@
                 this.loading = true;
                 this.classes = '';
 
+                var paras = document.getElementsByClassName('b-r-custom-asset');
+
+                while(paras[0]) {
+                    paras[0].parentNode.removeChild(paras[0]);
+                }
+
                 let ajaxUrl = '';
 
                 if(this.$route.path === '/'+this.$store.state.options.adminUrl){
@@ -219,6 +225,7 @@
                                         var fileref = document.createElement('script');
                                         fileref.setAttribute("type","text/javascript");
                                         fileref.setAttribute("src", filename);
+                                        fileref.setAttribute("class", "b-r-custom-asset");
 
                                         document.getElementsByTagName("head")[0].appendChild(fileref)
                                     }
@@ -229,6 +236,7 @@
                                         var fileref = document.createElement('script');
                                         fileref.setAttribute("type","text/javascript");
                                         fileref.setAttribute("src", filename);
+                                        fileref.setAttribute("class", "b-r-custom-asset");
 
                                         document.getElementsByTagName("body")[0].appendChild(fileref)
                                     }
@@ -242,6 +250,7 @@
                                         fileref.setAttribute("rel", "stylesheet");
                                         fileref.setAttribute("type", "text/css");
                                         fileref.setAttribute("href", filename);
+                                        fileref.setAttribute("class", "b-r-custom-asset");
 
                                         document.getElementsByTagName("head")[0].appendChild(fileref)
                                     }
