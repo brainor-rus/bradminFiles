@@ -35634,6 +35634,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             });
             __WEBPACK_IMPORTED_MODULE_1_jquery___default()(function () {
                 __WEBPACK_IMPORTED_MODULE_1_jquery___default()('.wysiwyg_editor').each(function (e) {
+                    var instance = CKEDITOR.instances[this.id];
+                    if (instance) {
+                        CKEDITOR.remove(instance);
+                    }
                     CKEDITOR.replace(this.id);
                 });
 
@@ -35650,9 +35654,17 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                     });
                 });
 
+                function dropzoneExists(selector) {
+                    var elements = __WEBPACK_IMPORTED_MODULE_1_jquery___default()(selector).find('.dz-default');
+                    return elements.length > 0;
+                }
+
                 var dropZones = [];
                 __WEBPACK_IMPORTED_MODULE_1_jquery___default()('.dropzone').each(function (e) {
-                    dropZones[this.id] = new Dropzone("#" + this.id, { url: this.getAttribute('data-dropzone-url') });
+                    var exists = dropzoneExists('div#' + this.id);
+                    if (!exists) {
+                        dropZones[this.id] = new Dropzone("#" + this.id, { url: this.getAttribute('data-dropzone-url') });
+                    }
                 });
             });
         });

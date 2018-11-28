@@ -120,6 +120,11 @@
                 });
                 $(function(){
                     $('.wysiwyg_editor').each(function(e){
+                        var instance = CKEDITOR.instances[this.id];
+                        if(instance)
+                        {
+                            CKEDITOR.remove(instance);
+                        }
                         CKEDITOR.replace( this.id );
                     });
 
@@ -136,9 +141,18 @@
                         });
                     });
 
+                    function dropzoneExists(selector) {
+                        var elements = $(selector).find('.dz-default');
+                        return elements.length > 0;
+                    }
+
                     var dropZones = [];
                     $('.dropzone').each(function(e){
-                        dropZones[this.id] = new Dropzone("#"+this.id, { url: this.getAttribute('data-dropzone-url')});
+                        var exists = dropzoneExists('div#' + this.id);
+                        if(!exists)
+                        {
+                            dropZones[this.id] = new Dropzone("#"+this.id, { url: this.getAttribute('data-dropzone-url')});
+                        }
                     });
                 });
             });
