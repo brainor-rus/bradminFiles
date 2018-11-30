@@ -107,7 +107,8 @@ class BRPages extends Section
                 ->setTodayBtn(true)
                 ->setValue(Carbon::now())
                 ->setRequired(true),
-            '0.06' => FormField::input('thumb', 'Миниатюра'),
+            '0.06' => FormField::custom(view('bradmin::cms.partials.thumb')->with(compact('cur_page'))),
+            '99.98' => FormField::hidden('thumb'),
             '99.99' => FormField::hidden('type')->setValue("page"),
         ];
 
