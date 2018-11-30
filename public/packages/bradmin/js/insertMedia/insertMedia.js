@@ -90,7 +90,7 @@ $(document).ready(function(){
         }
         else{alert( 'You must be in WYSIWYG mode!' );}
 
-        $('#insertMediaModal').modal('toggle');
+        // $('#insertMediaModal').modal('toggle');
         $( ".modal-backdrop.fade.show" ).remove();
     });
 
@@ -160,16 +160,16 @@ $(document).ready(function(){
         }
         else{alert( 'You must be in WYSIWYG mode!' );}
 
-        $('#createGalleyModal').modal('toggle');
-
-        $('#insertMediaModal').modal('toggle');
+        // $('#createGalleyModal').modal('toggle');
+        //
+        // $('#insertMediaModal').modal('toggle');
 
         $( ".modal-backdrop.fade.show" ).remove();
     });
 
 
     $(document).on('click', '.set-thumb', function (e) {
-        $('#insertMediaModal').modal('show');
+        // $('#insertMediaModal').modal('show');
         $(function () {
             $('.insert-media-tab-toggles #thumbImageTabToggle').tab('show')
         })
@@ -177,11 +177,11 @@ $(document).ready(function(){
 
     $(document).on('click', '#insertThumbImage', function (e) {
         var elements = document.querySelectorAll('.insert-media-element.ui-selected img');
-        $('input#thumb').val(elements[0].getAttribute("data-insert-media-url"));
-        $('#input#thumb').attr('value', elements[0].getAttribute("data-insert-media-url"));
-        $('.admin-post-thumb').html('<img src='+elements[0].getAttribute("data-insert-media-url")+'/>');
+        $('#input_thumb').val(elements[0].getAttribute("data-insert-media-url"));
+        $('#input_thumb').attr('value', elements[0].getAttribute("data-insert-media-url"));
+        $('#thumb').html('<img src='+elements[0].getAttribute("data-insert-media-url")+' class="img-fluid" alt="thumb" />');
 
-        $('#insertMediaModal').modal('hide');
+        // $('#insertMediaModal').modal('hide');
     });
 
     function basename(path) {
@@ -194,6 +194,6 @@ $(document).ready(function(){
         $('#insertMediaFileDetailsModal .file-description-url').html(element.getAttribute("data-insert-media-url"));
         $('#insertMediaFileDetailsModal .file-description-name').html(basename(element.getAttribute("data-insert-media-url")));
 
-        $('#insertMediaFileDetailsModal').modal('show');
+        // $('#insertMediaFileDetailsModal').modal('show');
     });
 });
