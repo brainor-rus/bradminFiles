@@ -3,6 +3,7 @@
 namespace Bradmin\Cms\Sections;
 
 use Bradmin\Cms\Helpers\TemplatesHelper;
+use Bradmin\Cms\Models\BRPost;
 use Bradmin\Cms\Models\BRTag;
 use Bradmin\Cms\Models\BRTerm;
 use Bradmin\Section;
@@ -55,10 +56,10 @@ class BRPosts extends Section
 
     public static function onCreate()
     {
-        return self::onEdit();
+        return self::onEdit(null);
     }
 
-    public static function onEdit()
+    public static function onEdit($id)
     {
 //        $meta = new Meta;
 //        $meta->setStyles([
@@ -72,6 +73,8 @@ class BRPosts extends Section
 
         $pluginsFieldsLeft = app()['PluginsData']['CmsData']['Posts']['EditField']['Left'] ?? [];
         $pluginsFieldsRight = app()['PluginsData']['CmsData']['Posts']['EditField']['Right'] ?? [];
+
+        $cur_page = $id ? BRPost::with('ancestors')->where('id', $id)->first()->toArray() : null;
 
         $templates = TemplatesHelper::getTemplates('post');
 
@@ -98,7 +101,8 @@ class BRPosts extends Section
                     }
                 )
                 ->setDisplay('title'),
-            '0.07' => FormField::wysiwyg('content', 'Содержимое'),
+            '0.07' => FormField::custom(view('bradmin::SectionBuilder.Form.Fields.InsertMedia.insertMedia')->with('id','input_content')),
+            '0.08' => FormField::wysiwyg('content', 'Содержимое'),
         ];
         $brFieldsRight = [
             '0.01' => FormField::select('status', 'Статус')
@@ -124,7 +128,8 @@ class BRPosts extends Section
                 ->setTodayBtn(true)
                 ->setValue(Carbon::now())
                 ->setRequired(true),
-            '0.05' => FormField::input('thumb', 'Миниатюра'),
+            '0.06' => FormField::custom(view('bradmin::cms.partials.thumb')->with(compact('cur_page'))),
+            '99.98' => FormField::hidden('thumb'),
             '99.99' => FormField::hidden('type')->setValue("post"),
         ];
 
