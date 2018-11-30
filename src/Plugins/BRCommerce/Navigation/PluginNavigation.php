@@ -14,6 +14,7 @@ class PluginNavigation
                 'url' => '/'.config('bradmin.admin_url').'/BRCommerce',
                 'icon' => 'fas fa-users',
                 'text' => 'BRCommerce',
+                'noDirect' => true,
                 'nodes' => [
                     [
                         'url' => '/bradmin/BRCommerce/BROffers',
