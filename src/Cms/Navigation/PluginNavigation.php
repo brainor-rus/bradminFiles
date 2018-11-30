@@ -14,6 +14,7 @@ class PluginNavigation
                 'url' => '/'.config('bradmin.admin_url').'/cms',
                 'icon' => 'fas fa-users',
                 'text' => 'CMS',
+                'noDirect' => true,
                 'nodes' => [
                     [
                         'url' => '/'.config('bradmin.admin_url').'/cms/BRPages',

@@ -27272,6 +27272,20 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -34806,6 +34820,21 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -34858,7 +34887,7 @@ var render = function() {
       return _c(
         "li",
         [
-          menuItem.nodes
+          menuItem.nodes && !menuItem.noDirect
             ? _c(
                 "router-link",
                 {
@@ -34910,51 +34939,103 @@ var render = function() {
                 ],
                 2
               )
-            : _c(
-                "router-link",
-                {
-                  class: [
-                    "menu-item",
-                    {
-                      "router-link-exact-active":
-                        menuItem.url === _vm.activeUrlParams
-                    }
-                  ],
-                  attrs: { to: menuItem.url }
-                },
-                [
-                  menuItem.iconText
-                    ? _c("i", { staticClass: "icon" }, [
-                        _vm._v(_vm._s(menuItem.iconText))
-                      ])
-                    : [
-                        menuItem.icon
-                          ? _c("i", {
-                              staticClass: "icon",
-                              class: menuItem.icon
-                            })
-                          : _vm._e()
-                      ],
-                  _vm._v(" "),
-                  _c("transition", { attrs: { name: "fade" } }, [
-                    _c(
-                      "span",
+            : menuItem.nodes && menuItem.noDirect
+              ? _c(
+                  "a",
+                  {
+                    class: [
+                      "menu-item",
                       {
-                        directives: [
-                          {
-                            name: "show",
-                            rawName: "v-show",
-                            value: _vm.sidebarOpen,
-                            expression: "sidebarOpen"
-                          }
-                        ]
-                      },
-                      [_vm._v(_vm._s(menuItem.text))]
-                    )
-                  ])
-                ],
-                2
-              ),
+                        "router-link-exact-active":
+                          menuItem.url === _vm.activeUrlParams
+                      }
+                    ],
+                    attrs: {
+                      href: "#",
+                      "data-toggle": "collapse",
+                      "data-target": "#" + menuItem.url.replace(/\//g, ""),
+                      "aria-expanded": true,
+                      "aria-controls": menuItem.url.replace(/\//g, "")
+                    }
+                  },
+                  [
+                    menuItem.iconText
+                      ? _c("i", { staticClass: "icon" }, [
+                          _vm._v(_vm._s(menuItem.iconText))
+                        ])
+                      : [
+                          menuItem.icon
+                            ? _c("i", {
+                                staticClass: "icon",
+                                class: menuItem.icon
+                              })
+                            : _vm._e()
+                        ],
+                    _vm._v(" "),
+                    _c("transition", { attrs: { name: "fade" } }, [
+                      _c(
+                        "span",
+                        {
+                          directives: [
+                            {
+                              name: "show",
+                              rawName: "v-show",
+                              value: _vm.sidebarOpen,
+                              expression: "sidebarOpen"
+                            }
+                          ]
+                        },
+                        [_vm._v(_vm._s(menuItem.text))]
+                      )
+                    ])
+                  ],
+                  2
+                )
+              : _c(
+                  "router-link",
+                  {
+                    class: [
+                      "menu-item",
+                      {
+                        "router-link-exact-active":
+                          menuItem.url === _vm.activeUrlParams
+                      }
+                    ],
+                    attrs: { to: menuItem.url }
+                  },
+                  [
+                    menuItem.iconText
+                      ? _c("i", { staticClass: "icon" }, [
+                          _vm._v(_vm._s(menuItem.iconText))
+                        ])
+                      : [
+                          menuItem.icon
+                            ? _c("i", {
+                                staticClass: "icon",
+                                class: menuItem.icon
+                              })
+                            : _vm._e()
+                        ],
+                    _vm._v(" "),
+                    _c("transition", { attrs: { name: "fade" } }, [
+                      _c(
+                        "span",
+                        {
+                          directives: [
+                            {
+                              name: "show",
+                              rawName: "v-show",
+                              value: _vm.sidebarOpen,
+                              expression: "sidebarOpen"
+                            }
+                          ]
+                        },
+                        [_vm._v(_vm._s(menuItem.text))]
+                      )
+                    ])
+                  ],
+                  2
+                ),
           _vm._v(" "),
           menuItem.nodes
             ? _c("left-menu-recursive", {
@@ -35001,7 +35082,7 @@ var render = function() {
         return _c(
           "li",
           [
-            menuItem.nodes
+            menuItem.nodes && !menuItem.noDirect
               ? _c(
                   "router-link",
                   {
@@ -35054,51 +35135,104 @@ var render = function() {
                   ],
                   2
                 )
-              : _c(
-                  "router-link",
-                  {
-                    class: [
-                      "menu-item",
-                      {
-                        "router-link-exact-active":
-                          menuItem.url === _vm.activeUrlParams
-                      }
-                    ],
-                    attrs: { to: menuItem.url }
-                  },
-                  [
-                    menuItem.iconText
-                      ? _c("i", { staticClass: "icon" }, [
-                          _vm._v(_vm._s(menuItem.iconText))
-                        ])
-                      : [
-                          menuItem.icon
-                            ? _c("i", {
-                                staticClass: "icon",
-                                class: menuItem.icon
-                              })
-                            : _vm._e()
-                        ],
-                    _vm._v(" "),
-                    _c("transition", { attrs: { name: "fade" } }, [
-                      _c(
-                        "span",
+              : menuItem.nodes && menuItem.noDirect
+                ? _c(
+                    "a",
+                    {
+                      class: [
+                        "collapsable",
+                        "menu-item",
                         {
-                          directives: [
-                            {
-                              name: "show",
-                              rawName: "v-show",
-                              value: _vm.sidebarOpen,
-                              expression: "sidebarOpen"
-                            }
-                          ]
-                        },
-                        [_vm._v(_vm._s(menuItem.text))]
-                      )
-                    ])
-                  ],
-                  2
-                ),
+                          "router-link-exact-active":
+                            menuItem.url === _vm.activeUrlParams
+                        }
+                      ],
+                      attrs: {
+                        href: "#",
+                        "data-target": "#" + menuItem.url.replace(/\//g, ""),
+                        exact: ""
+                      }
+                    },
+                    [
+                      menuItem.iconText
+                        ? _c("i", { staticClass: "icon" }, [
+                            _vm._v(_vm._s(menuItem.iconText))
+                          ])
+                        : [
+                            menuItem.icon
+                              ? _c("i", {
+                                  staticClass: "icon",
+                                  class: menuItem.icon
+                                })
+                              : _vm._e()
+                          ],
+                      _vm._v(" "),
+                      _c("transition", { attrs: { name: "fade" } }, [
+                        _c(
+                          "span",
+                          {
+                            directives: [
+                              {
+                                name: "show",
+                                rawName: "v-show",
+                                value: _vm.sidebarOpen,
+                                expression: "sidebarOpen"
+                              }
+                            ]
+                          },
+                          [_vm._v(_vm._s(menuItem.text))]
+                        )
+                      ]),
+                      _vm._v(" "),
+                      _c("i", { staticClass: "toggler fas" })
+                    ],
+                    2
+                  )
+                : _c(
+                    "router-link",
+                    {
+                      class: [
+                        "menu-item",
+                        {
+                          "router-link-exact-active":
+                            menuItem.url === _vm.activeUrlParams
+                        }
+                      ],
+                      attrs: { to: menuItem.url }
+                    },
+                    [
+                      menuItem.iconText
+                        ? _c("i", { staticClass: "icon" }, [
+                            _vm._v(_vm._s(menuItem.iconText))
+                          ])
+                        : [
+                            menuItem.icon
+                              ? _c("i", {
+                                  staticClass: "icon",
+                                  class: menuItem.icon
+                                })
+                              : _vm._e()
+                          ],
+                      _vm._v(" "),
+                      _c("transition", { attrs: { name: "fade" } }, [
+                        _c(
+                          "span",
+                          {
+                            directives: [
+                              {
+                                name: "show",
+                                rawName: "v-show",
+                                value: _vm.sidebarOpen,
+                                expression: "sidebarOpen"
+                              }
+                            ]
+                          },
+                          [_vm._v(_vm._s(menuItem.text))]
+                        )
+                      ])
+                    ],
+                    2
+                  ),
             _vm._v(" "),
             menuItem.nodes
               ? _c("left-menu-recursive", {

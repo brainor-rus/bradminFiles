@@ -14,6 +14,7 @@ class PluginNavigation
                 'url' => '/'.config('bradmin.admin_url').'/pay',
                 'icon' => 'fas fa-users',
                 'text' => 'Оплата',
+                'noDirect' => true,
                 'nodes' => [
                     [
                         'url' => '/bradmin/pay/BrainorPayBanks',

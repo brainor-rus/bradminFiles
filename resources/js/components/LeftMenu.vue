@@ -2,7 +2,7 @@
     <ul class="main-menu">
         <li class="error" v-if="error">{{ error}}</li>
         <li v-for="menuItem in responseData">
-            <router-link v-if="menuItem.nodes"
+            <router-link v-if="menuItem.nodes && !menuItem.noDirect"
                          :to="menuItem.url"
                          :class="['collapsable','menu-item', { 'router-link-exact-active' : menuItem.url === activeUrlParams}]"
                          :data-target="'#' + menuItem.url.replace(/\//g, '')"
@@ -17,6 +17,20 @@
                 </transition>
                 <i class="toggler fas"></i>
             </router-link>
+            <a href="#" v-else-if="menuItem.nodes && menuItem.noDirect"
+                         :class="['collapsable','menu-item', { 'router-link-exact-active' : menuItem.url === activeUrlParams}]"
+                         :data-target="'#' + menuItem.url.replace(/\//g, '')"
+                         exact
+            >
+                <i v-if="menuItem.iconText" class="icon">{{ menuItem.iconText }}</i>
+                <template v-else>
+                    <i v-if="menuItem.icon" class="icon" :class="menuItem.icon"></i>
+                </template>
+                <transition name="fade">
+                    <span v-show="sidebarOpen">{{ menuItem.text }}</span>
+                </transition>
+                <i class="toggler fas"></i>
+            </a>
             <router-link v-else :to="menuItem.url" :class="['menu-item',{ 'router-link-exact-active' : menuItem.url === activeUrlParams}]">
                 <i v-if="menuItem.iconText" class="icon">{{ menuItem.iconText }}</i>
                 <template v-else>
