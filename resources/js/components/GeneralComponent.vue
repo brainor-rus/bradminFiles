@@ -105,8 +105,6 @@
         updated: function () {
 
             this.$nextTick(function () {
-
-
                 $('.multiselect').selectize({
                     plugins: ['remove_button'],
                     delimiter: ',',

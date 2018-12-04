@@ -25,7 +25,7 @@ class DisplayTable
         $this->meta = new Meta;
     }
 
-    public function render($modelPath, Section $firedSection, $pluginData = null)
+    public function render($modelPath, Section $firedSection, $pluginData = null, $request = null)
     {
         $columns = $this->getColumns();
         $relationData = null;
@@ -49,9 +49,17 @@ class DisplayTable
             }
         }
 
-        $data = $model->when(isset($relationData), function ($query) use ($relationData) {
-            $query->with($relationData);
-        })->paginate($this->getPagination());
+        $data = $model
+            ->when(isset($relationData), function ($query) use ($relationData) {
+                $query->with($relationData);
+            })
+            ->when(!empty($request->sortBy), function ($query) use ($request) {
+                $query->orderBy($request->sortBy, 'asc');
+            })
+            ->when(!empty($request->sortByDesc), function ($query) use ($request) {
+                $query->orderBy($request->sortByDesc, 'desc');
+            })
+            ->paginate($this->getPagination());
         $fields = array();
 
         foreach ($data as $key => $row)

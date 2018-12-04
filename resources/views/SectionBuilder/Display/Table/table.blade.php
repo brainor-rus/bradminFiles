@@ -22,7 +22,17 @@
         <thead>
         <tr>
             @foreach($columns as $column)
-                <th scope="col">{{ $column->getLabel() }}</th>
+                <th scope="col">
+                    <div class="d-inline-block">
+                        {{ $column->getLabel() }}
+                    </div>
+                    @if($column->getSortable())
+                        <div class="text-right d-inline-block float-right">
+                            <a href="?sortBy={{ $column->getName() }}" class="@if(app('request')->input('sortBy') == $column->getName()) text-success @else text-muted @endif"><i class="fas fa-chevron-up"></i></a>
+                            <a href="?sortByDesc={{ $column->getName() }}" class="@if(app('request')->input('sortByDesc') == $column->getName()) text-success @else text-muted @endif"><i class="fas fa-chevron-down"></i></a>
+                        </div>
+                    @endif
+                </th>
             @endforeach
             <th></th>
         </tr>
