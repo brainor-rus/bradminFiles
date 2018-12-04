@@ -9,6 +9,7 @@ use Bradmin\Cms\Helpers\TemplatesHelper;
 use Bradmin\Section;
 use Bradmin\SectionBuilder\Display\BaseDisplay\Display;
 use Bradmin\SectionBuilder\Display\Table\Columns\BaseColumn\Column;
+use Bradmin\SectionBuilder\Filter\Types\BaseType\FilterType;
 use Bradmin\SectionBuilder\Form\BaseForm\Form;
 use Bradmin\SectionBuilder\Form\Panel\Columns\BaseColumn\FormColumn;
 use Bradmin\SectionBuilder\Form\Panel\Fields\BaseField\FormField;
@@ -37,6 +38,23 @@ class BRPages extends Section
         ksort($mergedFields);
 
         $display = Display::table($mergedFields)->setPagination(10);
+        
+        $filter = [
+          FilterType::text('id', '#'),
+          FilterType::text('title', 'Заголовок'),
+          null,
+          FilterType::select('tags.title')->setOptions(
+              BRTerm::where('type', 'tag')->pluck('title', 'id')->toArray()
+          ),
+        FilterType::select('categories.title')->setOptions(
+            BRTerm::where('type', 'category')->pluck('title', 'id')->toArray()
+        ),
+          null,
+          null,
+          null,
+        ];
+
+        $display->setFilter($filter);
 
         return $display->setScopes(['pages']);
     }

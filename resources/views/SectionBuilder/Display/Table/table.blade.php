@@ -75,6 +75,26 @@
                 </td>
             </tr>
         @endforeach
+        @if(!empty($filter))
+            <tr>
+                @foreach($filter as $filterType)
+                    <td>
+                        @if(!empty($filterType))
+                            {!! $filterType->render() !!}
+                        @endif
+                    </td>
+                @endforeach
+                <td class="text-right">
+                    {{--<button type="submit" class="btn btn-success">Фильтровать</button>--}}
+
+                    <div class="btn-group" role="group">
+                        <button type="button" class="btn btn-secondary"><i class="fas fa-filter"></i> Фильтровать</button>
+                        <button type="button" class="btn btn-danger"><i class="fas fa-times"></i></button>
+                    </div>
+
+                </td>
+            </tr>
+        @endif
         </tbody>
     </table>
 </div>
