@@ -55,7 +55,6 @@ class DisplayTable
 //            ['field' => 'title', 'value' => 'тест'],
 //            ['field' => 'description', 'value' => 'фыва']
 //        ];
-
         $data = $model
             ->when(isset($relationData), function ($query) use ($relationData) {
                 $query->with($relationData);
@@ -66,8 +65,15 @@ class DisplayTable
             ->when(!empty($request->sortByDesc), function ($query) use ($request) {
                 $query->orderBy($request->sortByDesc, 'desc');
             })
+            ->when(!empty($request->sort), function ($query) use ($request) {
+                parse_str($request->sort, $sortArray);
+                foreach ($sortArray as $sortItem) {
+                    $query = $query->orderBy($sortItem['by'], $sortItem['type']);
+                }
+            })
             ->when(!empty($request->filter), function ($query) use ($request) {
-                foreach ($request->filter as $filterItem) {
+                parse_str($request->filter, $filterArray);
+                foreach ($filterArray as $filterItem) {
                     $query = $query->where($filterItem['field'], 'like', '%' . $filterItem['value'] . '%');
                 }
             })

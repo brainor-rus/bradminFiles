@@ -28,8 +28,17 @@
                     </div>
                     @if($column->getSortable())
                         <div class="text-right d-inline-block float-right">
-                            <a href="?sortBy={{ $column->getName() }}" class="@if(app('request')->input('sortBy') == $column->getName()) text-success @else text-muted @endif"><i class="fas fa-chevron-up"></i></a>
-                            <a href="?sortByDesc={{ $column->getName() }}" class="@if(app('request')->input('sortByDesc') == $column->getName()) text-success @else text-muted @endif"><i class="fas fa-chevron-down"></i></a>
+                            @php
+                                $sortType = null;
+                                if(null !== app('request')->input('sort')){
+                                    parse_str(app('request')->input('sort'), $sortArray);
+                                }
+                                if(isset($sortArray[$column->getName()])){
+                                    $sortType = $sortArray[$column->getName()]['type'];
+                                }
+                            @endphp
+                            <a href="#" @click.prevent="$emit('sorting',$event)" data-sort-type="asc" data-sort-by="{{ $column->getName() }}" class="@if($sortType == 'asc') text-success @else text-muted @endif fas fa-chevron-up"></a>
+                            <a href="#" @click.prevent="$emit('sorting',$event)" data-sort-type="desc" data-sort-by="{{ $column->getName() }}" class="@if($sortType == 'desc') text-success @else text-muted @endif fas fa-chevron-down"></a>
                         </div>
                     @endif
                 </th>
@@ -88,8 +97,8 @@
                     {{--<button type="submit" class="btn btn-success">Фильтровать</button>--}}
 
                     <div class="btn-group" role="group">
-                        <button type="button" class="btn btn-secondary"><i class="fas fa-filter"></i> Фильтровать</button>
-                        <button type="button" class="btn btn-danger"><i class="fas fa-times"></i></button>
+                        <button @click.prevent="$emit('filter')" type="button" class="btn btn-secondary"><i class="fas fa-filter"></i> Фильтровать</button>
+                        <button @click.prevent="$emit('filterClear')" type="button" class="btn btn-danger"><i class="fas fa-times"></i></button>
                     </div>
 
                 </td>

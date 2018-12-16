@@ -37,7 +37,7 @@ class BRPages extends Section
         $mergedFields = array_merge($pluginsFields, $brFields);
         ksort($mergedFields);
 
-        $display = Display::table($mergedFields)->setPagination(10);
+        $display = Display::table($mergedFields)->setPagination(1);
         
         $filter = [
           FilterType::text('id', '#'),
