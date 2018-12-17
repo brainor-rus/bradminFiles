@@ -12,6 +12,7 @@ use Bradmin\SectionBuilder\Display\Table\Columns\BaseColumn\Column;
 use Bradmin\SectionBuilder\Form\BaseForm\Form;
 use Bradmin\SectionBuilder\Form\Panel\Columns\BaseColumn\FormColumn;
 use Bradmin\SectionBuilder\Form\Panel\Fields\BaseField\FormField;
+use Bradmin\SectionBuilder\Meta\Meta;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -55,6 +56,16 @@ class BRPages extends Section
         $pages_tree = BRPost::where('type', 'page')->orderBy('title')->get()->toTree()->toArray();
         $cur_page = $id ? BRPost::with('ancestors')->where('id', $id)->first()->toArray() : null;
         $pagesTreeView = view('bradmin::cms.partials.pagesTree')->with(compact('pages_tree', 'cur_page'));
+
+        $meta = new Meta;
+        $meta->setScripts([
+            'head' => [],
+            'body' => [
+                'insert-media' => '/packages/bradmin/js/insertMedia/insertMedia.js'
+            ]
+        ])->setStyles(
+            ['insert-media' => '/packages/bradmin/js/insertMedia/insertMedia.css']
+        );
 
         $brFieldsLeft = [
             '0.01' => FormField::input('title', 'Заголовок')->setRequired(true),
@@ -123,7 +134,7 @@ class BRPages extends Section
             FormColumn::column($mergedFieldsRight, 'col-md-4 col-12'),
         ]);
 
-        return $form;
+        return $form->setMeta($meta);
     }
 
     public function afterSave(Request $request, $model = null)

@@ -44,4 +44,9 @@ class BROffer extends Model
     {
         return $this->hasMany(BRAttributeValue::class);
     }
+
+    public function photos()
+    {
+        // todo
+    }
 }

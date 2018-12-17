@@ -46,17 +46,20 @@ class BROffers extends Section
     {
         $meta = new Meta;
         $meta->setStyles([
-            '' => ''
+            'insert-media' => '/packages/bradmin/js/insertMedia/insertMedia.css'
         ])->setScripts([
             'head' => [],
             'body' => [
-                'OffersAttrFormAdd' => ('/packages/bradmin/js/OffersAttrFormAdd.js')
+                'OffersAttrFormAdd' => '/packages/bradmin/js/OffersAttrFormAdd.js',
+                'insert-media' => '/packages/bradmin/js/insertMedia/insertMedia.js'
             ]
         ]);
 
         $attributes = null;
         if($id) {
-            $offer = BROffer::where('id', $id)->first();
+            $offer = BROffer::where('id', $id)
+//                ->with('photos')
+                ->first();
             $attributes = BRAttributeName::where('category_id', $offer->category_id)
                 ->whereHas('values', function ($query) use ($offer) {
                     $query->where('offer_id', $offer->id)->select('value');
@@ -73,6 +76,7 @@ class BROffers extends Section
             FormColumn::column([
                 FormField::input('name', 'Название')->setRequired(true),
                 FormField::input('slug', 'Слаг (необязательно)'),
+                FormField::custom(view('BRCommerce::InsertMedia.insertMedia')->with('id','input_content')),
                 FormField::Wysiwyg('description', 'Описание')
             ]),
             FormColumn::column([
@@ -91,6 +95,7 @@ class BROffers extends Section
                         0 => 'Нет',
                         1 => 'Да'
                     ]),
+                FormField::custom(view('BRCommerce::partials.photos')->with(compact('offer'))),
                 FormField::custom(view('BRCommerce::partials.attributes')->with(compact('offer', 'attributes')))
             ])
         ]);

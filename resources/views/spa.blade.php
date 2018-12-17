@@ -11,7 +11,7 @@
     <link href="{{ asset('packages/bradmin/js/datetime/bootstrap-datetimepicker.css') }}" rel="stylesheet">
     <link href="{{ asset('packages/bradmin/js/dropzone/dropzone.min.css') }}" rel="stylesheet">
     <link href="{{ asset('packages/bradmin/js/jquery-ui/jquery-ui.css') }}" rel="stylesheet">
-    <link href="{{ asset('packages/bradmin/js/insertMedia/insertMedia.css') }}" rel="stylesheet">
+    {{--<link href="{{ asset('packages/bradmin/js/insertMedia/insertMedia.css') }}" rel="stylesheet">--}}
     {{--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>--}}
 
 
@@ -37,6 +37,6 @@
 <script src="{{ asset('packages/bradmin/js/ckeditor/ckeditor.js') }}"></script>
 <script src="{{ asset('packages/bradmin/js/dropzone/dropzone.min.js') }}"></script>
 <script src="{{ asset('packages/bradmin/js/app.js') }}"></script>
-<script src="{{ asset('packages/bradmin/js/insertMedia/insertMedia.js') }}"></script>
+{{--<script src="{{ asset('packages/bradmin/js/insertMedia/insertMedia.js') }}"></script>--}}
 </body>
 </html>

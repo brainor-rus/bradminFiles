@@ -61,22 +61,22 @@ class BRPosts extends Section
 
     public static function onEdit($id)
     {
-//        $meta = new Meta;
-//        $meta->setStyles([
-//            '' => ''
-//        ])->setScripts([
-//            'head' => [],
-//            'body' => [
-//                'test' => asset('js/test.js')
-//            ]
-//        ]);
-
         $pluginsFieldsLeft = app()['PluginsData']['CmsData']['Posts']['EditField']['Left'] ?? [];
         $pluginsFieldsRight = app()['PluginsData']['CmsData']['Posts']['EditField']['Right'] ?? [];
 
         $cur_page = $id ? BRPost::with('ancestors')->where('id', $id)->first()->toArray() : null;
 
         $templates = TemplatesHelper::getTemplates('post');
+
+        $meta = new Meta;
+        $meta->setScripts([
+            'head' => [],
+            'body' => [
+                'insert-media' => '/packages/bradmin/js/insertMedia/insertMedia.js'
+            ]
+        ])->setStyles(
+            ['insert-media' => '/packages/bradmin/js/insertMedia/insertMedia.css']
+        );
 
         $brFieldsLeft = [
             '0.01' => FormField::input('title', 'Заголовок')->setRequired(true),
@@ -143,9 +143,8 @@ class BRPosts extends Section
             FormColumn::column($mergedFieldsLeft, 'col-md-8 col-12'),
             FormColumn::column($mergedFieldsRight, 'col-md-4 col-12'),
         ]);
-//            ->setMeta($meta);
 
-        return $form;
+        return $form->setMeta($meta);
     }
 
     public function afterSave(Request $request, $model = null)
