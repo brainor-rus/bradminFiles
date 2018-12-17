@@ -53,7 +53,7 @@ class BrAdminController extends Controller
         if($display instanceof DisplayCustom) {
             $results = $display->render($firedSection, $pluginData);
         } else {
-            $results = $display->render($sectionModelSettings['model'] ?? config('bradmin.base_models_path') . studly_case(strtolower(str_singular($sectionName))), $firedSection, $pluginData);
+            $results = $display->render($sectionModelSettings['model'] ?? config('bradmin.base_models_path') . studly_case(strtolower(str_singular($sectionName))), $firedSection, $pluginData, $request);
         }
 
         $html = $results['view'];

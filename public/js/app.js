@@ -22729,7 +22729,7 @@ module.exports = Cancel;
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(16);
-module.exports = __webpack_require__(79);
+module.exports = __webpack_require__(80);
 
 
 /***/ }),
@@ -35594,7 +35594,7 @@ var normalizeComponent = __webpack_require__(1)
 /* script */
 var __vue_script__ = __webpack_require__(68)
 /* template */
-var __vue_template__ = __webpack_require__(78)
+var __vue_template__ = __webpack_require__(79)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -35644,8 +35644,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_jquery___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_jquery__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_selectize__ = __webpack_require__(69);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_selectize___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_selectize__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__DeleteModal__ = __webpack_require__(72);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__DeleteModal___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__DeleteModal__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_deparam__ = __webpack_require__(72);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_deparam___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_deparam__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__DeleteModal__ = __webpack_require__(73);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__DeleteModal___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4__DeleteModal__);
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+//
+//
+//
 //
 //
 //
@@ -35707,11 +35714,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 
-// import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    components: { modal: __WEBPACK_IMPORTED_MODULE_3__DeleteModal___default.a },
+    components: { modal: __WEBPACK_IMPORTED_MODULE_4__DeleteModal___default.a },
     data: function data() {
         return {
             uid: Math.floor(Math.random() * 101),
@@ -35745,6 +35751,20 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             } else {
                 return this.$route.query.page;
             }
+        },
+        currentSorting: function currentSorting() {
+            var sortObject = null;
+            if (typeof this.$route.query.sort !== 'undefined') {
+                sortObject = this.$route.query.sort;
+            }
+            return sortObject;
+        },
+        currentFilter: function currentFilter() {
+            var filterObject = null;
+            if (typeof this.$route.query.filter !== 'undefined') {
+                filterObject = this.$route.query.filter;
+            }
+            return filterObject;
         }
     },
     created: function created() {
@@ -35754,7 +35774,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     updated: function updated() {
 
         this.$nextTick(function () {
-
             __WEBPACK_IMPORTED_MODULE_1_jquery___default()('.multiselect').selectize({
                 plugins: ['remove_button'],
                 delimiter: ',',
@@ -35811,6 +35830,31 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         fetchData: function fetchData(page) {
             var _this = this;
 
+            var query = Object.assign({}, this.$route.query);
+            this.$router.replace({ query: query });
+            if (typeof this.$route.query.sort !== 'undefined') {
+                if (_typeof(this.$route.query.sort) !== 'object') {
+                    if (Object.keys(this.$route.query.sort).length <= 0) {
+                        delete query.sort;
+                        this.$router.replace({ query: query });
+                    }
+                } else {
+                    delete query.sort;
+                    this.$router.replace({ query: query });
+                }
+            }
+            if (typeof this.$route.query.filter !== 'undefined') {
+                if (_typeof(this.$route.query.filter) !== 'object') {
+                    if (Object.keys(this.$route.query.filter).length <= 0) {
+                        delete query.filter;
+                        this.$router.replace({ query: query });
+                    }
+                } else {
+                    delete query.filter;
+                    this.$router.replace({ query: query });
+                }
+            }
+
             this.error = this.responseData = null;
             this.loading = true;
             this.classes = '';
@@ -35828,7 +35872,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             } else {
                 ajaxUrl = this.$route.path;
             }
-            __WEBPACK_IMPORTED_MODULE_0_axios___default.a.post(ajaxUrl + document.location.search, { 'page': this.currentPage }).then(function (response) {
+            __WEBPACK_IMPORTED_MODULE_0_axios___default.a.post(ajaxUrl + document.location.search, {}).then(function (response) {
                 if (typeof response.data.data !== 'undefined') {
                     _this.responseData = response.data.data;
                     if (typeof response.data.data.pagination !== 'undefined') {
@@ -35856,7 +35900,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                         _this.pagination.pagesNumber = pagesArray;
 
                         if (_this.pagination.pagesNumber.length > 1) {
-                            _this.$router.replace({ query: { page: page } });
+                            var _query = Object.assign({}, _this.$route.query);
+                            _query.page = page;
+                            _this.$router.replace({ query: _query });
                         }
                     }
                 }
@@ -35972,6 +36018,66 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             } else {
                 this.$router.push({ path: redirectUrl.pathname });
             }
+        },
+        sorting: function sorting(event) {
+
+            var sortObject = {},
+                needToUpdate = true;
+
+            if (typeof this.$route.query.sort !== 'undefined') {
+                sortObject = __WEBPACK_IMPORTED_MODULE_3_deparam___default()(this.$route.query.sort);
+
+                if (typeof sortObject[event.target.dataset.sortBy] !== 'undefined') {
+                    if (sortObject[event.target.dataset.sortBy]['type'] === event.target.dataset.sortType) {
+                        delete sortObject[event.target.dataset.sortBy];
+                        needToUpdate = false;
+                    }
+                }
+            }
+            if (needToUpdate === true) {
+                if (typeof sortObject[event.target.dataset.sortBy] === 'undefined') {
+                    sortObject[event.target.dataset.sortBy] = {};
+                }
+
+                sortObject[event.target.dataset.sortBy]['type'] = event.target.dataset.sortType;
+                sortObject[event.target.dataset.sortBy]['by'] = event.target.dataset.sortBy;
+            }
+            if (Object.keys(sortObject).length > 0) {
+                var query = Object.assign({}, this.$route.query);
+                query.sort = jQuery.param(sortObject);
+                this.$router.replace({ query: query });
+            } else {
+                var _query2 = Object.assign({}, this.$route.query);
+                delete _query2.sort;
+                this.$router.replace({ query: _query2 });
+            }
+        },
+        filter: function filter() {
+
+            var filterObject = {};
+
+            __WEBPACK_IMPORTED_MODULE_1_jquery___default()(".filter-input").each(function () {
+                if (__WEBPACK_IMPORTED_MODULE_1_jquery___default()(this).val() !== '' && __WEBPACK_IMPORTED_MODULE_1_jquery___default()(this).val() !== null) {
+                    filterObject[__WEBPACK_IMPORTED_MODULE_1_jquery___default()(this).data('filterName')] = {};
+                    filterObject[__WEBPACK_IMPORTED_MODULE_1_jquery___default()(this).data('filterName')]['field'] = __WEBPACK_IMPORTED_MODULE_1_jquery___default()(this).data('filterName');
+                    filterObject[__WEBPACK_IMPORTED_MODULE_1_jquery___default()(this).data('filterName')]['value'] = __WEBPACK_IMPORTED_MODULE_1_jquery___default()(this).val();
+                }
+            });
+
+            if (Object.keys(filterObject).length > 0) {
+                var query = Object.assign({}, this.$route.query);
+                query.filter = jQuery.param(filterObject);
+                this.$router.replace({ query: query });
+            } else {
+                var _query3 = Object.assign({}, this.$route.query);
+                delete _query3.filter;
+                this.$router.replace({ query: _query3 });
+            }
+        },
+        filterClear: function filterClear() {
+            var query = Object.assign({}, this.$route.query);
+            delete query.filter;
+            this.$router.replace({ query: query });
         }
     }
 });
@@ -39893,18 +39999,123 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;/**
 
 /***/ }),
 /* 72 */
+/***/ (function(module, exports) {
+
+/**
+ * Created by alexey2baranov on 28.01.17.
+ */
+/*
+ An extraction of the deparam method from Ben Alman's jQuery BBQ
+ http://benalman.com/projects/jquery-bbq-plugin/
+ */
+
+module.exports=function (params, coerce) {
+  // console.log(params)
+  var obj = {},
+    coerce_types = {'true': !0, 'false': !1, 'null': null};
+
+  // Iterate over all name=value pairs.
+  params.replace(/\+/g, ' ').split('&').forEach(function (v, j) {
+    var param = v.split('='),
+      key = decodeURIComponent(param[0]),
+      val,
+      cur = obj,
+      i = 0,
+
+      // If key is more complex than 'foo', like 'a[]' or 'a[b][c]', split it
+      // into its component parts.
+      keys = key.split(']['),
+      keys_last = keys.length - 1;
+
+    // If the first keys part contains [ and the last ends with ], then []
+    // are correctly balanced.
+    if (/\[/.test(keys[0]) && /\]$/.test(keys[keys_last])) {
+      // Remove the trailing ] from the last keys part.
+      keys[keys_last] = keys[keys_last].replace(/\]$/, '');
+
+      // Split first keys part into two parts on the [ and add them back onto
+      // the beginning of the keys array.
+      keys = keys.shift().split('[').concat(keys);
+
+      keys_last = keys.length - 1;
+    } else {
+      // Basic 'foo' style key.
+      keys_last = 0;
+    }
+
+    // Are we dealing with a name=value pair, or just a name?
+    if (param.length === 2) {
+      val = decodeURIComponent(param[1]);
+
+      // Coerce values.
+      if (coerce) {
+        val = val && !isNaN(val) ? +val              // number
+          : val === 'undefined' ? undefined         // undefined
+            : coerce_types[val] !== undefined ? coerce_types[val] // true, false, null
+              : val;                                                // string
+      }
+
+      if (keys_last) {
+        // Complex key, build deep object structure based on a few rules:
+        // * The 'cur' pointer starts at the object top-level.
+        // * [] = array push (n is set to array length), [n] = array if n is
+        //   numeric, otherwise object.
+        // * If at the last keys part, set the value.
+        // * For each keys part, if the current level is undefined create an
+        //   object or array based on the type of the next keys part.
+        // * Move the 'cur' pointer to the next level.
+        // * Rinse & repeat.
+        for (; i <= keys_last; i++) {
+          key = keys[i] === '' ? cur.length : keys[i];
+          cur = cur[key] = i < keys_last
+            ? cur[key] || (keys[i + 1] && isNaN(keys[i + 1]) ? {} : [])
+            : val;
+        }
+
+      } else {
+        // Simple key, even simpler rules, since only scalars and shallow
+        // arrays are allowed.
+
+        if (typeof obj[key]=="array") {
+          // val is already an array, so push on the next value.
+          obj[key].push(val);
+
+        } else if (obj[key] !== undefined) {
+          // val isn't an array, but since a second value has been specified,
+          // convert val into an array.
+          obj[key] = [obj[key], val];
+
+        } else {
+          // val is a scalar.
+          obj[key] = val;
+        }
+      }
+
+    } else if (key) {
+      // No value was defined, so set something meaningful.
+      obj[key] = coerce
+        ? undefined
+        : '';
+    }
+  });
+
+  return obj;
+}
+
+/***/ }),
+/* 73 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(73)
+  __webpack_require__(74)
 }
 var normalizeComponent = __webpack_require__(1)
 /* script */
-var __vue_script__ = __webpack_require__(76)
+var __vue_script__ = __webpack_require__(77)
 /* template */
-var __vue_template__ = __webpack_require__(77)
+var __vue_template__ = __webpack_require__(78)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -39943,13 +40154,13 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 73 */
+/* 74 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(74);
+var content = __webpack_require__(75);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -39969,12 +40180,12 @@ if(false) {
 }
 
 /***/ }),
-/* 74 */
+/* 75 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(4)(false);
 // imports
-exports.i(__webpack_require__(75), "");
+exports.i(__webpack_require__(76), "");
 
 // module
 exports.push([module.i, "\n", ""]);
@@ -39983,7 +40194,7 @@ exports.push([module.i, "\n", ""]);
 
 
 /***/ }),
-/* 75 */
+/* 76 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(4)(false);
@@ -39997,7 +40208,7 @@ exports.push([module.i, ".modal-mask {\r\n    position: fixed;\r\n    z-index: 9
 
 
 /***/ }),
-/* 76 */
+/* 77 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -40057,7 +40268,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 77 */
+/* 78 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -40168,7 +40379,7 @@ if (false) {
 }
 
 /***/ }),
-/* 78 */
+/* 79 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -40199,6 +40410,9 @@ var render = function() {
           on: {
             showDeleteModal: _vm.show_modal,
             redirectTo: _vm.redirectTo,
+            sorting: _vm.sorting,
+            filter: _vm.filter,
+            filterClear: _vm.filterClear,
             fireAction: _vm.fireAction
           }
         }
@@ -40222,7 +40436,13 @@ var render = function() {
                       {
                         staticClass: "page-link",
                         attrs: {
-                          to: { query: { page: 1 } },
+                          to: {
+                            query: {
+                              page: 1,
+                              sort: _vm.currentSorting,
+                              filter: _vm.currentFilter
+                            }
+                          },
                           "aria-label": "« First"
                         }
                       },
@@ -40249,7 +40469,11 @@ var render = function() {
                         staticClass: "page-link",
                         attrs: {
                           to: {
-                            query: { page: _vm.pagination.current_page - 1 }
+                            query: {
+                              page: _vm.pagination.current_page - 1,
+                              sort: _vm.currentSorting,
+                              filter: _vm.currentFilter
+                            }
                           },
                           "aria-label": "« Previous"
                         }
@@ -40276,7 +40500,15 @@ var render = function() {
                         "router-link",
                         {
                           staticClass: "page-link",
-                          attrs: { to: { query: { page: page } } }
+                          attrs: {
+                            to: {
+                              query: {
+                                page: page,
+                                sort: _vm.currentSorting,
+                                filter: _vm.currentFilter
+                              }
+                            }
+                          }
                         },
                         [
                           _vm._v(
@@ -40308,7 +40540,11 @@ var render = function() {
                         staticClass: "page-link",
                         attrs: {
                           to: {
-                            query: { page: _vm.pagination.current_page + 1 }
+                            query: {
+                              page: _vm.pagination.current_page + 1,
+                              sort: _vm.currentSorting,
+                              filter: _vm.currentFilter
+                            }
                           },
                           "aria-label": "Next »"
                         }
@@ -40339,7 +40575,13 @@ var render = function() {
                       {
                         staticClass: "page-link",
                         attrs: {
-                          to: { query: { page: _vm.pagination.last_page } },
+                          to: {
+                            query: {
+                              page: _vm.pagination.last_page,
+                              sort: _vm.currentSorting,
+                              filter: _vm.currentFilter
+                            }
+                          },
                           "aria-label": "Last »"
                         }
                       },
@@ -40396,7 +40638,7 @@ if (false) {
 }
 
 /***/ }),
-/* 79 */
+/* 80 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin

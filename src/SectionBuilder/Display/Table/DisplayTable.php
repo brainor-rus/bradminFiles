@@ -16,7 +16,7 @@ use BRHelper;
 
 class DisplayTable
 {
-    private $pagination, $columns, $scopes, $meta, $nav;
+    private $pagination, $columns, $scopes, $meta, $nav, $filter;
 
     public function __construct($columns, $pagination)
     {
@@ -25,7 +25,7 @@ class DisplayTable
         $this->meta = new Meta;
     }
 
-    public function render($modelPath, Section $firedSection, $pluginData = null)
+    public function render($modelPath, Section $firedSection, $pluginData = null, $request = null)
     {
         $columns = $this->getColumns();
         $relationData = null;
@@ -49,9 +49,35 @@ class DisplayTable
             }
         }
 
-        $data = $model->when(isset($relationData), function ($query) use ($relationData) {
-            $query->with($relationData);
-        })->paginate($this->getPagination());
+        // Для проверки
+        // todo Обязательно убрать при закрытии ветки
+//        $request->filter = [
+//            ['field' => 'title', 'value' => 'тест'],
+//            ['field' => 'description', 'value' => 'фыва']
+//        ];
+        $data = $model
+            ->when(isset($relationData), function ($query) use ($relationData) {
+                $query->with($relationData);
+            })
+            ->when(!empty($request->sortBy), function ($query) use ($request) {
+                $query->orderBy($request->sortBy, 'asc');
+            })
+            ->when(!empty($request->sortByDesc), function ($query) use ($request) {
+                $query->orderBy($request->sortByDesc, 'desc');
+            })
+            ->when(!empty($request->sort), function ($query) use ($request) {
+                parse_str($request->sort, $sortArray);
+                foreach ($sortArray as $sortItem) {
+                    $query = $query->orderBy($sortItem['by'], $sortItem['type']);
+                }
+            })
+            ->when(!empty($request->filter), function ($query) use ($request) {
+                parse_str($request->filter, $filterArray);
+                foreach ($filterArray as $filterItem) {
+                    $query = $query->where($filterItem['field'], 'like', '%' . $filterItem['value'] . '%');
+                }
+            })
+            ->paginate($this->getPagination());
         $fields = array();
 
         foreach ($data as $key => $row)
@@ -84,9 +110,10 @@ class DisplayTable
         }
 
         $nav = self::getNav();
+        $filter = $this->getFilter();
 
         $response['data'] = $data;
-        $response['view'] = View::make('bradmin::SectionBuilder/Display/Table/table')->with(compact('data', 'columns', 'fields', 'firedSection', 'pluginData', 'nav'));
+        $response['view'] = View::make('bradmin::SectionBuilder/Display/Table/table')->with(compact('data', 'columns', 'fields', 'firedSection', 'pluginData', 'nav', 'filter'));
 
         return $response;
     }
@@ -178,6 +205,24 @@ class DisplayTable
     public function setNav($nav)
     {
         $this->nav = $nav;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getFilter()
+    {
+        return $this->filter;
+    }
+
+    /**
+     * @param mixed $filter
+     * @return DisplayTable
+     */
+    public function setFilter($filter)
+    {
+        $this->filter = $filter;
         return $this;
     }
 }

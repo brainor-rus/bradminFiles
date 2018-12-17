@@ -9,6 +9,7 @@ use Bradmin\Cms\Helpers\TemplatesHelper;
 use Bradmin\Section;
 use Bradmin\SectionBuilder\Display\BaseDisplay\Display;
 use Bradmin\SectionBuilder\Display\Table\Columns\BaseColumn\Column;
+use Bradmin\SectionBuilder\Filter\Types\BaseType\FilterType;
 use Bradmin\SectionBuilder\Form\BaseForm\Form;
 use Bradmin\SectionBuilder\Form\Panel\Columns\BaseColumn\FormColumn;
 use Bradmin\SectionBuilder\Form\Panel\Fields\BaseField\FormField;
@@ -23,20 +24,37 @@ class BRPages extends Section
     public static function onDisplay(){
         $pluginsFields = app()['PluginsData']['CmsData']['Pages']['DisplayField'] ?? [];
         $brFields = [
-            '0.01' => Column::text('id', '#'),
-            '0.02' => Column::link('title', 'Заголовок'),
+            '0.01' => Column::text('id', '#')->setSortable(true),
+            '0.02' => Column::link('title', 'Заголовок')->setSortable(true),
             '0.03' => Column::text('description', 'Краткое описание'),
             '0.04' => Column::text('tags.title', 'Метки'),
             '0.05' => Column::text('categories.title', 'Рубрики'),
-            '0.06' => Column::text('status', 'Статус'),
-            '0.07' => Column::text('created_at', 'Дата создания'),
-            '0.08' => Column::text('published_at', 'Дата публикации'),
+            '0.06' => Column::text('status', 'Статус')->setSortable(true),
+            '0.07' => Column::text('created_at', 'Дата создания')->setSortable(true),
+            '0.08' => Column::text('published_at', 'Дата публикации')->setSortable(true),
         ];
 
         $mergedFields = array_merge($pluginsFields, $brFields);
         ksort($mergedFields);
 
         $display = Display::table($mergedFields)->setPagination(10);
+        
+        $filter = [
+          FilterType::text('id', '#'),
+          FilterType::text('title', 'Заголовок'),
+          null,
+          FilterType::select('tags.title')->setOptions(
+              BRTerm::where('type', 'tag')->pluck('title', 'id')->toArray()
+          ),
+        FilterType::select('categories.title')->setOptions(
+            BRTerm::where('type', 'category')->pluck('title', 'id')->toArray()
+        ),
+          null,
+          null,
+          null,
+        ];
+
+        $display->setFilter($filter);
 
         return $display->setScopes(['pages']);
     }
