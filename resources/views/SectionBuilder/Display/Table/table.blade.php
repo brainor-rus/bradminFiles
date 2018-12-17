@@ -22,7 +22,26 @@
         <thead>
         <tr>
             @foreach($columns as $column)
-                <th scope="col">{{ $column->getLabel() }}</th>
+                <th scope="col">
+                    <div class="d-inline-block">
+                        {{ $column->getLabel() }}
+                    </div>
+                    @if($column->getSortable())
+                        <div class="text-right d-inline-block float-right">
+                            @php
+                                $sortType = null;
+                                if(null !== app('request')->input('sort')){
+                                    parse_str(app('request')->input('sort'), $sortArray);
+                                }
+                                if(isset($sortArray[$column->getName()])){
+                                    $sortType = $sortArray[$column->getName()]['type'];
+                                }
+                            @endphp
+                            <a href="#" @click.prevent="$emit('sorting',$event)" data-sort-type="asc" data-sort-by="{{ $column->getName() }}" class="@if($sortType == 'asc') text-success @else text-muted @endif fas fa-chevron-up"></a>
+                            <a href="#" @click.prevent="$emit('sorting',$event)" data-sort-type="desc" data-sort-by="{{ $column->getName() }}" class="@if($sortType == 'desc') text-success @else text-muted @endif fas fa-chevron-down"></a>
+                        </div>
+                    @endif
+                </th>
             @endforeach
             <th></th>
         </tr>
@@ -65,6 +84,26 @@
                 </td>
             </tr>
         @endforeach
+        @if(!empty($filter))
+            <tr>
+                @foreach($filter as $filterType)
+                    <td>
+                        @if(!empty($filterType))
+                            {!! $filterType->render() !!}
+                        @endif
+                    </td>
+                @endforeach
+                <td class="text-right">
+                    {{--<button type="submit" class="btn btn-success">Фильтровать</button>--}}
+
+                    <div class="btn-group" role="group">
+                        <button @click.prevent="$emit('filter')" type="button" class="btn btn-secondary"><i class="fas fa-filter"></i> Фильтровать</button>
+                        <button @click.prevent="$emit('filterClear')" type="button" class="btn btn-danger"><i class="fas fa-times"></i></button>
+                    </div>
+
+                </td>
+            </tr>
+        @endif
         </tbody>
     </table>
 </div>

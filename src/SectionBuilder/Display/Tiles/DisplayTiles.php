@@ -25,7 +25,7 @@ class DisplayTiles
         $this->meta = new Meta;
     }
 
-    public function render($modelPath, Section $firedSection, $pluginData = null)
+    public function render($modelPath, Section $firedSection, $pluginData = null, $request = null)
     {
         $elements = $this->getElements();
         $relationData = null;

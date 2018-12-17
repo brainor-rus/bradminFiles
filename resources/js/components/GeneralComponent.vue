@@ -6,6 +6,9 @@
                    track-by="${responseHtml}"
                    @showDeleteModal="show_modal"
                    @redirectTo="redirectTo"
+                   @sorting="sorting"
+                   @filter="filter"
+                   @filterClear="filterClear"
                    @fireAction="fireAction"
                    :key="$route.fullPath"
         ></component>
@@ -13,28 +16,28 @@
         <nav v-if="pagination.pagesNumber.length > 1">
             <ul class="pagination" role="navigation">
                 <li class="page-item" v-bind:class="[ pagination.current_page <= 1 ? 'disabled' : '']">
-                    <router-link :to="{query: {page: 1}}" class="page-link" aria-label="« First">
+                    <router-link :to="{query: {page: 1, sort: currentSorting, filter: currentFilter}}" class="page-link" aria-label="« First">
                         <span aria-hidden="true">‹‹</span>
                     </router-link>
                 </li>
                 <li class="page-item" v-bind:class="[ pagination.current_page <= 1 ? 'disabled' : '']">
-                    <router-link :to="{query: {page: pagination.current_page - 1}}" class="page-link" aria-label="« Previous">
+                    <router-link :to="{query: {page: pagination.current_page - 1, sort: currentSorting, filter: currentFilter}}" class="page-link" aria-label="« Previous">
                         <span aria-hidden="true">‹</span>
                     </router-link>
                 </li>
                 <li class="page-item" v-for="page in pagination.pagesNumber"
                     v-bind:class="[ page == currentPage ? 'active' : '']">
-                    <router-link :to="{query: {page: page}}" class="page-link">
+                    <router-link :to="{query: {page: page, sort: currentSorting, filter: currentFilter}}" class="page-link">
                         {{page}}
                     </router-link>
                 </li>
                 <li class="page-item" v-bind:class="[ pagination.current_page >= pagination.last_page ? 'disabled' : '']">
-                    <router-link :to="{query: {page: pagination.current_page + 1}}" class="page-link" aria-label="Next »">
+                    <router-link :to="{query: {page: pagination.current_page + 1, sort: currentSorting, filter: currentFilter}}" class="page-link" aria-label="Next »">
                         <span aria-hidden="true">›</span>
                     </router-link>
                 </li>
                 <li class="page-item" v-bind:class="[ pagination.current_page >= pagination.last_page ? 'disabled' : '']">
-                    <router-link :to="{query: {page: pagination.last_page}}" class="page-link" aria-label="Last »">
+                    <router-link :to="{query: {page: pagination.last_page, sort: currentSorting, filter: currentFilter}}" class="page-link" aria-label="Last »">
                         <span aria-hidden="true">››</span>
                     </router-link>
                 </li>
@@ -58,8 +61,7 @@
     import axios from 'axios';
     import $ from 'jquery';
     import 'selectize';
-
-    // import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+    import deparam from 'deparam';
     import modal from './DeleteModal';
 
     export default {
@@ -96,6 +98,20 @@
                 }else{
                     return this.$route.query.page;
                 }
+            },
+            currentSorting(){
+                let sortObject = null;
+                if (typeof this.$route.query.sort !== 'undefined') {
+                    sortObject = this.$route.query.sort;
+                }
+                return sortObject;
+            },
+            currentFilter(){
+                let filterObject = null;
+                if (typeof this.$route.query.filter !== 'undefined') {
+                    filterObject = this.$route.query.filter;
+                }
+                return filterObject;
             }
         },
         created: function () {
@@ -105,8 +121,6 @@
         updated: function () {
 
             this.$nextTick(function () {
-
-
                 $('.multiselect').selectize({
                     plugins: ['remove_button'],
                     delimiter: ',',
@@ -164,6 +178,32 @@
                 this.link = event.target.dataset.deleteLink;
             },
             fetchData(page) {
+
+                let query = Object.assign({}, this.$route.query);
+                this.$router.replace({ query });
+                if(typeof this.$route.query.sort !== 'undefined') {
+                    if(typeof this.$route.query.sort !== 'object') {
+                        if (Object.keys(this.$route.query.sort).length <= 0) {
+                            delete query.sort;
+                            this.$router.replace({ query });
+                        }
+                    }else{
+                        delete query.sort;
+                        this.$router.replace({ query });
+                    }
+                }
+                if(typeof this.$route.query.filter !== 'undefined') {
+                    if(typeof this.$route.query.filter !== 'object') {
+                        if (Object.keys(this.$route.query.filter).length <= 0) {
+                            delete query.filter;
+                            this.$router.replace({ query });
+                        }
+                    }else{
+                        delete query.filter;
+                        this.$router.replace({ query });
+                    }
+                }
+
                 this.error = this.responseData = null;
                 this.loading = true;
                 this.classes = '';
@@ -184,7 +224,7 @@
                 }
                 axios
                     .post(ajaxUrl + document.location.search,
-                        {'page':this.currentPage,}
+                        {}
                     )
                     .then(response => {
                         if (typeof response.data.data !== 'undefined') {
@@ -215,7 +255,9 @@
                                 this.pagination.pagesNumber = pagesArray;
 
                                 if( this.pagination.pagesNumber.length > 1){
-                                    this.$router.replace({ query: {page: page} })
+                                    let query = Object.assign({}, this.$route.query);
+                                    query.page = page;
+                                    this.$router.replace({ query });
                                 }
                             }
                         }
@@ -336,6 +378,68 @@
                 else{
                     this.$router.push({ path: redirectUrl.pathname});
                 }
+            },
+            sorting: function (event) {
+
+                let sortObject = {},
+                needToUpdate = true;
+
+                if (typeof this.$route.query.sort !== 'undefined') {
+                    sortObject = deparam(this.$route.query.sort);
+
+                    if (typeof sortObject[event.target.dataset.sortBy] !== 'undefined') {
+                        if (sortObject[event.target.dataset.sortBy]['type'] === event.target.dataset.sortType) {
+                            delete sortObject[event.target.dataset.sortBy];
+                            needToUpdate = false;
+                        }
+                    }
+                }
+                if(needToUpdate === true){
+                    if (typeof sortObject[event.target.dataset.sortBy] === 'undefined') {
+                        sortObject[event.target.dataset.sortBy] = {};
+                    }
+
+                    sortObject[event.target.dataset.sortBy]['type']= event.target.dataset.sortType;
+                    sortObject[event.target.dataset.sortBy]['by']= event.target.dataset.sortBy;
+                }
+                if(Object.keys(sortObject).length > 0) {
+                    let query = Object.assign({}, this.$route.query);
+                    query.sort = jQuery.param(sortObject);
+                    this.$router.replace({ query });
+                }else{
+                    let query = Object.assign({}, this.$route.query);
+                    delete query.sort;
+                    this.$router.replace({ query });
+                }
+
+            },
+            filter: function () {
+
+                let filterObject = {};
+
+                $(".filter-input").each(function() {
+                    if(($(this).val() !== '') && ($(this).val() !== null)){
+                        filterObject[$(this).data('filterName')] = {};
+                        filterObject[$(this).data('filterName')]['field'] = $(this).data('filterName');
+                        filterObject[$(this).data('filterName')]['value'] = $(this).val();
+                    }
+                });
+
+                if(Object.keys(filterObject).length > 0) {
+                    let query = Object.assign({}, this.$route.query);
+                    query.filter = jQuery.param(filterObject);
+                    this.$router.replace({ query });
+                }else{
+                    let query = Object.assign({}, this.$route.query);
+                    delete query.filter;
+                    this.$router.replace({ query });
+                }
+            },
+            filterClear: function () {
+                let query = Object.assign({}, this.$route.query);
+                delete query.filter;
+                this.$router.replace({ query });
+
             }
         }
     }

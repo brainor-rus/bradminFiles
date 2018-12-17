@@ -27,6 +27,6 @@ class Display
 
     public static function custom($columns = null, $pagination = null, $view = null)
     {
-        return new DisplayCustom($columns ?? null, $pagination ?? 15, $view ?? null);
+        return new DisplayCustom($view ?? null);
     }
 }
