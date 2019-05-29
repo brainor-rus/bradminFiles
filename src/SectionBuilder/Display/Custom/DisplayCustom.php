@@ -20,9 +20,8 @@ class DisplayCustom
     private $pagination, $columns, $scopes, $meta, $view;
 
 
-    public function __construct($view)
+    public function __construct()
     {
-        $this->setView($view);
         $this->meta = new Meta;
     }
 

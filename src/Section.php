@@ -144,4 +144,9 @@ class Section
         // override in child
     }
 
+    public function beforeDelete(Request $request, $id = null)
+    {
+        // override in child
+    }
+
 }

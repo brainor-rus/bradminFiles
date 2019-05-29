@@ -13,7 +13,24 @@ use Illuminate\Support\Facades\View;
 
 class Textarea
 {
-    private $name, $label, $value, $placeholder, $required, $readonly, $cols = 30, $rows = 10;
+    private $name, $label, $value, $placeholder, $required, $readonly, $cols = 30, $rows = 10, $maxlength;
+
+    /**
+     * @return mixed
+     */
+    public function getMaxlenght()
+    {
+        return $this->maxlength;
+    }
+
+    /**
+     * @param mixed $maxlenght
+     */
+    public function setMaxlenght($maxlength)
+    {
+        $this->maxlength = $maxlength;
+        return $this;
+    }
 
     public function __construct($name, $label)
     {
@@ -165,8 +182,9 @@ class Textarea
         $readonly = $this->getReadonly();
         $cols = $this->getCols();
         $rows = $this->getRows();
+        $maxlength = $this->getMaxlenght();
 
         return View::make('bradmin::SectionBuilder/Form/Fields/textarea')
-            ->with(compact('name', 'label', 'value', 'placeholder', 'required', 'readonly', 'cols', 'rows'));
+            ->with(compact('name', 'label', 'value', 'placeholder', 'required', 'readonly', 'cols', 'rows', 'maxlength'));
     }
 }

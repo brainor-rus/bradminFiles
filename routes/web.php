@@ -44,7 +44,7 @@ Route::group(['middleware' => config('bradmin.middleware')], function () {
     ]);
 
     Route::post('/'.config('bradmin.admin_url').'/{section}/{id}/edit-action/', [
-        'as'   => 'bradmin.section.edit.form',
+        'as'   => 'bradmin.section.edit.form.action',
         'uses' => 'Bradmin\Controllers\BrAdminController@editAction',
     ]);
 

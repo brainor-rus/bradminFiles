@@ -2,6 +2,7 @@
 
 namespace Bradmin\Controllers;
 
+use Bradmin\Helpers\BRHelper;
 use Bradmin\SectionBuilder\Display\Custom\DisplayCustom;
 use Bradmin\SectionBuilder\Form\FormAction\FormAction;
 use Bradmin\SectionBuilder\Meta\Meta;
@@ -192,11 +193,11 @@ class BrAdminController extends Controller
             $request->offsetUnset('pluginData');
 
             $model = new $modelPath;
-            $relationFields = array_keys($model->getRelations());
+            $relationFields = array_keys(BRHelper::getModelRelationships($model));
 
             $model = $model->where('id', $id)
                 ->when(isset($relationFields), function ($query) use ($relationFields) {
-                    $query->with(array_keys($relationFields));
+                    $query->with($relationFields);
                 })
                 ->first();
 
@@ -206,6 +207,7 @@ class BrAdminController extends Controller
             FormAction::saveBelongsToRelations($model, $request);
             FormAction::saveBelongsToManyRelations($model, $request);
             FormAction::saveHasOneRelations($model, $request);
+
 
             $class->afterSave($request, $model);
 
@@ -234,6 +236,7 @@ class BrAdminController extends Controller
         if(!isset($class)) { abort(500); }
         $redirectUrl = $request->pluginData['deleteUrl'] ?? '/'.config('bradmin.admin_url').'/'.$sectionName;
         if($class->isDeletable()){
+            $class->beforeDelete($request, $id);
             $model->where('id', $id)->delete();
             return response()->json([
                     'data' => [

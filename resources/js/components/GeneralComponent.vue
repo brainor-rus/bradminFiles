@@ -125,12 +125,12 @@
                     plugins: ['remove_button'],
                     delimiter: ',',
                     persist: false,
-                    create: function(input) {
-                        return {
-                            value: input,
-                            text: input
-                        }
-                    }
+                    // create: function(input) {
+                    //     return {
+                    //         value: input,
+                    //         text: input
+                    //     }
+                    // }
                 });
                 $(function(){
                     $('.wysiwyg_editor').each(function(e){

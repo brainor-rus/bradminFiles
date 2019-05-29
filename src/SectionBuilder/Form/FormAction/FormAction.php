@@ -9,6 +9,7 @@
 namespace Bradmin\SectionBuilder\Form\FormAction;
 
 
+use Bradmin\Helpers\BRHelper;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -27,7 +28,7 @@ class FormAction
 
     public static function saveBelongsToRelations(Model $model, Request $request)
     {
-        foreach ($model->getRelations() as $name => $relation) {
+        foreach (BRHelper::getModelRelationships($model) as $name => $relation) {
             if ($model->{$name}() instanceof BelongsTo && $request->has($name)) {
 //                $request->{$name}->save();
                 $model->{$name}()->associate($request->{$name});
@@ -37,7 +38,7 @@ class FormAction
 
     public static function saveBelongsToManyRelations(Model $model, Request $request)
     {
-        foreach ($model->getRelations() as $name => $relation) {
+        foreach (BRHelper::getModelRelationships($model) as $name => $relation) {
             if ($model->{$name}() instanceof BelongsToMany && $request->has($name)) {
 //                $request->{$name}->save();
                 $model->{$name}()->sync($request->{$name});
@@ -47,7 +48,7 @@ class FormAction
 
     public static function saveHasOneRelations(Model $model, Request $request)
     {
-        foreach ($model->getRelations() as $name => $relation) {
+        foreach (BRHelper::getModelRelationships($model) as $name => $relation) {
             if ($model->{$name}() instanceof HasOneOrMany && $request->has($name) && isset($request->{$name})) {
                 if (is_array($request->{$name}) || $request->{$name} instanceof \Traversable) {
                     $model->{$name}()->saveMany($request->{$name});
